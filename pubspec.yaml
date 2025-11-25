@@ -34,8 +34,23 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  material_symbols_icons: ^4.2874.0
-  logger: ^2.6.2
+  material_symbols_icons: ^4.2874.0 # icones atualizados
+  logger: ^2.6.2 # logging 
+  flutter_secure_storage: ^9.2.4 # salvar dados localmente criptografados
+  shared_preferences: ^2.5.3 # salvar dados localmente de forma simples
+  #flutter_bloc: ^9.1.1 # gerenciamento de estado
+  provider: ^6.1.5+1 # gerenciamento de estado
+  dio: ^5.9.0 # para rede
+  get_it: ^9.1.0 # injeção de dependência
+  go_router: ^17.0.0 # gerenciamento de rotas
+  #equatable: ^2.0.7 # comparar objetos
+  intl: ^0.20.2 # formatação
+  table_calendar: ^3.2.0 # calendario abrir programacao/ver agendamentos
+  shimmer: ^3.0.0 # carregamento
+  toastification: ^3.0.3 # feedback visual
+  google_maps_flutter: ^2.14.0 # map
+  url_launcher: ^6.3.2 # abrir urls externas
+  mask_text_input_formatter: ^2.9.0 # para mascaras
 
 dev_dependencies:
   flutter_test:
@@ -47,6 +62,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  build_runner: ^2.10.4
+  json_serializable: ^6.11.3
+  json_annotation: ^4.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -60,9 +78,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
