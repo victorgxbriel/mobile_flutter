@@ -161,15 +161,10 @@ class _LoginFormState extends State<_LoginForm> {
                         onPressed: notifier.status is Loading
                             ? null
                             : () {
-                              // TODO aqui você coloca a rota da tela home
-                              // 
-                              // depois é só descomentar a autenticação
-                              /*
                                 notifier.login(
                                   _emailController.text,
                                   _passwordController.text,
                                 );
-                              */
                               },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),

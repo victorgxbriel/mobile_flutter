@@ -64,7 +64,8 @@ class AuthServiceImpl implements AuthService {
     await _client.storage.write(key: 'jwt_token', value: loginResponse.accessToken);
     
     // 4. Cria o cliente no /clientes (já autenticado)
-    await _client.instance.post('/clientes', data: clientDto.toJson());
+    // o auth já cria o cliente
+    //await _client.instance.post('/clientes', data: clientDto.toJson());
   }
 
   @override
