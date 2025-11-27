@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/di/service_locator.dart';
 import '../notifiers/login_notifier.dart';
 import '../states/login_state.dart';
 import 'register_page.dart';
@@ -10,7 +12,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => LoginNotifier(),
+      create: (context) => LoginNotifier(ServiceLocator().authRepository),
       child: const _LoginForm(),
     );
   }
@@ -51,13 +53,8 @@ class _LoginFormState extends State<_LoginForm> {
                 );
                 notifier.reset();
               case Success():
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Login realizado com sucesso!'),
-                    backgroundColor: Colors.green,
-                  ),
-                );
                 notifier.reset();
+                context.go('/home');
               default:
                 break;
             }
@@ -164,10 +161,15 @@ class _LoginFormState extends State<_LoginForm> {
                         onPressed: notifier.status is Loading
                             ? null
                             : () {
+                              // TODO aqui você coloca a rota da tela home
+                              // 
+                              // depois é só descomentar a autenticação
+                              /*
                                 notifier.login(
                                   _emailController.text,
                                   _passwordController.text,
                                 );
+                              */
                               },
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),

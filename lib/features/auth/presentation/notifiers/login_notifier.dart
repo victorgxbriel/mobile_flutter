@@ -1,9 +1,14 @@
 import 'package:flutter/foundation.dart';
+import 'package:mobile_flutter/features/auth/data/repositories/auth_repository.dart';
 import 'package:mobile_flutter/features/auth/presentation/states/login_state.dart';
 
 class LoginNotifier extends ChangeNotifier {
+  final AuthRepository _authRepository;
+  
   LoginState _status = Initial();
   bool _isPasswordVisible = false;
+
+  LoginNotifier(this._authRepository);
 
   LoginState get status => _status;
   bool get isPasswordVisible => _isPasswordVisible;
@@ -24,14 +29,8 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
 
     try {
-      // Simulate network delay
-      await Future.delayed(const Duration(seconds: 2));
-
-      if (email == 'test@test.com' && password == '123456') {
-        _status = Success();
-      } else {
-        _status = Error('Credenciais inválidas');
-      }
+      await _authRepository.login(email, password);
+      _status = Success();
       notifyListeners();
     } catch (e) {
       _status = Error(e.toString());

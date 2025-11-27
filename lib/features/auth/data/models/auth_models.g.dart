@@ -6,6 +6,18 @@ part of 'auth_models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
+  userId: (json['userId'] as num).toInt(),
+  email: json['email'] as String,
+  roles: (json['roles'] as List<dynamic>).map((e) => e as String).toList(),
+);
+
+Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
+  'userId': instance.userId,
+  'email': instance.email,
+  'roles': instance.roles,
+};
+
 LoginDto _$LoginDtoFromJson(Map<String, dynamic> json) => LoginDto(
   email: json['email'] as String,
   password: json['password'] as String,
@@ -16,15 +28,20 @@ Map<String, dynamic> _$LoginDtoToJson(LoginDto instance) => <String, dynamic>{
   'password': instance.password,
 };
 
-RegisterClientDto _$RegisterClientDtoFromJson(Map<String, dynamic> json) =>
-    RegisterClientDto(
-      nome: json['nome'] as String,
-      email: json['email'] as String,
-      password: json['password'] as String,
-      cpf: json['cpf'] as String,
-    );
+LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
+    LoginResponse(accessToken: json['access_token'] as String);
 
-Map<String, dynamic> _$RegisterClientDtoToJson(RegisterClientDto instance) =>
+Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
+    <String, dynamic>{'access_token': instance.accessToken};
+
+RegisterDto _$RegisterDtoFromJson(Map<String, dynamic> json) => RegisterDto(
+  nome: json['nome'] as String,
+  email: json['email'] as String,
+  password: json['password'] as String,
+  cpf: json['cpf'] as String,
+);
+
+Map<String, dynamic> _$RegisterDtoToJson(RegisterDto instance) =>
     <String, dynamic>{
       'nome': instance.nome,
       'email': instance.email,
@@ -32,36 +49,69 @@ Map<String, dynamic> _$RegisterClientDtoToJson(RegisterClientDto instance) =>
       'cpf': instance.cpf,
     };
 
-RegisterEstablishmentDto _$RegisterEstablishmentDtoFromJson(
+RegisterResponse _$RegisterResponseFromJson(Map<String, dynamic> json) =>
+    RegisterResponse(
+      message: json['message'] as String,
+      userId: (json['userId'] as num).toInt(),
+    );
+
+Map<String, dynamic> _$RegisterResponseToJson(RegisterResponse instance) =>
+    <String, dynamic>{'message': instance.message, 'userId': instance.userId};
+
+CreateClienteDto _$CreateClienteDtoFromJson(Map<String, dynamic> json) =>
+    CreateClienteDto(
+      nome: json['nome'] as String,
+      cpf: json['cpf'] as String,
+      email: json['email'] as String,
+    );
+
+Map<String, dynamic> _$CreateClienteDtoToJson(CreateClienteDto instance) =>
+    <String, dynamic>{
+      'nome': instance.nome,
+      'cpf': instance.cpf,
+      'email': instance.email,
+    };
+
+SetupEstabelecimentoDto _$SetupEstabelecimentoDtoFromJson(
   Map<String, dynamic> json,
-) => RegisterEstablishmentDto(
-  nome: json['nome'] as String,
-  email: json['email'] as String,
-  password: json['password'] as String,
-  nomeEstabelecimento: json['nomeEstabelecimento'] as String,
+) => SetupEstabelecimentoDto(
+  usuario: UsuarioSetupDto.fromJson(json['usuario'] as Map<String, dynamic>),
+  estabelecimento: EstabelecimentoSetupDto.fromJson(
+    json['estabelecimento'] as Map<String, dynamic>,
+  ),
 );
 
-Map<String, dynamic> _$RegisterEstablishmentDtoToJson(
-  RegisterEstablishmentDto instance,
+Map<String, dynamic> _$SetupEstabelecimentoDtoToJson(
+  SetupEstabelecimentoDto instance,
 ) => <String, dynamic>{
-  'nome': instance.nome,
-  'email': instance.email,
-  'password': instance.password,
-  'nomeEstabelecimento': instance.nomeEstabelecimento,
+  'usuario': instance.usuario,
+  'estabelecimento': instance.estabelecimento,
 };
 
-User _$UserFromJson(Map<String, dynamic> json) => User(
-  id: (json['id'] as num?)?.toInt(),
-  nome: json['nome'] as String,
-  email: json['email'] as String,
-  avatarUrl: json['avatarUrl'] as String?,
-  isActive: json['isActive'] as bool? ?? true,
+UsuarioSetupDto _$UsuarioSetupDtoFromJson(Map<String, dynamic> json) =>
+    UsuarioSetupDto(
+      nome: json['nome'] as String,
+      email: json['email'] as String,
+      password: json['password'] as String,
+    );
+
+Map<String, dynamic> _$UsuarioSetupDtoToJson(UsuarioSetupDto instance) =>
+    <String, dynamic>{
+      'nome': instance.nome,
+      'email': instance.email,
+      'password': instance.password,
+    };
+
+EstabelecimentoSetupDto _$EstabelecimentoSetupDtoFromJson(
+  Map<String, dynamic> json,
+) => EstabelecimentoSetupDto(
+  cnpj: json['cnpj'] as String,
+  nomeFantasia: json['nomeFantasia'] as String,
 );
 
-Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
-  'id': instance.id,
-  'nome': instance.nome,
-  'email': instance.email,
-  'avatarUrl': instance.avatarUrl,
-  'isActive': instance.isActive,
+Map<String, dynamic> _$EstabelecimentoSetupDtoToJson(
+  EstabelecimentoSetupDto instance,
+) => <String, dynamic>{
+  'cnpj': instance.cnpj,
+  'nomeFantasia': instance.nomeFantasia,
 };

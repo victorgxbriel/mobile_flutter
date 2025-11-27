@@ -51,6 +51,8 @@ dependencies:
   google_maps_flutter: ^2.14.0 # map
   url_launcher: ^6.3.2 # abrir urls externas
   mask_text_input_formatter: ^2.9.0 # para mascaras
+  json_annotation: ^4.9.0
+  freezed_annotation: ^3.1.0
 
 dev_dependencies:
   flutter_test:
@@ -63,8 +65,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
   build_runner: ^2.10.4
-  json_serializable: ^6.11.3
-  json_annotation: ^4.9.0
+  freezed: ^3.2.3
+  json_serializable: ^6.11.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

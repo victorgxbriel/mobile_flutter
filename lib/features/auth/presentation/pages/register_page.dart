@@ -3,6 +3,7 @@ import 'package:mobile_flutter/app/utils/formatters.dart';
 import 'package:mobile_flutter/features/auth/presentation/states/register_state.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mobile_flutter/core/di/service_locator.dart';
 import 'package:mobile_flutter/features/auth/data/models/auth_models.dart';
 import 'package:mobile_flutter/features/auth/presentation/notifiers/register_notifier.dart';
 import 'package:mobile_flutter/widgets/app_text_form_field.dart';
@@ -13,7 +14,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => RegisterNotifier(),
+      create: (context) => RegisterNotifier(ServiceLocator().authRepository),
       child: const _RegisterView(),
     );
   }
@@ -96,11 +97,8 @@ class _RegisterViewState extends State<_RegisterView>
           WidgetsBinding.instance.addPostFrameCallback((_) {
             switch (notifier.status) {
               case Success():
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Cadastro realizado com sucesso!')),
-                );
                 notifier.reset();
-                context.pop(); // Go back to login
+                context.go('/home');
               case Error(message: final msg):
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
@@ -303,7 +301,7 @@ class _RegisterViewState extends State<_RegisterView>
                 if (value?.isEmpty ?? true) {
                   return 'Campo obrigatório';
                 }
-                if (value != _clientPasswordController.text) {
+                if (value != _estPasswordController.text) {
                   return 'Senhas não são iguais';
                 }
                 return null;
@@ -328,6 +326,7 @@ class _RegisterViewState extends State<_RegisterView>
                             nomeEstabelecimento:
                                 _estEstablishmentNameController.text,
                             password: _estPasswordController.text,
+                            cnpj: _estCnpjController.text,
                           );
                           context.read<RegisterNotifier>().registerEstablishment(
                             dto,
