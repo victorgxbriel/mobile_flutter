@@ -12,7 +12,7 @@ class DioClient {
     // - iOS Simulator: 'http://localhost:3000' ou 'http://127.0.0.1:3000'
     // - Dispositivo físico: 'http://SEU_IP_LOCAL:3000' (ex: http://192.168.0.10:3000)
     // - Produção: 'https://sua-api.com'
-    _dio.options.baseUrl = 'http://10.0.2.2:3000'; // Padrão para Android Emulator 
+    _dio.options.baseUrl = 'https://abluocar.up.railway.app/'; // Padrão para Android Emulator 
     
     _dio.options.connectTimeout = const Duration(seconds: 10);
     _dio.options.receiveTimeout = const Duration(seconds: 10);
