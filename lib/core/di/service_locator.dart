@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/data/services/auth_service.dart';
+import '../../features/profile/data/repositories/profile_repository.dart';
+import '../../features/profile/data/services/profile_service.dart';
 import '../network/dio_client.dart';
 
 class ServiceLocator {
@@ -15,6 +17,8 @@ class ServiceLocator {
   late final DioClient _dioClient;
   late final AuthService _authService;
   late final AuthRepository _authRepository;
+  late final ProfileService _profileService;
+  late final ProfileRepository _profileRepository;
 
   void init() {
     _dio = Dio();
@@ -22,9 +26,12 @@ class ServiceLocator {
     _dioClient = DioClient(_dio, _storage);
     _authService = AuthServiceImpl(_dioClient);
     _authRepository = AuthRepository(_authService, _storage);
+    _profileService = ProfileServiceImpl(_dioClient);
+    _profileRepository = ProfileRepository(_profileService, _storage);
   }
 
   // Getters
   AuthRepository get authRepository => _authRepository;
+  ProfileRepository get profileRepository => _profileRepository;
   FlutterSecureStorage get storage => _storage;
 }
