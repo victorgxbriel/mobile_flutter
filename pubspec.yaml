@@ -48,6 +48,12 @@ dependencies:
   table_calendar: ^3.2.0 # calendario abrir programacao/ver agendamentos
   shimmer: ^3.0.0 # carregamento
   toastification: ^3.0.3 # feedback visual
+  image_picker: ^1.0.7 # seleção de imagens da galeria/câmera
+  path_provider: ^2.1.2 # acessar diretórios do dispositivo
+  path: ^1.8.3 # manipulação de caminhos de arquivo
+  http: ^1.1.0 # requisições HTTP
+  cached_network_image: ^3.3.1 # cache de imagens da internet
+  file_picker: ^6.1.6 # seleção de arquivos
   google_maps_flutter: ^2.14.0 # map
   url_launcher: ^6.3.2 # abrir urls externas
   mask_text_input_formatter: ^2.9.0 # para mascaras

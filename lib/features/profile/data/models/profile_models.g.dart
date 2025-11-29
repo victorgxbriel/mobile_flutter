@@ -15,6 +15,7 @@ ClienteModel _$ClienteModelFromJson(Map<String, dynamic> json) => ClienteModel(
   cpf: json['cpf'] as String,
   email: json['email'] as String,
   userId: (json['userId'] as num?)?.toInt(),
+  fotoUrl: json['fotoUrl'] as String?,
 );
 
 Map<String, dynamic> _$ClienteModelToJson(ClienteModel instance) =>
@@ -27,6 +28,7 @@ Map<String, dynamic> _$ClienteModelToJson(ClienteModel instance) =>
       'cpf': instance.cpf,
       'email': instance.email,
       'userId': instance.userId,
+      'fotoUrl': instance.fotoUrl,
     };
 
 UpdateClienteDto _$UpdateClienteDtoFromJson(Map<String, dynamic> json) =>
@@ -34,6 +36,7 @@ UpdateClienteDto _$UpdateClienteDtoFromJson(Map<String, dynamic> json) =>
       nome: json['nome'] as String?,
       cpf: json['cpf'] as String?,
       email: json['email'] as String?,
+      fotoUrl: json['fotoUrl'] as String?,
     );
 
 Map<String, dynamic> _$UpdateClienteDtoToJson(UpdateClienteDto instance) =>
@@ -41,4 +44,5 @@ Map<String, dynamic> _$UpdateClienteDtoToJson(UpdateClienteDto instance) =>
       'nome': instance.nome,
       'cpf': instance.cpf,
       'email': instance.email,
+      'fotoUrl': instance.fotoUrl,
     };

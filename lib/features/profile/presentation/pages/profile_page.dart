@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_flutter/core/di/service_locator.dart';
@@ -5,6 +6,7 @@ import 'package:mobile_flutter/features/auth/data/models/auth_models.dart';
 import 'package:mobile_flutter/features/profile/presentation/notifiers/profile_notifier.dart';
 import 'package:mobile_flutter/features/profile/presentation/states/profile_state.dart';
 import 'package:provider/provider.dart';
+import 'package:mobile_flutter/features/profile/presentation/widgets/profile_image_picker.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -69,6 +71,11 @@ class _ProfilePageState extends State<_ProfilePage> {
     }
   }
 
+  Future<void> _handleImageSelected(String imagePath) async {
+    final notifier = context.read<ProfileNotifier>();
+    await notifier.updateProfileImage(File(imagePath));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,34 +113,10 @@ class _ProfilePageState extends State<_ProfilePage> {
               children: [
                 const SizedBox(height: 20),
                 Center(
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 120,
-                        height: 120,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          size: 60,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: const BoxDecoration(
-                            color: Colors.blue,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(Icons.edit, color: Colors.white, size: 20),
-                        ),
-                      ),
-                    ],
+                  child: ProfileImagePicker(
+                    userId: cliente.id.toString(),
+                    imageUrl: cliente.fotoUrl,
+                    onImageSelected: _handleImageSelected,
                   ),
                 ),
                 const SizedBox(height: 16),

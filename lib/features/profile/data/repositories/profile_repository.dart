@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/profile_models.dart';
 import '../services/profile_service.dart';
 
@@ -31,12 +33,14 @@ class ProfileRepository {
     String? nome,
     String? cpf,
     String? email,
+    String? fotoUrl,
   }) async {
     try {
       final dto = UpdateClienteDto(
         nome: nome,
         cpf: cpf?.replaceAll(RegExp(r'\D'), ''),
         email: email,
+        fotoUrl: fotoUrl,
       );
       return await _profileService.updateCliente(clienteId, dto);
     } catch (e) {
@@ -55,6 +59,20 @@ class ProfileRepository {
   /// Realiza o logout (limpa o token)
   Future<void> logout() async {
     await _storage.delete(key: 'jwt_token');
+  }
+  
+  /// Faz upload da foto de perfil para o servidor
+  Future<String> uploadProfileImage(File imageFile) async {
+    try {
+      // Se você tiver um endpoint específico para upload de imagem, use-o aqui
+      // Por enquanto, vamos apenas retornar um caminho local
+      final fileName = 'profile_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final appDir = await getApplicationDocumentsDirectory();
+      final savedImage = await imageFile.copy('${appDir.path}/$fileName');
+      return savedImage.path;
+    } catch (e) {
+      throw Exception('Erro ao fazer upload da imagem: $e');
+    }
   }
 
   /// Verifica se o usuário está logado

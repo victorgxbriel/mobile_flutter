@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:mobile_flutter/core/di/service_locator.dart';
 import 'package:mobile_flutter/features/profile/data/repositories/profile_repository.dart';
 
 import '../../data/models/profile_models.dart';
@@ -36,6 +38,7 @@ class ProfileNotifier extends ChangeNotifier {
     required int clienteId,
     String? nome,
     String? email,
+    String? fotoUrl,
   }) async {
     _state = ProfileLoading();
     notifyListeners();
@@ -45,6 +48,7 @@ class ProfileNotifier extends ChangeNotifier {
         clienteId,
         nome: nome,
         email: email,
+        fotoUrl: fotoUrl,
       );
       _cliente = cliente;
       _state = ProfileLoaded(cliente);
@@ -62,10 +66,41 @@ class ProfileNotifier extends ChangeNotifier {
 
     try {
       await _repository.logout();
-      _cliente = null;
       _state = ProfileLoggedOut();
     } catch (e) {
-      _state = ProfileError(e.toString().replaceAll('Exception: ', ''));
+      _state = ProfileError('Erro ao fazer logout: $e');
+    }
+
+    notifyListeners();
+  }
+
+  /// Atualiza a foto de perfil do cliente
+  Future<void> updateProfileImage(File imageFile) async {
+    if (_cliente == null) return;
+    
+    _state = ProfileLoading();
+    notifyListeners();
+
+    try {
+      final storage = ServiceLocator().storageService;
+      
+      // Salva a imagem localmente primeiro para feedback imediato
+      final savedPath = await storage.saveImage(
+        imageFile, 
+        'profile_${_cliente!.id}.jpg',
+      );
+      
+      // Salva a URL local no SharedPreferences
+      await storage.saveImageUrl('profile_${_cliente!.id}', savedPath);
+      
+      // Atualiza o perfil com a nova URL da imagem
+      // Se você tiver um endpoint para upload de imagem no servidor, use-o aqui
+      // Por enquanto, estamos apenas atualizando localmente
+      _cliente = _cliente!.copyWith(fotoUrl: savedPath);
+      _state = ProfileLoaded(_cliente!);
+      
+    } catch (e) {
+      _state = ProfileError('Erro ao atualizar a foto de perfil: $e');
     }
 
     notifyListeners();
