@@ -126,4 +126,22 @@ class AuthRepository {
       throw Exception('Erro ao registrar estabelecimento.');
     }
   }
+  
+  Future<UserModel?> getCurrentUser() async {
+    try {
+      final token = await _storage.read(key: 'jwt_token');
+      if (token == null) return null;
+      
+      // Se você já tem o ID do usuário no token ou em outro lugar, use-o
+      // Caso contrário, você pode precisar decodificar o JWT para obter o ID
+      // Vou assumir que o token JWT contém o ID do usuário
+      
+      final response = await _dataSource.getCurrentUser();
+      return response;
+    } catch (e) {
+      print('Erro ao obter usuário atual: $e');
+      return null;
+    }
+  }
+
 }

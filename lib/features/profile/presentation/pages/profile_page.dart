@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_flutter/core/di/service_locator.dart';
+import 'package:mobile_flutter/features/auth/data/models/auth_models.dart';
 import 'package:mobile_flutter/features/profile/presentation/notifiers/profile_notifier.dart';
 import 'package:mobile_flutter/features/profile/presentation/states/profile_state.dart';
 import 'package:provider/provider.dart';
@@ -12,13 +13,62 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ProfileNotifier(ServiceLocator().profileRepository),
-      child: _ProfilePage(),
+      child: const _ProfilePage(),
     );
   }
-
 }
 
-class _ProfilePage extends StatelessWidget {
+class _ProfilePage extends StatefulWidget {
+  const _ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<_ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<_ProfilePage> {
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    if (!mounted) return;
+    
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final authRepo = ServiceLocator().authRepository;
+      final notifier = context.read<ProfileNotifier>();
+      
+      final token = await authRepo.getToken();
+      if (token != null) {
+        final user = await authRepo.getCurrentUser();
+        if (user != null) {
+          await notifier.loadProfile(user.userId);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'Erro ao carregar perfil: $e';
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,25 +77,31 @@ class _ProfilePage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Consumer<ProfileNotifier>(
-        builder: (context, notifier, child) {
-          // para mostrar mensagens quando o status mudar
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            switch (notifier.state) {
-              case ProfileError(message: final msg):
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(msg),
-                    backgroundColor: Theme.of(context).colorScheme.error,
+        builder: (context, notifier, _) {
+          if (_isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (_errorMessage != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(_errorMessage!),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _loadUserProfile,
+                    child: const Text('Tentar novamente'),
                   ),
-                );
-                notifier.reset();
-              case ProfileLoggedOut():
-                notifier.reset();
-                context.go('/login');
-              default:
-                break;
-            }
-          });
+                ],
+              ),
+            );
+          }
+
+          final cliente = notifier.cliente;
+          if (cliente == null) {
+            return const Center(child: Text('Nenhum dado de perfil encontrado'));
+          }
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
@@ -85,16 +141,16 @@ class _ProfilePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'João da Silva',
+                Text(
+                  cliente.nome,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'joao@email.com',
+                Text(
+                  cliente.email,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
+                  style: const TextStyle(color: Colors.grey),
                 ),
                 const SizedBox(height: 32),
                 _buildProfileItem(
@@ -142,7 +198,11 @@ class _ProfilePage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 32.0),
                   child: ElevatedButton(
                     onPressed: () {
+                      final notifier = context.read<ProfileNotifier>();
                       notifier.logout();
+                      if (mounted) {
+                        context.go('/login');
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,

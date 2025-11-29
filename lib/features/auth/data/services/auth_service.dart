@@ -30,13 +30,6 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<UserModel> getCurrentUser() async {
-    // Endpoint /auth/me que vi no seu Swagger
-    final response = await _client.instance.get('/auth/me');
-    return UserModel.fromJson(response.data);
-  }
-
-  @override
   Future<RegisterResponse> register(RegisterDto dto) async {
     try {
       final response = await _client.instance.post(
@@ -72,5 +65,11 @@ class AuthServiceImpl implements AuthService {
   Future<void> registerEstablishment(SetupEstabelecimentoDto setupDto) async {
     // Usa o endpoint /estabelecimentos/setup que cria usuário + estabelecimento
     await _client.instance.post('/estabelecimentos/setup', data: setupDto.toJson());
+  }
+
+  @override
+  Future<UserModel> getCurrentUser() async {
+    final response = await _client.instance.get('/auth/me');
+    return UserModel.fromJson(response.data);
   }
 }
