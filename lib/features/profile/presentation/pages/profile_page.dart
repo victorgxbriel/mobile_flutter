@@ -72,10 +72,6 @@ class _ProfilePageState extends State<_ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Meu Perfil'),
-        centerTitle: true,
-      ),
       body: Consumer<ProfileNotifier>(
         builder: (context, notifier, _) {
           if (_isLoading) {
