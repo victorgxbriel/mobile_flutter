@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,8 +14,7 @@ abstract class StorageService {
 }
 
 class StorageServiceImpl implements StorageService {
-  final ImagePicker _picker = ImagePicker();
-  final SharedPreferences _prefs;
+final SharedPreferences _prefs;
 
   StorageServiceImpl(this._prefs);
 
@@ -24,12 +22,13 @@ class StorageServiceImpl implements StorageService {
   Future<File?> pickImage() async {
     try {
       if (kIsWeb) {
-        // Para web, usamos o image_picker diretamente
-        final XFile? image = await ImagePicker().pickImage(
-          source: ImageSource.gallery,
-          imageQuality: 85,
+        // Para web, usamos o file_picker que funciona melhor
+        final result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          allowMultiple: false,
         );
-        return image != null ? File(image.path) : null;
+        if (result == null || result.files.isEmpty) return null;
+        return File(result.files.single.path!);
       } else {
         // Para mobile/desktop, usamos o file_picker
         final result = await FilePicker.platform.pickFiles(
