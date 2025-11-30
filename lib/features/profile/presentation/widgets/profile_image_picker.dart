@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/services.dart';
 import 'package:mobile_flutter/core/di/service_locator.dart';
 
 class ProfileImagePicker extends StatefulWidget {
@@ -87,33 +88,38 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _pickImage,
-      child: Stack(
-        children: [
-          Container(
-            width: widget.size,
-            height: widget.size,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: _buildImage(),
+    return Stack(
+      children: [
+        // Container da imagem de perfil (sem GestureDetector aqui)
+        Container(
+          width: widget.size,
+          height: widget.size,
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            shape: BoxShape.circle,
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
+          child: _buildImage(),
+        ),
+        // Ícone de câmera clicável
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: MouseRegion(
+            cursor: SystemMouseCursors.click,
+            child: GestureDetector(
+              onTap: _pickImage,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.photo_camera, color: Colors.white, size: 20),
               ),
-              child: const Icon(Icons.edit, color: Colors.white, size: 20),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
