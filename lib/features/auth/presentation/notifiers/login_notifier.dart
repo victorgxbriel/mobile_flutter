@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:mobile_flutter/core/di/service_locator.dart';
 import 'package:mobile_flutter/features/auth/data/repositories/auth_repository.dart';
 import 'package:mobile_flutter/features/auth/presentation/states/login_state.dart';
 
@@ -29,7 +30,11 @@ class LoginNotifier extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await _authRepository.login(email, password);
+      final token = await _authRepository.login(email, password);
+      
+      // Atualiza a sessão com o novo token
+      await ServiceLocator().sessionService.setToken(token);
+      
       _status = Success();
       notifyListeners();
     } catch (e) {

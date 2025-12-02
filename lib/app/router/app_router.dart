@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import '../../core/di/service_locator.dart';
+import '../../core/services/session_service.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
+import '../../features/estabelecimento/presentation/notifiers/estabelecimento_details_notifier.dart';
+import '../../features/estabelecimento/presentation/pages/estabelecimento_details_page.dart';
 import '../../features/home/presentation/pages/home_shell.dart';
 import '../../features/home/presentation/pages/dashboard_page.dart';
 import '../../features/appointments/presentation/pages/appointments_page.dart';
@@ -12,9 +17,35 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
+// Getter para o SessionService
+SessionService get _sessionService => ServiceLocator().sessionService;
+
 final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: "/login",
+  
+  // Redirect global para verificar autenticação
+  redirect: (context, state) {
+    final isAuthenticated = _sessionService.isAuthenticated;
+    final isAuthRoute = state.matchedLocation == '/login' || 
+                        state.matchedLocation == '/register';
+
+    // Se não está autenticado e não está em rota de auth, redireciona para login
+    if (!isAuthenticated && !isAuthRoute) {
+      return '/login';
+    }
+
+    // Se está autenticado e está em rota de auth, redireciona para home
+    if (isAuthenticated && isAuthRoute) {
+      return '/home';
+    }
+
+    return null; // Sem redirecionamento
+  },
+  
+  // Escuta mudanças na sessão para atualizar rotas
+  refreshListenable: ServiceLocator().sessionService,
+  
   routes: [
     // Rotas de autenticação (fora do shell)
     GoRoute(
@@ -24,6 +55,20 @@ final appRouter = GoRouter(
     GoRoute(
       path: "/register",
       builder: (_, __) => const RegisterPage(),
+    ),
+    
+    // Detalhes do estabelecimento (fora do shell para tela completa)
+    GoRoute(
+      path: "/estabelecimento/:id",
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return ChangeNotifierProvider(
+          create: (_) => EstabelecimentoDetailsNotifier(
+            ServiceLocator().estabelecimentoDetailsRepository,
+          ),
+          child: EstabelecimentoDetailsPage(estabelecimentoId: id),
+        );
+      },
     ),
     
     // Shell com bottom navigation (área autenticada)

@@ -22,10 +22,7 @@ class AppColors {
     onTertiary: darkBlue,           // Texto sobre tertiary
     
     surface: Colors.white,          // Superfícies (cards, dialogs)
-    onSurface: Colors.black87,      // Texto sobre surface
-    
-    background: background,         // Fundo da tela
-    onBackground: Colors.black87,   // Texto sobre background
+    onSurface: Colors.black87,   // Texto sobre background
     
     error: Colors.red.shade700,     // Cor de erro
     onError: Colors.white,          // Texto sobre error

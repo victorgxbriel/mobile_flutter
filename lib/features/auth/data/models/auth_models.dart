@@ -38,10 +38,43 @@ class LoginDto {
 class LoginResponse {
   @JsonKey(name: 'access_token')
   final String accessToken;
+  
+  @JsonKey(name: 'refresh_token')
+  final String? refreshToken;
 
-  LoginResponse({required this.accessToken});
+  LoginResponse({
+    required this.accessToken,
+    this.refreshToken,
+  });
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) => _$LoginResponseFromJson(json);
+}
+
+// --- DTO PARA REFRESH TOKEN (Request) ---
+@JsonSerializable()
+class RefreshTokenDto {
+  final String refreshToken;
+
+  RefreshTokenDto({required this.refreshToken});
+
+  Map<String, dynamic> toJson() => _$RefreshTokenDtoToJson(this);
+}
+
+// --- RESPOSTA DO REFRESH TOKEN (Response) ---
+@JsonSerializable()
+class RefreshTokenResponse {
+  @JsonKey(name: 'access_token')
+  final String accessToken;
+  
+  @JsonKey(name: 'refresh_token')
+  final String? refreshToken;
+
+  RefreshTokenResponse({
+    required this.accessToken,
+    this.refreshToken,
+  });
+
+  factory RefreshTokenResponse.fromJson(Map<String, dynamic> json) => _$RefreshTokenResponseFromJson(json);
 }
 
 @JsonSerializable()

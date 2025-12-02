@@ -2,9 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_flutter/core/di/service_locator.dart';
-import 'package:mobile_flutter/features/auth/data/models/auth_models.dart';
 import 'package:mobile_flutter/features/profile/presentation/notifiers/profile_notifier.dart';
-import 'package:mobile_flutter/features/profile/presentation/states/profile_state.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile_flutter/features/profile/presentation/widgets/profile_image_picker.dart';
 
@@ -21,7 +19,7 @@ class ProfilePage extends StatelessWidget {
 }
 
 class _ProfilePage extends StatefulWidget {
-  const _ProfilePage({Key? key}) : super(key: key);
+  const _ProfilePage();
 
   @override
   State<_ProfilePage> createState() => _ProfilePageState();

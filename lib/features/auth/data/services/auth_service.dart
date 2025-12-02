@@ -8,6 +8,8 @@ abstract class AuthService {
   Future<RegisterResponse> register(RegisterDto dto);
   Future<void> registerClient(RegisterDto userDto, CreateClienteDto clientDto);
   Future<void> registerEstablishment(SetupEstabelecimentoDto setupDto);
+  Future<RefreshTokenResponse> refreshToken(String refreshToken);
+  Future<void> logout();
 }
 
 class AuthServiceImpl implements AuthService {
@@ -23,9 +25,9 @@ class AuthServiceImpl implements AuthService {
         data: dto.toJson(),
       );
       return LoginResponse.fromJson(response.data);
-    } on DioException catch (e) {
+    } on DioException catch (_) {
       // Aqui você pode tratar erros específicos do NestJS (400, 401)
-      throw e; 
+      rethrow; 
     }
   }
 
@@ -37,8 +39,8 @@ class AuthServiceImpl implements AuthService {
         data: dto.toJson(),
       );
       return RegisterResponse.fromJson(response.data);
-    } on DioException catch (e) {
-      throw e;
+    } on DioException catch (_) {
+      rethrow;
     }
   }
 
@@ -71,5 +73,27 @@ class AuthServiceImpl implements AuthService {
   Future<UserModel> getCurrentUser() async {
     final response = await _client.instance.get('/auth/me');
     return UserModel.fromJson(response.data);
+  }
+
+  @override
+  Future<RefreshTokenResponse> refreshToken(String refreshToken) async {
+    try {
+      final response = await _client.instance.post(
+        '/auth/refresh',
+        data: RefreshTokenDto(refreshToken: refreshToken).toJson(),
+      );
+      return RefreshTokenResponse.fromJson(response.data);
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> logout() async {
+    try {
+      await _client.instance.post('/auth/logout');
+    } on DioException catch (_) {
+      // Ignora erros de logout, pois o importante é limpar os tokens localmente
+    }
   }
 }
