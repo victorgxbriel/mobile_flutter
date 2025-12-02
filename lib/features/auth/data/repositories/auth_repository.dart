@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobile_flutter/features/auth/data/services/auth_service.dart';
+
+import '../../../../core/services/token_service.dart';
 import '../models/auth_models.dart';
 
 class AuthRepository {
@@ -9,20 +11,20 @@ class AuthRepository {
 
   AuthRepository(this._dataSource, this._storage);
 
-  Future<UserModel> login(String email, String password) async {
+  Future<String> login(String email, String password) async {
     try {
       // 1. Faz o Login na API
       final loginDto = LoginDto(email: email, password: password);
       final response = await _dataSource.login(loginDto);
 
-      // 2. Salva o Token no Celular (Segurança)
-      await _storage.write(key: 'jwt_token', value: response.accessToken);
+      // 2. Salva os Tokens no Celular (Segurança)
+      await _storage.write(key: TokenService.accessTokenKey, value: response.accessToken);
+      if (response.refreshToken != null) {
+        await _storage.write(key: TokenService.refreshTokenKey, value: response.refreshToken);
+      }
 
-      // 3. Busca os dados completos do usuário (já com o token salvo)
-      // O DioClient vai injetar o token automaticamente na requisição do /auth/me
-      final user = await _dataSource.getCurrentUser();
-      
-      return user;
+      // 3. Retorna o token para o SessionService gerenciar
+      return response.accessToken;
     } catch (e) {
       // Tratamento de erro simplificado para o exemplo
       if (e is DioException) {
@@ -35,11 +37,24 @@ class AuthRepository {
   }
 
   Future<void> logout() async {
-    await _storage.delete(key: 'jwt_token');
+    try {
+      // Tenta fazer logout na API (invalida refresh token no servidor)
+      await _dataSource.logout();
+    } catch (_) {
+      // Ignora erros - o importante é limpar localmente
+    } finally {
+      // Sempre limpa os tokens locais
+      await _storage.delete(key: TokenService.accessTokenKey);
+      await _storage.delete(key: TokenService.refreshTokenKey);
+    }
   }
 
   Future<String?> getToken() async {
-    return await _storage.read(key: 'jwt_token');
+    return await _storage.read(key: TokenService.accessTokenKey);
+  }
+
+  Future<String?> getRefreshToken() async {
+    return await _storage.read(key: TokenService.refreshTokenKey);
   }
 
   Future<void> register({

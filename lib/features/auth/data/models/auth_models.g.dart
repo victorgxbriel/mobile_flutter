@@ -29,10 +29,36 @@ Map<String, dynamic> _$LoginDtoToJson(LoginDto instance) => <String, dynamic>{
 };
 
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
-    LoginResponse(accessToken: json['access_token'] as String);
+    LoginResponse(
+      accessToken: json['access_token'] as String,
+      refreshToken: json['refresh_token'] as String?,
+    );
 
 Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
-    <String, dynamic>{'access_token': instance.accessToken};
+    <String, dynamic>{
+      'access_token': instance.accessToken,
+      'refresh_token': instance.refreshToken,
+    };
+
+RefreshTokenDto _$RefreshTokenDtoFromJson(Map<String, dynamic> json) =>
+    RefreshTokenDto(refreshToken: json['refreshToken'] as String);
+
+Map<String, dynamic> _$RefreshTokenDtoToJson(RefreshTokenDto instance) =>
+    <String, dynamic>{'refreshToken': instance.refreshToken};
+
+RefreshTokenResponse _$RefreshTokenResponseFromJson(
+  Map<String, dynamic> json,
+) => RefreshTokenResponse(
+  accessToken: json['access_token'] as String,
+  refreshToken: json['refresh_token'] as String?,
+);
+
+Map<String, dynamic> _$RefreshTokenResponseToJson(
+  RefreshTokenResponse instance,
+) => <String, dynamic>{
+  'access_token': instance.accessToken,
+  'refresh_token': instance.refreshToken,
+};
 
 RegisterDto _$RegisterDtoFromJson(Map<String, dynamic> json) => RegisterDto(
   nome: json['nome'] as String,

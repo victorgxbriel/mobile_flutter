@@ -17,8 +17,8 @@ class ProfileServiceImpl implements ProfileService {
     try {
       final response = await _client.instance.get('/clientes/$clienteId');
       return ClienteModel.fromJson(response.data);
-    } on DioException catch (e) {
-      throw e;
+    } on DioException catch (_) {
+      rethrow;
     }
   }
 
@@ -30,8 +30,8 @@ class ProfileServiceImpl implements ProfileService {
         data: dto.toJson(),
       );
       return ClienteModel.fromJson(response.data);
-    } on DioException catch (e) {
-      throw e;
+    } on DioException catch (_) {
+      rethrow;
     }
   }
 }
