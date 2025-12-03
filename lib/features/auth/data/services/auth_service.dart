@@ -10,6 +10,8 @@ abstract class AuthService {
   Future<void> registerEstablishment(SetupEstabelecimentoDto setupDto);
   Future<RefreshTokenResponse> refreshToken(String refreshToken);
   Future<void> logout();
+  Future<void> forgotPassword(ForgotPasswordDto dto);
+  Future<void> resetPassword(ResetPasswordDto dto);
 }
 
 class AuthServiceImpl implements AuthService {
@@ -94,6 +96,40 @@ class AuthServiceImpl implements AuthService {
       await _client.instance.post('/auth/logout');
     } on DioException catch (_) {
       // Ignora erros de logout, pois o importante é limpar os tokens localmente
+    }
+  }
+
+  @override
+  Future<void> forgotPassword(ForgotPasswordDto dto) async {
+    try {
+      await _client.instance.post(
+        '/auth/forgot-password',
+        data: dto.toJson(),
+        options: Options(
+          // Timeout maior para envio de email
+          receiveTimeout: const Duration(seconds: 30),
+          sendTimeout: const Duration(seconds: 30),
+        ),
+      );
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> resetPassword(ResetPasswordDto dto) async {
+    try {
+      await _client.instance.post(
+        '/auth/reset-password',
+        data: dto.toJson(),
+        options: Options(
+          // Timeout maior para operações de email
+          receiveTimeout: const Duration(seconds: 30),
+          sendTimeout: const Duration(seconds: 30),
+        ),
+      );
+    } on DioException catch (_) {
+      rethrow;
     }
   }
 }

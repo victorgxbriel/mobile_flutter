@@ -151,7 +151,7 @@ class _LoginFormState extends State<_LoginForm> {
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                           onPressed: () {
-                            // TODO: Implementar recuperação de senha
+                            context.push('/forgot-password');
                           }, 
                           child: const Text("Esqueceu sua senha?"),
                         ),

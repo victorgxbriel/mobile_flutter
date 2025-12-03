@@ -5,6 +5,8 @@ import '../../core/di/service_locator.dart';
 import '../../core/services/session_service.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
+import '../../features/auth/presentation/pages/forgot_password_page.dart';
+import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/estabelecimento/presentation/notifiers/estabelecimento_details_notifier.dart';
 import '../../features/estabelecimento/presentation/pages/estabelecimento_details_page.dart';
 import '../../features/home/presentation/pages/home_shell.dart';
@@ -33,7 +35,9 @@ final appRouter = GoRouter(
   redirect: (context, state) {
     final isAuthenticated = _sessionService.isAuthenticated;
     final isAuthRoute = state.matchedLocation == '/login' || 
-                        state.matchedLocation == '/register';
+                        state.matchedLocation == '/register' ||
+                        state.matchedLocation == '/forgot-password' ||
+                        state.matchedLocation == '/reset-password';
 
     // Se não está autenticado e não está em rota de auth, redireciona para login
     if (!isAuthenticated && !isAuthRoute) {
@@ -60,6 +64,17 @@ final appRouter = GoRouter(
     GoRoute(
       path: "/register",
       builder: (_, __) => const RegisterPage(),
+    ),
+    GoRoute(
+      path: "/forgot-password",
+      builder: (_, __) => const ForgotPasswordPage(),
+    ),
+    GoRoute(
+      path: "/reset-password",
+      builder: (_, state) {
+        final email = state.extra as String?;
+        return ResetPasswordPage(email: email);
+      },
     ),
     
     // Detalhes do estabelecimento (fora do shell para tela completa)

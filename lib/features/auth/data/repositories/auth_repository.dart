@@ -159,4 +159,42 @@ class AuthRepository {
     }
   }
 
+  Future<void> forgotPassword(String email) async {
+    try {
+      final dto = ForgotPasswordDto(email: email);
+      await _dataSource.forgotPassword(dto);
+    } catch (e) {
+      if (e is DioException) {
+        // API retorna 200 mesmo se email não existir (por segurança)
+        // Então só tratamos erros de rede
+        if (e.type == DioExceptionType.connectionError) {
+          throw Exception('Erro de conexão. Verifique sua internet.');
+        }
+      }
+      throw Exception('Erro ao solicitar recuperação de senha.');
+    }
+  }
+
+  Future<void> resetPassword({
+    required String email,
+    required String code,
+    required String newPassword,
+  }) async {
+    try {
+      final dto = ResetPasswordDto(
+        email: email,
+        code: code,
+        newPassword: newPassword,
+      );
+      await _dataSource.resetPassword(dto);
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response?.statusCode == 400) {
+          throw Exception('Código inválido ou expirado.');
+        }
+      }
+      throw Exception('Erro ao redefinir senha.');
+    }
+  }
+
 }

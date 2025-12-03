@@ -141,3 +141,23 @@ Map<String, dynamic> _$EstabelecimentoSetupDtoToJson(
   'cnpj': instance.cnpj,
   'nomeFantasia': instance.nomeFantasia,
 };
+
+ForgotPasswordDto _$ForgotPasswordDtoFromJson(Map<String, dynamic> json) =>
+    ForgotPasswordDto(email: json['email'] as String);
+
+Map<String, dynamic> _$ForgotPasswordDtoToJson(ForgotPasswordDto instance) =>
+    <String, dynamic>{'email': instance.email};
+
+ResetPasswordDto _$ResetPasswordDtoFromJson(Map<String, dynamic> json) =>
+    ResetPasswordDto(
+      email: json['email'] as String,
+      code: json['code'] as String,
+      newPassword: json['newPassword'] as String,
+    );
+
+Map<String, dynamic> _$ResetPasswordDtoToJson(ResetPasswordDto instance) =>
+    <String, dynamic>{
+      'email': instance.email,
+      'code': instance.code,
+      'newPassword': instance.newPassword,
+    };
