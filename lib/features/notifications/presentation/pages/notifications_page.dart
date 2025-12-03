@@ -26,6 +26,8 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final notifier = context.watch<NotificationsNotifier>();
     final notifications = notifier.notifications;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -47,31 +49,55 @@ class NotificationsPage extends StatelessWidget {
         itemCount: notifications.length,
         itemBuilder: (context, index) {
           final notification = notifications[index];
+          // Cores com bom contraste para tema claro/escuro
+          final bool isUnread = !notification.isRead;
+          final Color cardColor = isUnread
+              ? colorScheme.brightness == Brightness.dark
+                  // No tema escuro, use um container mais claro porém ainda escuro
+                  ? colorScheme.surfaceVariant
+                  // No tema claro, use um destaque suave
+                  : colorScheme.primaryContainer.withOpacity(0.35)
+              : colorScheme.surface;
+          final Color titleColor = isUnread
+              ? colorScheme.onSurface
+              : colorScheme.onSurface.withOpacity(0.9);
+          final Color subtitleColor = colorScheme.onSurface.withOpacity(0.78);
+
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-            color: notification.isRead ? Colors.white : Colors.blue[50],
+            color: cardColor,
             child: ListTile(
               contentPadding: const EdgeInsets.all(16),
               leading: CircleAvatar(
-                backgroundColor: Theme.of(context).primaryColor,
-                child: const Icon(Icons.notifications, color: Colors.white),
+                backgroundColor: colorScheme.primary,
+                child: Icon(
+                  Icons.notifications,
+                  color: colorScheme.onPrimary,
+                ),
               ),
               title: Text(
                 notification.title,
                 style: TextStyle(
                   fontWeight:
-                      notification.isRead ? FontWeight.normal : FontWeight.bold,
+                      notification.isRead ? FontWeight.w500 : FontWeight.w700,
+                  color: titleColor,
                 ),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 4),
-                  Text(notification.message),
+                  Text(
+                    notification.message,
+                    style: TextStyle(color: subtitleColor),
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     '${notification.dateTime.day}/${notification.dateTime.month}/${notification.dateTime.year} ${notification.dateTime.hour}:${notification.dateTime.minute.toString().padLeft(2, '0')}',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: subtitleColor,
+                    ),
                   ),
                 ],
               ),
