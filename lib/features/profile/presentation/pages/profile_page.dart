@@ -171,7 +171,7 @@ class _ProfilePageState extends State<_ProfilePage> {
                   icon: Icons.settings,
                   title: 'Configurações',
                   onTap: () {
-                    // Navegar para configurações
+                    context.push('/profile/settings');
                   },
                 ),
                 _buildDivider(),

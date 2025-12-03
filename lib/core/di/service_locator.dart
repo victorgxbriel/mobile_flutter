@@ -9,11 +9,13 @@ import '../../features/home/data/repositories/estabelecimento_repository.dart';
 import '../../features/home/data/services/estabelecimento_service.dart';
 import '../../features/profile/data/repositories/profile_repository.dart';
 import '../../features/profile/data/services/profile_service.dart';
+import '../../features/settings/presentation/notifiers/theme_notifier.dart';
 import '../../features/vehicles/data/repositories/vehicle_repository.dart';
 import '../../features/vehicles/data/services/vehicle_service.dart';
 import '../../features/vehicles/data/services/nhtsa_service.dart';
 import '../network/dio_client.dart';
 import '../services/session_service.dart';
+import '../services/theme_service.dart';
 import '../storage/storage_service.dart';
 
 class ServiceLocator {
@@ -42,6 +44,8 @@ class ServiceLocator {
   late final SharedPreferences _sharedPreferences;
   late final StorageService _storageService;
   late final SessionService _sessionService;
+  late final ThemeService _themeService;
+  late final ThemeNotifier _themeNotifier;
 
   Future<void> init() async {
     if (_initialized) return;
@@ -70,6 +74,8 @@ class ServiceLocator {
     _vehicleRepository = VehicleRepositoryImpl(_vehicleService);
     _nhtsaService = NhtsaServiceImpl(_dioClient);
     _storageService = StorageServiceImpl(_sharedPreferences);
+    _themeService = ThemeService(_sharedPreferences);
+    _themeNotifier = ThemeNotifier(_themeService);
     
     // Inicializa a sessão (verifica token existente)
     await _sessionService.init();
@@ -87,4 +93,5 @@ class ServiceLocator {
   FlutterSecureStorage get storage => _storage;
   StorageService get storageService => _storageService;
   SessionService get sessionService => _sessionService;
+  ThemeNotifier get themeNotifier => _themeNotifier;
 }

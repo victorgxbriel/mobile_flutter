@@ -19,6 +19,7 @@ import '../../features/vehicles/presentation/notifiers/nhtsa_notifier.dart';
 import '../../features/vehicles/presentation/pages/vehicles_page.dart';
 import '../../features/vehicles/presentation/pages/vehicle_form_page.dart';
 import '../../features/vehicles/presentation/pages/vehicle_edit_page.dart';
+import '../../features/settings/presentation/pages/settings_page.dart';
 
 // Chaves de navegação para cada branch
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -194,6 +195,10 @@ final appRouter = GoRouter(
                       },
                     ),
                   ],
+                ),
+                GoRoute(
+                  path: "settings",
+                  builder: (context, state) => const SettingsPage(),
                 ),
               ],
             ),

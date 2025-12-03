@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
-import 'package:mobile_flutter/app/theme/colors.dart';
+import 'package:provider/provider.dart';
+import 'app/theme/app_theme.dart';
 import 'app/router/app_router.dart';
 import 'core/di/service_locator.dart';
+import 'features/settings/presentation/notifiers/theme_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,13 +25,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Lava Jato App',
-      //theme: AppTheme.light,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.lightBlue)
+    return ChangeNotifierProvider<ThemeNotifier>.value(
+      value: ServiceLocator().themeNotifier,
+      child: Consumer<ThemeNotifier>(
+        builder: (context, themeNotifier, child) {
+          return MaterialApp.router(
+            title: 'Lava Jato App',
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeNotifier.themeMode,
+            routerConfig: appRouter,
+          );
+        },
       ),
-      routerConfig: appRouter,
     );
   }
 }
