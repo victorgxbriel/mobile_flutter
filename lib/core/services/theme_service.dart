@@ -19,7 +19,7 @@ class ThemeService {
     final savedTheme = _prefs.getString(_themeKey);
     
     if (savedTheme == null) {
-      return ThemeMode.system; // Padrão: seguir sistema
+      return ThemeMode.system;
     }
 
     return ThemeMode.values.firstWhere(

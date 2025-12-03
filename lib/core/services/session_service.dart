@@ -25,19 +25,15 @@ class SessionService extends ChangeNotifier {
 
   SessionService(this._storage);
 
-  /// Inicializa a sessão verificando se há um token válido
   Future<void> init() async {
     final token = await _storage.read(key: TokenService.accessTokenKey);
     final refreshToken = await _storage.read(key: TokenService.refreshTokenKey);
 
     if (token != null && token.isNotEmpty && !JwtUtils.isExpired(token)) {
-      // Access token válido
       _token = token;
       _isAuthenticated = true;
       _extractUserInfo(token);
     } else if (refreshToken != null && !JwtUtils.isExpired(refreshToken)) {
-      // Access token expirado mas refresh token válido
-      // O AuthInterceptor vai renovar automaticamente na próxima requisição
       _isAuthenticated = true;
       if (token != null) {
         _extractUserInfo(token);
@@ -63,14 +59,12 @@ class SessionService extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Extrai informações do usuário do token
   void _extractUserInfo(String token) {
     _userId = JwtUtils.getUserId(token);
     _email = JwtUtils.getEmail(token);
     _roles = JwtUtils.getRoles(token);
   }
 
-  /// Verifica se a sessão ainda é válida
   bool checkSession() {
     if (_token == null) return false;
     
@@ -90,7 +84,6 @@ class SessionService extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Faz logout
   Future<void> logout() async {
     await _clearStoredTokens();
     _clearSession();
@@ -110,13 +103,11 @@ class SessionService extends ChangeNotifier {
     _roles = null;
   }
 
-  /// Retorna a data de expiração do token atual
   DateTime? get tokenExpiration {
     if (_token == null) return null;
     return JwtUtils.getExpirationDate(_token!);
   }
 
-  /// Retorna quanto tempo falta para o token expirar
   Duration? get timeUntilExpiration {
     final expiration = tokenExpiration;
     if (expiration == null) return null;

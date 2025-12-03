@@ -8,8 +8,10 @@ import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
 import '../../features/appointments/presentation/notifiers/agendamentos_notifier.dart';
+import '../../features/appointments/presentation/notifiers/agendamento_details_notifier.dart';
 import '../../features/appointments/presentation/notifiers/create_agendamento_notifier.dart';
 import '../../features/appointments/presentation/pages/appointments_page.dart';
+import '../../features/appointments/presentation/pages/agendamento_details_page.dart';
 import '../../features/appointments/presentation/pages/create_agendamento_page.dart';
 import '../../features/estabelecimento/data/models/servico_model.dart';
 import '../../features/estabelecimento/presentation/notifiers/estabelecimento_details_notifier.dart';
@@ -29,7 +31,6 @@ import '../../features/settings/presentation/pages/settings_page.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 //final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
-// Getter para o SessionService
 SessionService get _sessionService => ServiceLocator().sessionService;
 
 final appRouter = GoRouter(
@@ -125,6 +126,20 @@ final appRouter = GoRouter(
             servicos: servicos,
             servicoPreSelecionadoId: servicoPreSelecionadoId,
           ),
+        );
+      },
+    ),
+    
+    // Detalhes do agendamento (fora do shell para tela completa)
+    GoRoute(
+      path: "/agendamento/:id",
+      builder: (context, state) {
+        final id = int.parse(state.pathParameters['id']!);
+        return ChangeNotifierProvider(
+          create: (_) => AgendamentoDetailsNotifier(
+            ServiceLocator().agendamentoRepository,
+          ),
+          child: AgendamentoDetailsPage(agendamentoId: id),
         );
       },
     ),

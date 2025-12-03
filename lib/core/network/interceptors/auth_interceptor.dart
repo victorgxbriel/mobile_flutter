@@ -35,14 +35,11 @@ class AuthInterceptor extends Interceptor {
     if (token != null && token.isNotEmpty) {
       // Verificar se o token está expirado ANTES de fazer a requisição
       if (JwtUtils.isExpired(token)) {
-        // Tenta renovar o token
         final refreshed = await tokenService.tryRefreshToken();
         
         if (refreshed) {
-          // Pega o novo token
           token = await storage.read(key: TokenService.accessTokenKey);
         } else {
-          // Refresh falhou - notifica e rejeita
           onTokenExpired?.call();
           handler.reject(
             DioException(
@@ -68,19 +65,15 @@ class AuthInterceptor extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    // Se receber 401 da API, tenta refresh
     if (err.response?.statusCode == 401) {
-      // Não tenta refresh se já for a rota de refresh ou login
       if (_isAuthRoute(err.requestOptions.path)) {
         handler.next(err);
         return;
       }
 
-      // Tenta renovar o token
       final refreshed = await tokenService.tryRefreshToken();
 
       if (refreshed) {
-        // Refaz a requisição original com o novo token
         try {
           final newToken = await storage.read(key: TokenService.accessTokenKey);
           

@@ -262,8 +262,12 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: InkWell(
-        onTap: () {
-          // TODO: Navegar para detalhes do agendamento
+        onTap: () async {
+          // Navega para detalhes e aguarda resultado (true = cancelamento realizado)
+          final result = await context.push<bool>('/agendamento/${agendamento.id}');
+          if (result == true && mounted) {
+            _loadAgendamentos();
+          }
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(

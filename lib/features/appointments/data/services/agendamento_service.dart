@@ -6,6 +6,7 @@ import '../models/slot_model.dart';
 abstract class AgendamentoService {
   Future<List<AgendamentoModel>> getAgendamentosByClienteId(int clienteId);
   Future<AgendamentoModel> getAgendamentoById(int id);
+  Future<AgendamentoModel> getAgendamentoByIdFull(int id);
   Future<AgendamentoModel> createAgendamento(CreateAgendamentoDto dto);
   Future<void> cancelarAgendamento(int id);
   Future<List<ProgramacaoDiariaModel>> getProgramacoesByEstabelecimento(int estabelecimentoId);
@@ -36,6 +37,19 @@ class AgendamentoServiceImpl implements AgendamentoService {
     try {
       final response = await _client.instance.get(
         '/agendamentos/$id',
+      );
+      return AgendamentoModel.fromJson(response.data);
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AgendamentoModel> getAgendamentoByIdFull(int id) async {
+    try {
+      final response = await _client.instance.get(
+        '/agendamentos/$id',
+        queryParameters: {'include': 'full'},
       );
       return AgendamentoModel.fromJson(response.data);
     } on DioException catch (_) {

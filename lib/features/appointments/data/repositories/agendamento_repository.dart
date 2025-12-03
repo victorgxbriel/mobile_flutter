@@ -11,7 +11,9 @@ class AgendamentoRepository {
   Future<List<AgendamentoModel>> getAgendamentosByClienteId(int clienteId) async {
     try {
       return await _service.getAgendamentosByClienteId(clienteId);
-    } catch (e) {
+    } catch (e, stackTrace) {
+      print('Erro ao carregar agendamentos: $e');
+      print('StackTrace: $stackTrace');
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
           throw Exception('Sessão expirada. Faça login novamente.');
@@ -31,6 +33,19 @@ class AgendamentoRepository {
         }
       }
       throw Exception('Erro ao carregar agendamento.');
+    }
+  }
+
+  Future<AgendamentoModel> getAgendamentoByIdFull(int id) async {
+    try {
+      return await _service.getAgendamentoByIdFull(id);
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response?.statusCode == 404) {
+          throw Exception('Agendamento não encontrado.');
+        }
+      }
+      throw Exception('Erro ao carregar detalhes do agendamento.');
     }
   }
 

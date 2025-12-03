@@ -26,6 +26,31 @@ final class AgendamentosError extends AgendamentosState {
   const AgendamentosError(this.message);
 }
 
+// Estado de detalhes do agendamento
+sealed class AgendamentoDetailsState {
+  const AgendamentoDetailsState();
+}
+
+final class AgendamentoDetailsInitial extends AgendamentoDetailsState {
+  const AgendamentoDetailsInitial();
+}
+
+final class AgendamentoDetailsLoading extends AgendamentoDetailsState {
+  const AgendamentoDetailsLoading();
+}
+
+final class AgendamentoDetailsLoaded extends AgendamentoDetailsState {
+  final AgendamentoModel agendamento;
+
+  const AgendamentoDetailsLoaded(this.agendamento);
+}
+
+final class AgendamentoDetailsError extends AgendamentoDetailsState {
+  final String message;
+
+  const AgendamentoDetailsError(this.message);
+}
+
 // Estado da criação de agendamento
 sealed class CreateAgendamentoState {
   const CreateAgendamentoState();
