@@ -34,15 +34,27 @@ class NotificationsPage extends StatelessWidget {
         title: const Text('Notificações'),
         centerTitle: true,
         actions: [
-          TextButton(
-            onPressed: () {
-              notifier.markAllAsRead();
-            },
-            child: const Text(
-              'Marcar todas como lidas',
-              style: TextStyle(color: Colors.white),
+          if (notifications.isNotEmpty) ...[
+            TextButton(
+              onPressed: () {
+                notifier.markAllAsRead();
+              },
+              child: Text(
+                'Marcar todas como lidas',
+                style: TextStyle(color: colorScheme.onSurface),
+              ),
             ),
-          ),
+            IconButton(
+              tooltip: 'Limpar notificações',
+              onPressed: () {
+                notifier.clearNotifications();
+              },
+              icon: Icon(
+                Icons.delete_sweep_outlined,
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
         ],
       ),
       body: ListView.builder(

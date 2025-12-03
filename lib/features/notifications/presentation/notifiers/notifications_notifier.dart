@@ -37,4 +37,10 @@ class NotificationsNotifier extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void clearNotifications() {
+    if (_notifications.isEmpty) return;
+    _notifications.clear();
+    notifyListeners();
+  }
 }
