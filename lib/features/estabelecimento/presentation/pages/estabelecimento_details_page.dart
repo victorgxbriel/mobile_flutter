@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../app/theme/colors.dart';
@@ -482,6 +483,18 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
   }
 
   void _showServiceDetails(ServicoModel servico) {
+    // Obter os dados do estabelecimento e serviços do notifier
+    final notifier = context.read<EstabelecimentoDetailsNotifier>();
+    final state = notifier.state;
+    
+    EstabelecimentoModel? estabelecimento;
+    List<ServicoModel> servicos = [];
+    
+    if (state is EstabelecimentoDetailsLoaded) {
+      estabelecimento = state.estabelecimento;
+      servicos = state.servicos;
+    }
+    
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -593,11 +606,10 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  // TODO: Implementar agendamento
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Agendamento será implementado em breve!'),
-                    ),
+                  _navigateToAgendar(
+                    estabelecimento: estabelecimento,
+                    servicos: servicos,
+                    servicoPreSelecionadoId: servico.id,
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -619,6 +631,23 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
           ],
         ),
       ),
+    );
+  }
+
+  void _navigateToAgendar({
+    EstabelecimentoModel? estabelecimento,
+    required List<ServicoModel> servicos,
+    int? servicoPreSelecionadoId,
+  }) {
+    if (estabelecimento == null) return;
+    
+    context.push(
+      '/agendar/${estabelecimento.id}',
+      extra: {
+        'estabelecimentoNome': estabelecimento.nomeFantasia,
+        'servicos': servicos,
+        'servicoPreSelecionadoId': servicoPreSelecionadoId,
+      },
     );
   }
 

@@ -25,8 +25,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final serviceLocator = ServiceLocator.instance;
+    
     return ChangeNotifierProvider<ThemeNotifier>.value(
-      value: ServiceLocator().themeNotifier,
+      value: serviceLocator.themeNotifier,
       child: Consumer<ThemeNotifier>(
         builder: (context, themeNotifier, child) {
           return MaterialApp.router(

@@ -7,11 +7,15 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/pages/forgot_password_page.dart';
 import '../../features/auth/presentation/pages/reset_password_page.dart';
+import '../../features/appointments/presentation/notifiers/agendamentos_notifier.dart';
+import '../../features/appointments/presentation/notifiers/create_agendamento_notifier.dart';
+import '../../features/appointments/presentation/pages/appointments_page.dart';
+import '../../features/appointments/presentation/pages/create_agendamento_page.dart';
+import '../../features/estabelecimento/data/models/servico_model.dart';
 import '../../features/estabelecimento/presentation/notifiers/estabelecimento_details_notifier.dart';
 import '../../features/estabelecimento/presentation/pages/estabelecimento_details_page.dart';
 import '../../features/home/presentation/pages/home_shell.dart';
 import '../../features/home/presentation/pages/dashboard_page.dart';
-import '../../features/appointments/presentation/pages/appointments_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/vehicles/presentation/notifiers/vehicles_notifier.dart';
@@ -92,6 +96,39 @@ final appRouter = GoRouter(
       },
     ),
     
+    // Criação de agendamento (fora do shell para tela completa)
+    GoRoute(
+      path: "/agendar/:estabelecimentoId",
+      builder: (context, state) {
+        final estabelecimentoId = int.parse(state.pathParameters['estabelecimentoId']!);
+        final extra = state.extra as Map<String, dynamic>?;
+        final estabelecimentoNome = extra?['estabelecimentoNome'] as String? ?? '';
+        final servicos = extra?['servicos'] as List<ServicoModel>? ?? [];
+        final servicoPreSelecionadoId = extra?['servicoPreSelecionadoId'] as int?;
+        
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (_) => VehiclesNotifier(
+                ServiceLocator().vehicleRepository,
+              ),
+            ),
+            ChangeNotifierProvider(
+              create: (_) => CreateAgendamentoNotifier(
+                ServiceLocator().agendamentoRepository,
+              ),
+            ),
+          ],
+          child: CreateAgendamentoPage(
+            estabelecimentoId: estabelecimentoId,
+            estabelecimentoNome: estabelecimentoNome,
+            servicos: servicos,
+            servicoPreSelecionadoId: servicoPreSelecionadoId,
+          ),
+        );
+      },
+    ),
+    
     // Shell com bottom navigation (área autenticada)
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) => HomeShell(
@@ -113,18 +150,12 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: "/appointments",
-              builder: (context, state) => AppointmentsPage(),
-              // Sub-rotas de agendamentos podem ser adicionadas aqui
-              // routes: [
-              //   GoRoute(
-              //     path: "new",
-              //     builder: (context, state) => NewAppointmentPage(),
-              //   ),
-              //   GoRoute(
-              //     path: ":id",
-              //     builder: (context, state) => AppointmentDetailsPage(id: state.pathParameters['id']!),
-              //   ),
-              // ],
+              builder: (context, state) => ChangeNotifierProvider(
+                create: (_) => AgendamentosNotifier(
+                  ServiceLocator().agendamentoRepository,
+                ),
+                child: const AppointmentsPage(),
+              ),
             ),
           ],
         ),

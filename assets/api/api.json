@@ -3490,54 +3490,20 @@
         ]
       }
     },
-    "/programacoes-diaria": {
-      "post": {
-        "operationId": "ProgramacaoDiariaController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProgramacaoDiariaDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Programação diária criado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
-        },
-        "security": [
+    "/estabelecimentos/{estabelecimentoId}/programacoes-diarias": {
+      "get": {
+        "operationId": "ProgramacaoDiariaController_findByEstabelecimento",
+        "parameters": [
           {
-            "bearer": []
-          },
-          {
-            "bearer": []
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "number"
+            }
           }
         ],
-        "summary": "Criar nova programação diária",
-        "tags": [
-          "programacao-diaria"
-        ]
-      },
-      "get": {
-        "operationId": "ProgramacaoDiariaController_findAll",
-        "parameters": [],
         "responses": {
           "200": {
             "description": "Lista de programações retornada com sucesso",
@@ -3551,26 +3517,111 @@
                 }
               }
             }
-          },
-          "401": {
-            "description": "Não autorizado"
           }
         },
         "security": [
           {
             "bearer": []
+          }
+        ],
+        "summary": "Listar programações diárias de um estabelecimento",
+        "tags": [
+          "programacao-diaria"
+        ]
+      },
+      "post": {
+        "operationId": "ProgramacaoDiariaController_abrirProgramacao",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProgramacaoDiariaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Programação aberta e slots gerados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
+                }
+              }
+            }
           },
+          "400": {
+            "description": "Dados inválidos ou programação já existe"
+          }
+        },
+        "security": [
           {
             "bearer": []
           }
         ],
-        "summary": "Listar todas as programações diárias",
+        "summary": "Abrir programação diária para um estabelecimento (gerar slots automáticos)",
         "tags": [
           "programacao-diaria"
         ]
       }
     },
-    "/programacoes-diaria/{id}": {
+    "/estabelecimentos/{estabelecimentoId}/programacoes-diarias/data/{data}": {
+      "get": {
+        "operationId": "ProgramacaoDiariaController_findByEstabelecimentoAndData",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "data",
+            "required": true,
+            "in": "path",
+            "description": "Data da programação (formato: YYYY-MM-DD)",
+            "schema": {
+              "example": "2025-12-03",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Programação com slots retornada com sucesso"
+          },
+          "404": {
+            "description": "Programação não encontrada para esta data"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar programação de um estabelecimento em uma data específica (com slots)",
+        "tags": [
+          "programacao-diaria"
+        ]
+      }
+    },
+    "/programacoes-diarias/{id}": {
       "get": {
         "operationId": "ProgramacaoDiariaController_findOne",
         "parameters": [
@@ -3717,54 +3768,9 @@
         ]
       }
     },
-    "/programacoes-diaria/{id}/slots-tempo/{idSlot}": {
-      "post": {
-        "operationId": "ProgramacaoDiariaController_desabilitaHorario",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID da programação",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "idSlot",
-            "required": true,
-            "in": "path",
-            "description": "ID do slot de tempo",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Horário desabilitado com sucesso"
-          },
-          "404": {
-            "description": "Programação ou slot não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Desabilitar horário específico (slot)",
-        "tags": [
-          "programacao-diaria"
-        ]
-      }
-    },
-    "/programacoes-diaria/{id}/slots-tempo": {
+    "/programacoes-diarias/{id}/slots": {
       "get": {
-        "operationId": "ProgramacaoDiariaController_findSlotsByDiaId",
+        "operationId": "ProgramacaoDiariaController_findSlots",
         "parameters": [
           {
             "name": "id",
@@ -3787,9 +3793,6 @@
         "security": [
           {
             "bearer": []
-          },
-          {
-            "bearer": []
           }
         ],
         "summary": "Listar slots de tempo de uma programação",
@@ -3798,37 +3801,43 @@
         ]
       }
     },
-    "/programacoes-diaria/abertura": {
-      "post": {
-        "operationId": "ProgramacaoDiariaController_abrirProgramacao",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProgramacaoDiariaDto"
-              }
+    "/programacoes-diarias/{id}/slots/{slotId}": {
+      "patch": {
+        "operationId": "ProgramacaoDiariaController_desabilitaHorario",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID da programação",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "slotId",
+            "required": true,
+            "in": "path",
+            "description": "ID do slot de tempo",
+            "schema": {
+              "type": "number"
             }
           }
-        },
+        ],
         "responses": {
-          "201": {
-            "description": "Programação aberta e slots gerados com sucesso"
+          "200": {
+            "description": "Slot atualizado com sucesso"
           },
-          "400": {
-            "description": "Dados inválidos ou programação já existe"
+          "404": {
+            "description": "Programação ou slot não encontrado"
           }
         },
         "security": [
           {
             "bearer": []
-          },
-          {
-            "bearer": []
           }
         ],
-        "summary": "Abrir programação diária (gerar slots automáticos)",
+        "summary": "Desabilitar/habilitar um slot de tempo",
         "tags": [
           "programacao-diaria"
         ]
@@ -6026,6 +6035,87 @@
           }
         }
       },
+      "SelectProgramacaoDiariaDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          },
+          "active": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true
+          },
+          "data": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+            "x-nestjs_zod-has-null": true
+          },
+          "horaInicio": {
+            "type": "string",
+            "format": "time",
+            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
+            "x-nestjs_zod-has-null": true
+          },
+          "horaTermino": {
+            "type": "string",
+            "format": "time",
+            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
+            "x-nestjs_zod-has-null": true
+          },
+          "intervaloHorario": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true
+          },
+          "agendamentosPorHorario": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "active",
+          "data",
+          "horaInicio",
+          "horaTermino",
+          "intervaloHorario",
+          "agendamentosPorHorario",
+          "estabelecimentoId"
+        ]
+      },
       "CreateProgramacaoDiariaDto": {
         "type": "object",
         "properties": {
@@ -7518,87 +7608,6 @@
           "quantidade",
           "valorUnitario",
           "desconto"
-        ]
-      },
-      "SelectProgramacaoDiariaDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true
-          },
-          "updatedAt": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true
-          },
-          "active": {
-            "type": "boolean",
-            "x-nestjs_zod-has-null": true
-          },
-          "data": {
-            "type": "string",
-            "format": "date",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
-            "x-nestjs_zod-has-null": true
-          },
-          "horaInicio": {
-            "type": "string",
-            "format": "time",
-            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
-            "x-nestjs_zod-has-null": true
-          },
-          "horaTermino": {
-            "type": "string",
-            "format": "time",
-            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
-            "x-nestjs_zod-has-null": true
-          },
-          "intervaloHorario": {
-            "type": "string",
-            "x-nestjs_zod-has-null": true
-          },
-          "agendamentosPorHorario": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          },
-          "estabelecimentoId": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "updatedAt",
-          "active",
-          "data",
-          "horaInicio",
-          "horaTermino",
-          "intervaloHorario",
-          "agendamentosPorHorario",
-          "estabelecimentoId"
         ]
       },
       "SelectSlotTempoDto": {
