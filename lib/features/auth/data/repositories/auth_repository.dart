@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mobile_flutter/app/utils/app_logger.dart';
 import 'package:mobile_flutter/features/auth/data/services/auth_service.dart';
 
 import '../../../../core/services/token_service.dart';
 import '../models/auth_models.dart';
+
+final _log = logger(AuthRepository);
 
 class AuthRepository {
   final AuthService _dataSource;
@@ -12,20 +15,24 @@ class AuthRepository {
   AuthRepository(this._dataSource, this._storage);
 
   Future<String> login(String email, String password) async {
+    _log.i('Tentando login para: $email');
     try {
       // 1. Faz o Login na API
       final loginDto = LoginDto(email: email, password: password);
       final response = await _dataSource.login(loginDto);
+      _log.d('Login API response recebido');
 
       // 2. Salva os Tokens no Celular (Segurança)
       await _storage.write(key: TokenService.accessTokenKey, value: response.accessToken);
       if (response.refreshToken != null) {
         await _storage.write(key: TokenService.refreshTokenKey, value: response.refreshToken);
       }
+      _log.i('Login realizado com sucesso');
 
       // 3. Retorna o token para o SessionService gerenciar
       return response.accessToken;
     } catch (e) {
+      _log.e('Erro no login', error: e);
       // Tratamento de erro simplificado para o exemplo
       if (e is DioException) {
         if (e.response?.statusCode == 401) {
@@ -37,15 +44,19 @@ class AuthRepository {
   }
 
   Future<void> logout() async {
+    _log.i('Iniciando logout...');
     try {
       // Tenta fazer logout na API (invalida refresh token no servidor)
       await _dataSource.logout();
-    } catch (_) {
+      _log.d('Logout na API realizado');
+    } catch (e) {
+      _log.w('Erro ao fazer logout na API (ignorando)', error: e);
       // Ignora erros - o importante é limpar localmente
     } finally {
       // Sempre limpa os tokens locais
       await _storage.delete(key: TokenService.accessTokenKey);
       await _storage.delete(key: TokenService.refreshTokenKey);
+      _log.i('Tokens locais removidos');
     }
   }
 
@@ -63,6 +74,7 @@ class AuthRepository {
     required String password,
     required String cpf,
   }) async {
+    _log.i('Registrando novo usuário: $email');
     try {
       final dto = RegisterDto(
         nome: nome,
@@ -72,8 +84,10 @@ class AuthRepository {
       );
       
       await _dataSource.register(dto);
+      _log.i('Usuário registrado com sucesso');
       // Não precisamos retornar nada se der certo, apenas se der erro (catch)
     } catch (e) {
+      _log.e('Erro ao registrar usuário', error: e);
       if (e is DioException && e.response?.statusCode == 400) {
         throw Exception('Dados inválidos. Verifique CPF ou Email.');
       }
@@ -87,6 +101,7 @@ class AuthRepository {
     required String password,
     required String cpf,
   }) async {
+    _log.i('Registrando novo cliente: $email');
     try {
       // Prepara DTO de usuário
       final userDto = RegisterDto(
@@ -104,7 +119,9 @@ class AuthRepository {
       );
       
       await _dataSource.registerClient(userDto, clientDto);
+      _log.i('Cliente registrado com sucesso');
     } catch (e) {
+      _log.e('Erro ao registrar cliente', error: e);
       if (e is DioException && e.response?.statusCode == 400) {
         throw Exception('Dados inválidos. Verifique CPF ou Email.');
       }
@@ -119,6 +136,7 @@ class AuthRepository {
     required String cnpj,
     required String nomeFantasia,
   }) async {
+    _log.i('Registrando novo estabelecimento: $nomeFantasia');
     try {
       // O endpoint /estabelecimentos/setup espera os dados do setup
       final setupDto = SetupEstabelecimentoDto(
@@ -134,7 +152,9 @@ class AuthRepository {
       );
       
       await _dataSource.registerEstablishment(setupDto);
+      _log.i('Estabelecimento registrado com sucesso');
     } catch (e) {
+      _log.e('Erro ao registrar estabelecimento', error: e);
       if (e is DioException && e.response?.statusCode == 400) {
         throw Exception('Dados inválidos. Verifique CNPJ ou Email.');
       }
@@ -143,27 +163,31 @@ class AuthRepository {
   }
   
   Future<UserModel?> getCurrentUser() async {
+    _log.d('Buscando usuário atual...');
     try {
       final token = await _storage.read(key: 'jwt_token');
-      if (token == null) return null;
-      
-      // Se você já tem o ID do usuário no token ou em outro lugar, use-o
-      // Caso contrário, você pode precisar decodificar o JWT para obter o ID
-      // Vou assumir que o token JWT contém o ID do usuário
+      if (token == null) {
+        _log.w('Nenhum token encontrado');
+        return null;
+      }
       
       final response = await _dataSource.getCurrentUser();
+      _log.d('Usuário obtido: ${response.email}');
       return response;
     } catch (e) {
-      print('Erro ao obter usuário atual: $e');
+      _log.e('Erro ao obter usuário atual', error: e);
       return null;
     }
   }
 
   Future<void> forgotPassword(String email) async {
+    _log.i('Solicitando recuperação de senha para: $email');
     try {
       final dto = ForgotPasswordDto(email: email);
       await _dataSource.forgotPassword(dto);
+      _log.i('Email de recuperação enviado');
     } catch (e) {
+      _log.e('Erro ao solicitar recuperação', error: e);
       if (e is DioException) {
         // API retorna 200 mesmo se email não existir (por segurança)
         // Então só tratamos erros de rede
@@ -180,6 +204,7 @@ class AuthRepository {
     required String code,
     required String newPassword,
   }) async {
+    _log.i('Redefinindo senha para: $email');
     try {
       final dto = ResetPasswordDto(
         email: email,
@@ -187,7 +212,9 @@ class AuthRepository {
         newPassword: newPassword,
       );
       await _dataSource.resetPassword(dto);
+      _log.i('Senha redefinida com sucesso');
     } catch (e) {
+      _log.e('Erro ao redefinir senha', error: e);
       if (e is DioException) {
         if (e.response?.statusCode == 400) {
           throw Exception('Código inválido ou expirado.');

@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:mobile_flutter/app/utils/app_logger.dart';
 
 import '../../data/models/nhtsa_models.dart';
 import '../../data/services/nhtsa_service.dart';
 import '../state/nhtsa_state.dart';
+
+final _log = logger(NhtsaNotifier);
 
 class NhtsaNotifier extends ChangeNotifier {
   final NhtsaService _service;
@@ -33,19 +36,23 @@ class NhtsaNotifier extends ChangeNotifier {
   Future<void> loadMakes() async {
     // Se já tem cache, não precisa carregar novamente
     if (_allMakes.isNotEmpty) {
+      _log.t('Usando cache de marcas (${_allMakes.length} marcas)');
       _makesState = MakesLoaded(_allMakes);
       notifyListeners();
       return;
     }
 
+    _log.i('Carregando marcas da NHTSA...');
     _makesState = const MakesLoading();
     notifyListeners();
 
     try {
       final response = await _service.getAllMakes();
       _allMakes = response.results;
+      _log.d('${_allMakes.length} marcas carregadas');
       _makesState = MakesLoaded(_allMakes);
     } catch (e) {
+      _log.e('Erro ao carregar marcas', error: e);
       _makesState = MakesError(e.toString());
     }
 
@@ -64,6 +71,7 @@ class NhtsaNotifier extends ChangeNotifier {
 
   /// Seleciona uma marca e carrega seus modelos
   Future<void> selectMake(MakeModel make) async {
+    _log.i('Selecionando marca: ${make.makeName}');
     _selectedMake = make;
     _availableModels = [];
     _modelsState = const ModelsLoading();
@@ -72,8 +80,10 @@ class NhtsaNotifier extends ChangeNotifier {
     try {
       final response = await _service.getModelsByMakeId(make.makeId);
       _availableModels = response.results;
+      _log.d('${_availableModels.length} modelos encontrados para ${make.makeName}');
       _modelsState = ModelsLoaded(_availableModels);
     } catch (e) {
+      _log.e('Erro ao carregar modelos', error: e);
       _modelsState = ModelsError(e.toString());
     }
 
@@ -82,6 +92,7 @@ class NhtsaNotifier extends ChangeNotifier {
 
   /// Limpa a seleção de marca e modelos
   void clearSelection() {
+    _log.t('Limpando seleção de marca/modelo');
     _selectedMake = null;
     _availableModels = [];
     _modelsState = const ModelsInitial();
@@ -99,6 +110,7 @@ class NhtsaNotifier extends ChangeNotifier {
 
   /// Reseta todos os estados
   void reset() {
+    _log.t('Reset do estado NHTSA (mantendo cache)');
     _selectedMake = null;
     _availableModels = [];
     _modelsState = const ModelsInitial();

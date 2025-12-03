@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:mobile_flutter/app/utils/app_logger.dart';
 import 'package:mobile_flutter/core/di/service_locator.dart';
 import 'package:mobile_flutter/features/auth/data/repositories/auth_repository.dart';
 import 'package:mobile_flutter/features/auth/presentation/states/login_state.dart';
+
+final _log = logger(LoginNotifier);
 
 class LoginNotifier extends ChangeNotifier {
   final AuthRepository _authRepository;
@@ -20,7 +23,10 @@ class LoginNotifier extends ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
+    _log.i('Iniciando processo de login para: $email');
+    
     if (email.isEmpty || password.isEmpty) {
+      _log.w('Campos vazios no login');
       _status = Error('Por favor, preencha todos os campos.');
       notifyListeners();
       return;
@@ -31,19 +37,23 @@ class LoginNotifier extends ChangeNotifier {
 
     try {
       final token = await _authRepository.login(email, password);
+      _log.d('Token obtido, atualizando sessão...');
       
       // Atualiza a sessão com o novo token
       await ServiceLocator().sessionService.setToken(token);
       
+      _log.i('Login realizado com sucesso');
       _status = Success();
       notifyListeners();
     } catch (e) {
+      _log.e('Erro no login', error: e);
       _status = Error(e.toString());
       notifyListeners();
     }
   }
 
   void reset() {
+    _log.t('Reset do estado de login');
     _status = Initial();
     notifyListeners();
   }

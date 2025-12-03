@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../app/utils/app_logger.dart';
 import '../../features/appointments/data/repositories/agendamento_repository.dart';
 import '../../features/appointments/data/services/agendamento_service.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
@@ -20,6 +21,8 @@ import '../services/session_service.dart';
 import '../services/theme_service.dart';
 import '../storage/storage_service.dart';
 
+final _log = detailLogger(ServiceLocator);
+
 class ServiceLocator {
   static final ServiceLocator _instance = ServiceLocator._internal();
   static ServiceLocator get instance => _instance;
@@ -28,6 +31,7 @@ class ServiceLocator {
 
   /// Método utilitário para obter dependências
   T get<T>() {
+    _log.t('Resolvendo dependência: $T');
     if (T == SessionService) return sessionService as T;
     if (T == AuthRepository) return authRepository as T;
     if (T == ProfileRepository) return profileRepository as T;
@@ -39,6 +43,7 @@ class ServiceLocator {
     if (T == StorageService) return storageService as T;
     if (T == ThemeNotifier) return themeNotifier as T;
     if (T == FlutterSecureStorage) return storage as T;
+    _log.e('Dependência não registrada: $T');
     throw Exception('Dependency $T not registered in ServiceLocator');
   }
 
@@ -69,12 +74,20 @@ class ServiceLocator {
   late final ThemeNotifier _themeNotifier;
 
   Future<void> init() async {
-    if (_initialized) return;
+    if (_initialized) {
+      _log.w('ServiceLocator já foi inicializado');
+      return;
+    }
+    
+    _log.i('Inicializando ServiceLocator...');
     
     _dio = Dio();
     _storage = const FlutterSecureStorage();
     _sharedPreferences = await SharedPreferences.getInstance();
+    _log.d('SharedPreferences inicializado');
+    
     _sessionService = SessionService(_storage);
+    _log.d('SessionService criado');
     
     // Inicializa DioClient com callback de sessão expirada
     _dioClient = DioClient(
@@ -82,28 +95,39 @@ class ServiceLocator {
       _storage,
       onTokenExpired: () => _sessionService.handleSessionExpired(),
     );
+    _log.d('DioClient configurado');
     
+    // Services
     _authService = AuthServiceImpl(_dioClient);
-    _authRepository = AuthRepository(_authService, _storage);
     _profileService = ProfileServiceImpl(_dioClient);
-    _profileRepository = ProfileRepository(_profileService, _storage);
     _estabelecimentoService = EstabelecimentoServiceImpl(_dioClient);
-    _estabelecimentoRepository = EstabelecimentoRepository(_estabelecimentoService);
     _estabelecimentoDetailsService = EstabelecimentoDetailsServiceImpl(_dioClient);
-    _estabelecimentoDetailsRepository = EstabelecimentoDetailsRepository(_estabelecimentoDetailsService);
     _vehicleService = VehicleServiceImpl(_dioClient);
-    _vehicleRepository = VehicleRepositoryImpl(_vehicleService);
     _nhtsaService = NhtsaServiceImpl(_dioClient);
     _agendamentoService = AgendamentoServiceImpl(_dioClient);
+    _log.d('Services criados');
+    
+    // Repositories
+    _authRepository = AuthRepository(_authService, _storage);
+    _profileRepository = ProfileRepository(_profileService, _storage);
+    _estabelecimentoRepository = EstabelecimentoRepository(_estabelecimentoService);
+    _estabelecimentoDetailsRepository = EstabelecimentoDetailsRepository(_estabelecimentoDetailsService);
+    _vehicleRepository = VehicleRepositoryImpl(_vehicleService);
     _agendamentoRepository = AgendamentoRepository(_agendamentoService);
+    _log.d('Repositories criados');
+    
+    // Storage e Theme
     _storageService = StorageServiceImpl(_sharedPreferences);
     _themeService = ThemeService(_sharedPreferences);
     _themeNotifier = ThemeNotifier(_themeService);
+    _log.d('Storage e Theme configurados');
     
     // Inicializa a sessão (verifica token existente)
     await _sessionService.init();
+    _log.d('Sessão inicializada');
     
     _initialized = true;
+    _log.i('ServiceLocator inicializado com sucesso');
   }
 
   // Getters

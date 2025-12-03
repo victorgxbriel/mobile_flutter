@@ -133,8 +133,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
               final agendamento = state.agendamento;
               final notificationsNotifier =
                   context.read<NotificationsNotifier>();
-              String message =
-                  'Seu agendamento em ${widget.estabelecimentoNome} foi confirmado.';
+              String message = 'Seu agendamento em ${widget.estabelecimentoNome} foi confirmado.';
 
               final slot = agendamento.slot;
               final programacao = slot?.programacao;
@@ -142,8 +141,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
                 final dataFormatada =
                     DateFormat('dd/MM/yyyy').format(programacao.dataAsDateTime);
                 final horario = slot.horarioFormatado;
-                message =
-                    'Seu agendamento em ${widget.estabelecimentoNome} foi confirmado para $dataFormatada às $horario.';
+                message = 'Seu agendamento em ${widget.estabelecimentoNome} foi confirmado para $dataFormatada às $horario.';
               }
               notificationsNotifier.addNotification(
                 title: 'Agendamento confirmado',
@@ -262,8 +260,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Selecione os serviços desejados:',
+        Text( 'Selecione os serviços desejados:',
           style: TextStyle(color: colorScheme.outline),
         ),
         const SizedBox(height: 12),
@@ -351,12 +348,10 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Total estimado:',
+          const Text( 'Total estimado:',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          Text(
-            'R\$ ${total.toStringAsFixed(2).replaceAll('.', ',')}',
+          Text( 'R\$ ${total.toStringAsFixed(2).replaceAll('.', ',')}',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
@@ -434,8 +429,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Selecione o veículo:',
+        Text( 'Selecione o veículo:',
           style: TextStyle(color: colorScheme.outline),
         ),
         const SizedBox(height: 12),
@@ -452,14 +446,12 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
                   notifier.setSelectedCarro(value);
                 }
               },
-              title: Text(
-                '${vehicle.marca} ${vehicle.modelo}',
+              title: Text( '${vehicle.marca} ${vehicle.modelo}',
                 style: TextStyle(
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                 ),
               ),
-              subtitle: Text(
-                '${vehicle.placa} • ${vehicle.ano}',
+              subtitle: Text( '${vehicle.placa} • ${vehicle.ano}',
                 style: TextStyle(color: colorScheme.outline),
               ),
               secondary: Container(
@@ -542,13 +534,11 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
             color: colorScheme.outline,
           ),
           const SizedBox(height: 16),
-          const Text(
-            'Não há datas disponíveis para agendamento',
+          const Text( 'Não há datas disponíveis para agendamento',
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
-          Text(
-            'O estabelecimento ainda não abriu agenda',
+          Text( 'O estabelecimento ainda não abriu agenda',
             style: TextStyle(color: colorScheme.outline),
           ),
         ],
@@ -575,8 +565,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Selecione a data do agendamento:',
+        Text( 'Selecione a data do agendamento:',
           style: TextStyle(color: colorScheme.outline),
         ),
         const SizedBox(height: 8),
@@ -591,8 +580,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
               Icon(Icons.info_outline, size: 16, color: colorScheme.primary),
               const SizedBox(width: 8),
               Expanded(
-                child: Text(
-                  'Apenas as datas com horários disponíveis podem ser selecionadas',
+                child: Text( 'Apenas as datas com horários disponíveis podem ser selecionadas',
                   style: TextStyle(
                     fontSize: 12,
                     color: colorScheme.onSurface,
@@ -628,8 +616,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
               children: [
                 Icon(Icons.check_circle, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text(
-                  'Data selecionada: ${DateFormat('dd/MM/yyyy').format(notifier.selectedDate!)}',
+                Text( 'Data selecionada: ${DateFormat('dd/MM/yyyy').format(notifier.selectedDate!)}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onPrimaryContainer,
@@ -695,13 +682,11 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
           color: colorScheme.outline,
         ),
         const SizedBox(height: 16),
-        const Text(
-          'Não há horários disponíveis para esta data',
+        const Text( 'Não há horários disponíveis para esta data',
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
-        Text(
-          'Tente selecionar outra data',
+        Text( 'Tente selecionar outra data',
           style: TextStyle(color: colorScheme.outline),
         ),
       ],
@@ -722,13 +707,11 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Horários disponíveis:',
+        Text( 'Horários disponíveis:',
           style: TextStyle(color: colorScheme.outline),
         ),
         const SizedBox(height: 8),
-        Text(
-          'Funcionamento: ${programacao.horaInicio} - ${programacao.horaTermino}',
+        Text( 'Funcionamento: ${programacao.horaInicio} - ${programacao.horaTermino}',
           style: TextStyle(
             color: colorScheme.outline,
             fontSize: 12,
@@ -785,8 +768,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Confirme os dados do agendamento:',
+        Text( 'Confirme os dados do agendamento:',
           style: TextStyle(color: colorScheme.outline),
         ),
         const SizedBox(height: 16),
@@ -833,16 +815,14 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Total:',
+              Text( 'Total:',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                   color: colorScheme.onPrimaryContainer,
                 ),
               ),
-              Text(
-                'R\$ ${total.toStringAsFixed(2).replaceAll('.', ',')}',
+              Text( 'R\$ ${total.toStringAsFixed(2).replaceAll('.', ',')}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -903,8 +883,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
           size: 64,
         ),
         title: const Text('Agendamento Confirmado!'),
-        content: const Text(
-          'Seu agendamento foi realizado com sucesso. Você pode acompanhar o status na aba de agendamentos.',
+        content: const Text( 'Seu agendamento foi realizado com sucesso. Você pode acompanhar o status na aba de agendamentos.',
         ),
         actions: [
           FilledButton(

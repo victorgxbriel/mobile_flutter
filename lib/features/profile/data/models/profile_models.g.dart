@@ -19,16 +19,7 @@ ClienteModel _$ClienteModelFromJson(Map<String, dynamic> json) => ClienteModel(
 );
 
 Map<String, dynamic> _$ClienteModelToJson(ClienteModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt.toIso8601String(),
-      'active': instance.active,
-      'nome': instance.nome,
-      'cpf': instance.cpf,
-      'email': instance.email,
-      'userId': instance.userId,
-      'fotoUrl': instance.fotoUrl,
+    <String, dynamic>{ 'id': instance.id, 'createdAt': instance.createdAt.toIso8601String(), 'updatedAt': instance.updatedAt.toIso8601String(), 'active': instance.active, 'nome': instance.nome, 'cpf': instance.cpf, 'email': instance.email, 'userId': instance.userId, 'fotoUrl': instance.fotoUrl,
     };
 
 UpdateClienteDto _$UpdateClienteDtoFromJson(Map<String, dynamic> json) =>
@@ -40,9 +31,5 @@ UpdateClienteDto _$UpdateClienteDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$UpdateClienteDtoToJson(UpdateClienteDto instance) =>
-    <String, dynamic>{
-      'nome': instance.nome,
-      'cpf': instance.cpf,
-      'email': instance.email,
-      'fotoUrl': instance.fotoUrl,
+    <String, dynamic>{ 'nome': instance.nome, 'cpf': instance.cpf, 'email': instance.email, 'fotoUrl': instance.fotoUrl,
     };

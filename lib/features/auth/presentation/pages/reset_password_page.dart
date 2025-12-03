@@ -92,8 +92,7 @@ class _ResetPasswordFormState extends State<_ResetPasswordForm> {
                 const SizedBox(height: 24),
                 
                 // Título
-                Text(
-                  'Criar nova senha',
+                Text( 'Criar nova senha',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -104,8 +103,7 @@ class _ResetPasswordFormState extends State<_ResetPasswordForm> {
                 const SizedBox(height: 12),
                 
                 // Descrição
-                Text(
-                  'Digite o código de 6 dígitos enviado para ${notifier.email.isNotEmpty ? notifier.email : "seu email"} e crie uma nova senha.',
+                Text( 'Digite o código de 6 dígitos enviado para ${notifier.email.isNotEmpty ? notifier.email : "seu email"} e crie uma nova senha.',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.grey[600],
@@ -214,8 +212,7 @@ class _ResetPasswordFormState extends State<_ResetPasswordForm> {
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          'REDEFINIR SENHA',
+                      : const Text( 'REDEFINIR SENHA',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -284,8 +281,7 @@ class _ResetPasswordFormState extends State<_ResetPasswordForm> {
           color: Theme.of(context).colorScheme.primary,
         ),
         title: const Text('Senha alterada!'),
-        content: const Text(
-          'Sua senha foi redefinida com sucesso. Agora você pode fazer login com sua nova senha.',
+        content: const Text( 'Sua senha foi redefinida com sucesso. Agora você pode fazer login com sua nova senha.',
         ),
         actions: [
           FilledButton(

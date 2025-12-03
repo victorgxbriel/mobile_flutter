@@ -190,8 +190,7 @@ class _ProfilePageState extends State<_ProfilePage> {
                       backgroundColor: Colors.red,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text(
-                      'Sair',
+                    child: const Text( 'Sair',
                       style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),

@@ -112,8 +112,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
                     size: 24,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'Serviços disponíveis',
+                  Text( 'Serviços disponíveis',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: AppColors.darkBlue,
@@ -129,8 +128,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
                       color: AppColors.lightBlue.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Text(
-                      '${servicos.length}',
+                    child: Text( '${servicos.length}',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkBlue,
@@ -278,8 +276,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
                 color: Colors.grey[600],
               ),
               const SizedBox(width: 8),
-              Text(
-                'CNPJ: ${estabelecimento.cnpjFormatado}',
+              Text( 'CNPJ: ${estabelecimento.cnpjFormatado}',
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 14,
@@ -461,8 +458,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
             color: Colors.grey[400],
           ),
           const SizedBox(height: 16),
-          Text(
-            'Nenhum serviço disponível',
+          Text( 'Nenhum serviço disponível',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -470,8 +466,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            'Este estabelecimento ainda não cadastrou serviços.',
+          Text( 'Este estabelecimento ainda não cadastrou serviços.',
             textAlign: TextAlign.center,
             style: TextStyle(
               color: Colors.grey[500],
@@ -570,8 +565,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
             ),
             const SizedBox(height: 16),
             if (servico.descricao != null && servico.descricao!.isNotEmpty) ...[
-              const Text(
-                'Descrição',
+              const Text( 'Descrição',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -591,8 +585,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
               children: [
                 Icon(Icons.access_time, size: 20, color: Colors.grey[600]),
                 const SizedBox(width: 8),
-                Text(
-                  'Tempo estimado: ${servico.tempoFormatado}',
+                Text( 'Tempo estimado: ${servico.tempoFormatado}',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 15,
@@ -618,8 +611,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
-                  'Agendar serviço',
+                child: const Text( 'Agendar serviço',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -641,12 +633,8 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
   }) {
     if (estabelecimento == null) return;
     
-    context.push(
-      '/agendar/${estabelecimento.id}',
-      extra: {
-        'estabelecimentoNome': estabelecimento.nomeFantasia,
-        'servicos': servicos,
-        'servicoPreSelecionadoId': servicoPreSelecionadoId,
+    context.push( '/agendar/${estabelecimento.id}',
+      extra: { 'estabelecimentoNome': estabelecimento.nomeFantasia, 'servicos': servicos, 'servicoPreSelecionadoId': servicoPreSelecionadoId,
       },
     );
   }
@@ -664,8 +652,7 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
               color: Colors.red[300],
             ),
             const SizedBox(height: 16),
-            Text(
-              'Ops! Algo deu errado',
+            Text( 'Ops! Algo deu errado',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

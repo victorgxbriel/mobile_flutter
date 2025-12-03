@@ -206,8 +206,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Status',
+                  Text( 'Status',
                     style: TextStyle(
                       fontSize: 12,
                       color: colorScheme.outline,
@@ -231,8 +230,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
                 color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
-                '#${agendamento.id}',
+              child: Text( '#${agendamento.id}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: statusColor,
@@ -259,8 +257,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
               children: [
                 Icon(Icons.event, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text(
-                  'Data e Horário',
+                Text( 'Data e Horário',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -310,8 +307,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
               children: [
                 Icon(Icons.store, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text(
-                  'Estabelecimento',
+                Text( 'Estabelecimento',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -347,8 +343,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
                         ),
                       ),
                       if (estabelecimento?.cnpj != null)
-                        Text(
-                          'CNPJ: ${estabelecimento!.cnpj}',
+                        Text( 'CNPJ: ${estabelecimento!.cnpj}',
                           style: TextStyle(
                             fontSize: 12,
                             color: colorScheme.outline,
@@ -376,8 +371,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
               children: [
                 Icon(Icons.directions_car, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text(
-                  'Veículo',
+                Text( 'Veículo',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -443,8 +437,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
                             ),
                           ),
                           if (carro.ano != null) ...[
-                            Text(
-                              ' • ${carro.ano}',
+                            Text( ' • ${carro.ano}',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: colorScheme.outline,
@@ -477,8 +470,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
               children: [
                 Icon(Icons.build, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text(
-                  'Serviços',
+                Text( 'Serviços',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -491,8 +483,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
                     color: colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text(
-                    '${servicos.length}',
+                  child: Text( '${servicos.length}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -507,8 +498,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text(
-                    'Nenhum serviço encontrado',
+                  child: Text( 'Nenhum serviço encontrado',
                     style: TextStyle(color: colorScheme.outline),
                   ),
                 ),
@@ -603,8 +593,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Valor Total',
+                Text( 'Valor Total',
                   style: TextStyle(
                     fontSize: 14,
                     color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
@@ -716,9 +705,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
           size: 48,
         ),
         title: const Text('Cancelar Agendamento'),
-        content: const Text(
-          'Tem certeza que deseja cancelar este agendamento? '
-          'Esta ação não pode ser desfeita.',
+        content: const Text( 'Tem certeza que deseja cancelar este agendamento? ' 'Esta ação não pode ser desfeita.',
         ),
         actions: [
           TextButton(

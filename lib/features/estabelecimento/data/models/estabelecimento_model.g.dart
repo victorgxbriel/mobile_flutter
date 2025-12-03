@@ -19,11 +19,5 @@ EstabelecimentoModel _$EstabelecimentoModelFromJson(
 
 Map<String, dynamic> _$EstabelecimentoModelToJson(
   EstabelecimentoModel instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'createdAt': instance.createdAt.toIso8601String(),
-  'updatedAt': instance.updatedAt.toIso8601String(),
-  'active': instance.active,
-  'cnpj': instance.cnpj,
-  'nomeFantasia': instance.nomeFantasia,
+) => <String, dynamic>{ 'id': instance.id, 'createdAt': instance.createdAt.toIso8601String(), 'updatedAt': instance.updatedAt.toIso8601String(), 'active': instance.active, 'cnpj': instance.cnpj, 'nomeFantasia': instance.nomeFantasia,
 };

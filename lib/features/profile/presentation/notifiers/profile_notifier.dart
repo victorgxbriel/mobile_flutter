@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:mobile_flutter/app/utils/app_logger.dart';
 import 'package:mobile_flutter/core/di/service_locator.dart';
 import 'package:mobile_flutter/features/profile/data/repositories/profile_repository.dart';
 
 import '../../data/models/profile_models.dart';
 import '../states/profile_state.dart';
+
+final _log = logger(ProfileNotifier);
 
 class ProfileNotifier extends ChangeNotifier {
   final ProfileRepository _repository;
@@ -19,14 +22,17 @@ class ProfileNotifier extends ChangeNotifier {
 
   /// Carrega os dados do perfil do cliente
   Future<void> loadProfile(int clienteId) async {
+    _log.i('Carregando perfil do cliente: $clienteId');
     _state = ProfileLoading();
     notifyListeners();
 
     try {
       final cliente = await _repository.getCliente(clienteId);
       _cliente = cliente;
+      _log.d('Perfil carregado: ${cliente.nome}');
       _state = ProfileLoaded(cliente);
     } catch (e) {
+      _log.e('Erro ao carregar perfil', error: e);
       _state = ProfileError(e.toString().replaceAll('Exception: ', ''));
     }
 
@@ -40,6 +46,7 @@ class ProfileNotifier extends ChangeNotifier {
     String? email,
     String? fotoUrl,
   }) async {
+    _log.i('Atualizando perfil do cliente: $clienteId');
     _state = ProfileLoading();
     notifyListeners();
 
@@ -51,8 +58,10 @@ class ProfileNotifier extends ChangeNotifier {
         fotoUrl: fotoUrl,
       );
       _cliente = cliente;
+      _log.i('Perfil atualizado com sucesso');
       _state = ProfileLoaded(cliente);
     } catch (e) {
+      _log.e('Erro ao atualizar perfil', error: e);
       _state = ProfileError(e.toString().replaceAll('Exception: ', ''));
     }
 
@@ -61,13 +70,16 @@ class ProfileNotifier extends ChangeNotifier {
 
   /// Realiza o logout do usuário
   Future<void> logout() async {
+    _log.i('Iniciando logout...');
     _state = ProfileLoading();
     notifyListeners();
 
     try {
       await _repository.logout();
+      _log.i('Logout realizado com sucesso');
       _state = ProfileLoggedOut();
     } catch (e) {
+      _log.e('Erro ao fazer logout', error: e);
       _state = ProfileError('Erro ao fazer logout: $e');
     }
 
@@ -76,8 +88,12 @@ class ProfileNotifier extends ChangeNotifier {
 
   /// Atualiza a foto de perfil do cliente
   Future<void> updateProfileImage(File imageFile) async {
-    if (_cliente == null) return;
+    if (_cliente == null) {
+      _log.w('Tentativa de atualizar foto sem cliente carregado');
+      return;
+    }
     
+    _log.i('Atualizando foto de perfil do cliente: ${_cliente!.id}');
     _state = ProfileLoading();
     notifyListeners();
 
@@ -86,9 +102,9 @@ class ProfileNotifier extends ChangeNotifier {
       
       // Salva a imagem localmente primeiro para feedback imediato
       final savedPath = await storage.saveImage(
-        imageFile, 
-        'profile_${_cliente!.id}.jpg',
+        imageFile, 'profile_${_cliente!.id}.jpg',
       );
+      _log.d('Imagem salva em: $savedPath');
       
       // Salva a URL local no SharedPreferences
       await storage.saveImageUrl('profile_${_cliente!.id}', savedPath);
@@ -97,9 +113,11 @@ class ProfileNotifier extends ChangeNotifier {
       // Se você tiver um endpoint para upload de imagem no servidor, use-o aqui
       // Por enquanto, estamos apenas atualizando localmente
       _cliente = _cliente!.copyWith(fotoUrl: savedPath);
+      _log.i('Foto de perfil atualizada');
       _state = ProfileLoaded(_cliente!);
       
     } catch (e) {
+      _log.e('Erro ao atualizar foto de perfil', error: e);
       _state = ProfileError('Erro ao atualizar a foto de perfil: $e');
     }
 
@@ -108,6 +126,7 @@ class ProfileNotifier extends ChangeNotifier {
 
   /// Reseta o estado para inicial
   void reset() {
+    _log.t('Reset do estado de perfil');
     _state = ProfileInitial();
     _cliente = null;
     notifyListeners();

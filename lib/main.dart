@@ -4,20 +4,29 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'app/theme/app_theme.dart';
 import 'app/router/app_router.dart';
+import 'app/utils/app_logger.dart';
 import 'core/di/service_locator.dart';
 import 'features/settings/presentation/notifiers/theme_notifier.dart';
 import 'features/notifications/presentation/notifiers/notifications_notifier.dart';
 
+final _log = logger(MyApp);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  _log.i('Iniciando aplicacao Lava Jato...');
+  
   // Inicializar dependências
   await ServiceLocator().init();
+  _log.i('ServiceLocator inicializado');
+  
   if (!kIsWeb) {
-  // Isso força a inicialização do path_provider
-  final tempDir = await getTemporaryDirectory();
-  print('Diretório temporário: ${tempDir.path}');
+    // Isso força a inicialização do path_provider
+    final tempDir = await getTemporaryDirectory();
+    _log.d('Diretorio temporario: ${tempDir.path}');
   }
+  
+  _log.i('Aplicacao pronta para execucao');
   runApp(const MyApp());
 }
 

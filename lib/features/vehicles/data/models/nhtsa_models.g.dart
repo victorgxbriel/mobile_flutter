@@ -11,9 +11,7 @@ MakeModel _$MakeModelFromJson(Map<String, dynamic> json) => MakeModel(
   makeName: json['Make_Name'] as String,
 );
 
-Map<String, dynamic> _$MakeModelToJson(MakeModel instance) => <String, dynamic>{
-  'Make_ID': instance.makeId,
-  'Make_Name': instance.makeName,
+Map<String, dynamic> _$MakeModelToJson(MakeModel instance) => <String, dynamic>{ 'Make_ID': instance.makeId, 'Make_Name': instance.makeName,
 };
 
 VehicleModelNhtsa _$VehicleModelNhtsaFromJson(Map<String, dynamic> json) =>
@@ -25,11 +23,7 @@ VehicleModelNhtsa _$VehicleModelNhtsaFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$VehicleModelNhtsaToJson(VehicleModelNhtsa instance) =>
-    <String, dynamic>{
-      'Make_ID': instance.makeId,
-      'Make_Name': instance.makeName,
-      'Model_ID': instance.modelId,
-      'Model_Name': instance.modelName,
+    <String, dynamic>{ 'Make_ID': instance.makeId, 'Make_Name': instance.makeName, 'Model_ID': instance.modelId, 'Model_Name': instance.modelName,
     };
 
 MakesResponse _$MakesResponseFromJson(Map<String, dynamic> json) =>
@@ -42,10 +36,7 @@ MakesResponse _$MakesResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$MakesResponseToJson(MakesResponse instance) =>
-    <String, dynamic>{
-      'Count': instance.count,
-      'Message': instance.message,
-      'Results': instance.results,
+    <String, dynamic>{ 'Count': instance.count, 'Message': instance.message, 'Results': instance.results,
     };
 
 ModelsResponse _$ModelsResponseFromJson(Map<String, dynamic> json) =>
@@ -58,8 +49,5 @@ ModelsResponse _$ModelsResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ModelsResponseToJson(ModelsResponse instance) =>
-    <String, dynamic>{
-      'Count': instance.count,
-      'Message': instance.message,
-      'Results': instance.results,
+    <String, dynamic>{ 'Count': instance.count, 'Message': instance.message, 'Results': instance.results,
     };

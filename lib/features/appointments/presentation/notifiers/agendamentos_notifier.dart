@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
+import 'package:mobile_flutter/app/utils/app_logger.dart';
 import '../../data/models/agendamento_model.dart';
 import '../../data/repositories/agendamento_repository.dart';
 import '../states/agendamento_state.dart';
+
+final _log = logger(AgendamentosNotifier);
 
 class AgendamentosNotifier extends ChangeNotifier {
   final AgendamentoRepository _repository;
@@ -40,6 +43,7 @@ class AgendamentosNotifier extends ChangeNotifier {
       .toList();
 
   Future<void> loadAgendamentos(int clienteId) async {
+    _log.i('Carregando agendamentos do cliente: $clienteId');
     _state = const AgendamentosLoading();
     notifyListeners();
 
@@ -47,8 +51,11 @@ class AgendamentosNotifier extends ChangeNotifier {
       _agendamentos = await _repository.getAgendamentosByClienteId(clienteId);
       // Ordenar por data de criação, mais recentes primeiro
       _agendamentos.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      _log.d('${_agendamentos.length} agendamentos carregados');
+      _log.t('Ativos: ${agendamentosAtivos.length}, Concluídos: ${agendamentosConcluidos.length}, Cancelados: ${agendamentosCancelados.length}');
       _state = AgendamentosLoaded(_agendamentos);
     } catch (e) {
+      _log.e('Erro ao carregar agendamentos', error: e);
       _state = AgendamentosError(e.toString().replaceAll('Exception: ', ''));
     }
 
@@ -56,15 +63,18 @@ class AgendamentosNotifier extends ChangeNotifier {
   }
 
   Future<void> cancelarAgendamento(int id, int clienteId) async {
+    _log.i('Cancelando agendamento: $id');
     _cancelState = const CancelAgendamentoLoading();
     notifyListeners();
 
     try {
       await _repository.cancelarAgendamento(id);
+      _log.i('Agendamento cancelado com sucesso');
       _cancelState = const CancelAgendamentoSuccess();
       // Recarregar a lista após cancelamento
       await loadAgendamentos(clienteId);
     } catch (e) {
+      _log.e('Erro ao cancelar agendamento', error: e);
       _cancelState = CancelAgendamentoError(e.toString().replaceAll('Exception: ', ''));
     }
 
@@ -77,6 +87,7 @@ class AgendamentosNotifier extends ChangeNotifier {
   }
 
   void reset() {
+    _log.t('Reset do estado de agendamentos');
     _state = const AgendamentosInitial();
     _cancelState = const CancelAgendamentoInitial();
     _agendamentos = [];

@@ -71,8 +71,7 @@ class _LoginFormState extends State<_LoginForm> {
                     color: Theme.of(context).colorScheme.inversePrimary,
                   ),
                   child: ClipRect(
-                    child: Image.asset(
-                      'assets/images/header-abluo.png',
+                    child: Image.asset( 'assets/images/header-abluo.png',
                       fit: BoxFit.contain, // ou BoxFit.scaleDown
                       alignment: Alignment.center,
                       errorBuilder: (context, error, stackTrace) {
@@ -98,8 +97,7 @@ class _LoginFormState extends State<_LoginForm> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 16),
-                      Text(
-                        'Bem-vindo!',
+                      Text( 'Bem-vindo!',
                         textAlign: TextAlign.start,
                         style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
@@ -183,8 +181,7 @@ class _LoginFormState extends State<_LoginForm> {
                                   color: Colors.white,
                                 ),
                               )
-                            : const Text(
-                                'ENTRAR',
+                            : const Text( 'ENTRAR',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -195,8 +192,7 @@ class _LoginFormState extends State<_LoginForm> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Não tem uma conta? ',
+                          Text( 'Não tem uma conta? ',
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                           TextButton(
@@ -226,8 +222,7 @@ class _LoginFormState extends State<_LoginForm> {
                           ),
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: Text(
-                              'ou continue com',
+                            child: Text( 'ou continue com',
                               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                                 color: Colors.grey[600],
                               ),
@@ -259,8 +254,7 @@ class _LoginFormState extends State<_LoginForm> {
                                   width: 1.5,
                                 ),
                               ),
-                              child: Image.network(
-                                'https://www.google.com/favicon.ico',
+                              child: Image.network( 'https://www.google.com/favicon.ico',
                                 width: 24,
                                 height: 24,
                                 errorBuilder: (context, error, stackTrace) {

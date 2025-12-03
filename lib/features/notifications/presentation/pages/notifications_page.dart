@@ -39,8 +39,7 @@ class NotificationsPage extends StatelessWidget {
               onPressed: () {
                 notifier.markAllAsRead();
               },
-              child: Text(
-                'Marcar todas como lidas',
+              child: Text( 'Marcar todas como lidas',
                 style: TextStyle(color: colorScheme.onSurface),
               ),
             ),
@@ -104,8 +103,7 @@ class NotificationsPage extends StatelessWidget {
                     style: TextStyle(color: subtitleColor),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    '${notification.dateTime.day}/${notification.dateTime.month}/${notification.dateTime.year} ${notification.dateTime.hour}:${notification.dateTime.minute.toString().padLeft(2, '0')}',
+                  Text( '${notification.dateTime.day}/${notification.dateTime.month}/${notification.dateTime.year} ${notification.dateTime.hour}:${notification.dateTime.minute.toString().padLeft(2, '0')}',
                     style: TextStyle(
                       fontSize: 12,
                       color: subtitleColor,

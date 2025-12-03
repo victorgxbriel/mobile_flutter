@@ -12,8 +12,6 @@ final telefoneFormatter = MaskTextInputFormatter(
 
 final cnpjFormatter = MaskTextInputFormatter(
   mask: 'XX.XXX.XXX/XXXX-##',
-  filter: {
-    'X': RegExp(r'[0-9A-Za-z]'),
-    '#': RegExp(r'[0-9]'),
+  filter: { 'X': RegExp(r'[0-9A-Za-z]'), '#': RegExp(r'[0-9]'),
   },
 );

@@ -41,8 +41,7 @@ class DetailLogger extends PrettyPrinter {
   @override
   List<String> log(LogEvent event) {
     var modifiedEvent = LogEvent(
-      event.level,
-      '$className: ${event.message}',
+      event.level, '$className: ${event.message}',
       error: event.error,
       stackTrace: event.stackTrace,
       time: event.time,

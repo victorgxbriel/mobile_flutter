@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter/services.dart';
+import 'package:mobile_flutter/app/utils/app_logger.dart';
 import 'package:mobile_flutter/core/di/service_locator.dart';
+
+final _log = logger(ProfileImagePicker);
 
 class ProfileImagePicker extends StatefulWidget {
   final String? imageUrl;
@@ -34,8 +36,10 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   }
 
   Future<void> _loadLocalImage() async {
+    _log.t('Carregando imagem local para user: ${widget.userId}');
     final localPath = await _storageService.getImageUrl('profile_${widget.userId}');
     if (mounted && localPath != null) {
+      _log.d('Imagem local encontrada: $localPath');
       setState(() {
         _localImagePath = localPath;
       });
@@ -43,46 +47,45 @@ class _ProfileImagePickerState extends State<ProfileImagePicker> {
   }
 
   Future<void> _pickImage() async {
-    print('1. Iniciando seleção de imagem...');
+    _log.i('Iniciando seleção de imagem...');
     try {
       final image = await _storageService.pickImage();
-      print('2. Imagem selecionada: ${image?.path ?? "Nenhuma imagem selecionada"}');
       
       if (image != null) {
-        print('3. Tentando salvar a imagem...');
+        _log.d('Imagem selecionada: ${image.path}');
         try {
           // Salva a imagem localmente
           final savedPath = await _storageService.saveImage(
-            image,
-            'profile_${widget.userId}.jpg',
+            image, 'profile_${widget.userId}.jpg',
           );
-          print('4. Imagem salva em: $savedPath');
+          _log.d('Imagem salva em: $savedPath');
           
           // Salva o caminho local
           await _storageService.saveImageUrl('profile_${widget.userId}', savedPath);
-          print('5. Caminho da imagem salvo no SharedPreferences');
+          _log.t('Caminho da imagem salvo no SharedPreferences');
           
           if (mounted) {
             setState(() {
               _localImagePath = savedPath;
             });
-            print('6. Estado atualizado com o novo caminho da imagem');
+            _log.i('Imagem de perfil atualizada com sucesso');
             
             // Notifica o widget pai sobre a nova imagem
             widget.onImageSelected(savedPath);
-            print('7. Widget pai notificado sobre a nova imagem');
           }
-        } catch (e) {
-          print('Erro ao salvar a imagem: $e');
+        } catch (e, st) {
+          _log.e('Erro ao salvar a imagem', error: e, stackTrace: st);
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Erro ao salvar a imagem')),
             );
           }
         }
+      } else {
+        _log.d('Nenhuma imagem selecionada');
       }
-    } catch (e) {
-      print('Erro ao selecionar a imagem: $e');
+    } catch (e, st) {
+      _log.e('Erro ao selecionar a imagem', error: e, stackTrace: st);
     }
   }
 

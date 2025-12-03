@@ -186,15 +186,13 @@ class _DashboardContentState extends State<_DashboardContent> {
                     color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    'Nenhum estabelecimento encontrado',
+                  Text( 'Nenhum estabelecimento encontrado',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    'Puxe para atualizar',
+                  Text( 'Puxe para atualizar',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),

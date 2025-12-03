@@ -69,8 +69,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Cancelar Agendamento'),
-        content: const Text(
-          'Tem certeza que deseja cancelar este agendamento?',
+        content: const Text( 'Tem certeza que deseja cancelar este agendamento?',
         ),
         actions: [
           TextButton(
@@ -207,15 +206,13 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
               color: colorScheme.outline,
             ),
             const SizedBox(height: 24),
-            Text(
-              'Nenhum agendamento',
+            Text( 'Nenhum agendamento',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     color: colorScheme.onSurface,
                   ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Você ainda não possui nenhum agendamento.\nQue tal agendar uma lavagem?',
+            Text( 'Você ainda não possui nenhum agendamento.\nQue tal agendar uma lavagem?',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: colorScheme.outline,
@@ -294,8 +291,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Agendamento #${agendamento.id}',
+                        Text( 'Agendamento #${agendamento.id}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -343,8 +339,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                     color: colorScheme.outline,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'Criado em ${DateFormat('dd/MM/yyyy HH:mm').format(agendamento.createdAt)}',
+                  Text( 'Criado em ${DateFormat('dd/MM/yyyy HH:mm').format(agendamento.createdAt)}',
                     style: TextStyle(
                       color: colorScheme.outline,
                       fontSize: 13,
@@ -361,8 +356,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                     color: colorScheme.outline,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'Veículo ID: ${agendamento.carroId}',
+                  Text( 'Veículo ID: ${agendamento.carroId}',
                     style: TextStyle(
                       color: colorScheme.outline,
                       fontSize: 13,
@@ -379,8 +373,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                     color: colorScheme.outline,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    'Horário: Slot #${agendamento.slotId}',
+                  Text( 'Horário: Slot #${agendamento.slotId}',
                     style: TextStyle(
                       color: colorScheme.outline,
                       fontSize: 13,

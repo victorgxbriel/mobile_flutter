@@ -12,10 +12,7 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
   roles: (json['roles'] as List<dynamic>).map((e) => e as String).toList(),
 );
 
-Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
-  'userId': instance.userId,
-  'email': instance.email,
-  'roles': instance.roles,
+Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{ 'userId': instance.userId, 'email': instance.email, 'roles': instance.roles,
 };
 
 LoginDto _$LoginDtoFromJson(Map<String, dynamic> json) => LoginDto(
@@ -23,9 +20,7 @@ LoginDto _$LoginDtoFromJson(Map<String, dynamic> json) => LoginDto(
   password: json['password'] as String,
 );
 
-Map<String, dynamic> _$LoginDtoToJson(LoginDto instance) => <String, dynamic>{
-  'email': instance.email,
-  'password': instance.password,
+Map<String, dynamic> _$LoginDtoToJson(LoginDto instance) => <String, dynamic>{ 'email': instance.email, 'password': instance.password,
 };
 
 LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
@@ -35,9 +30,7 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
-    <String, dynamic>{
-      'access_token': instance.accessToken,
-      'refresh_token': instance.refreshToken,
+    <String, dynamic>{ 'access_token': instance.accessToken, 'refresh_token': instance.refreshToken,
     };
 
 RefreshTokenDto _$RefreshTokenDtoFromJson(Map<String, dynamic> json) =>
@@ -55,9 +48,7 @@ RefreshTokenResponse _$RefreshTokenResponseFromJson(
 
 Map<String, dynamic> _$RefreshTokenResponseToJson(
   RefreshTokenResponse instance,
-) => <String, dynamic>{
-  'access_token': instance.accessToken,
-  'refresh_token': instance.refreshToken,
+) => <String, dynamic>{ 'access_token': instance.accessToken, 'refresh_token': instance.refreshToken,
 };
 
 RegisterDto _$RegisterDtoFromJson(Map<String, dynamic> json) => RegisterDto(
@@ -68,11 +59,7 @@ RegisterDto _$RegisterDtoFromJson(Map<String, dynamic> json) => RegisterDto(
 );
 
 Map<String, dynamic> _$RegisterDtoToJson(RegisterDto instance) =>
-    <String, dynamic>{
-      'nome': instance.nome,
-      'email': instance.email,
-      'password': instance.password,
-      'cpf': instance.cpf,
+    <String, dynamic>{ 'nome': instance.nome, 'email': instance.email, 'password': instance.password, 'cpf': instance.cpf,
     };
 
 RegisterResponse _$RegisterResponseFromJson(Map<String, dynamic> json) =>
@@ -92,10 +79,7 @@ CreateClienteDto _$CreateClienteDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$CreateClienteDtoToJson(CreateClienteDto instance) =>
-    <String, dynamic>{
-      'nome': instance.nome,
-      'cpf': instance.cpf,
-      'email': instance.email,
+    <String, dynamic>{ 'nome': instance.nome, 'cpf': instance.cpf, 'email': instance.email,
     };
 
 SetupEstabelecimentoDto _$SetupEstabelecimentoDtoFromJson(
@@ -109,9 +93,7 @@ SetupEstabelecimentoDto _$SetupEstabelecimentoDtoFromJson(
 
 Map<String, dynamic> _$SetupEstabelecimentoDtoToJson(
   SetupEstabelecimentoDto instance,
-) => <String, dynamic>{
-  'usuario': instance.usuario,
-  'estabelecimento': instance.estabelecimento,
+) => <String, dynamic>{ 'usuario': instance.usuario, 'estabelecimento': instance.estabelecimento,
 };
 
 UsuarioSetupDto _$UsuarioSetupDtoFromJson(Map<String, dynamic> json) =>
@@ -122,10 +104,7 @@ UsuarioSetupDto _$UsuarioSetupDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$UsuarioSetupDtoToJson(UsuarioSetupDto instance) =>
-    <String, dynamic>{
-      'nome': instance.nome,
-      'email': instance.email,
-      'password': instance.password,
+    <String, dynamic>{ 'nome': instance.nome, 'email': instance.email, 'password': instance.password,
     };
 
 EstabelecimentoSetupDto _$EstabelecimentoSetupDtoFromJson(
@@ -137,9 +116,7 @@ EstabelecimentoSetupDto _$EstabelecimentoSetupDtoFromJson(
 
 Map<String, dynamic> _$EstabelecimentoSetupDtoToJson(
   EstabelecimentoSetupDto instance,
-) => <String, dynamic>{
-  'cnpj': instance.cnpj,
-  'nomeFantasia': instance.nomeFantasia,
+) => <String, dynamic>{ 'cnpj': instance.cnpj, 'nomeFantasia': instance.nomeFantasia,
 };
 
 ForgotPasswordDto _$ForgotPasswordDtoFromJson(Map<String, dynamic> json) =>
@@ -156,8 +133,5 @@ ResetPasswordDto _$ResetPasswordDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$ResetPasswordDtoToJson(ResetPasswordDto instance) =>
-    <String, dynamic>{
-      'email': instance.email,
-      'code': instance.code,
-      'newPassword': instance.newPassword,
+    <String, dynamic>{ 'email': instance.email, 'code': instance.code, 'newPassword': instance.newPassword,
     };

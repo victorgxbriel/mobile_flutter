@@ -80,8 +80,7 @@ class _ForgotPasswordFormState extends State<_ForgotPasswordForm> {
                 const SizedBox(height: 32),
                 
                 // Título
-                Text(
-                  'Esqueceu sua senha?',
+                Text( 'Esqueceu sua senha?',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.bold,
@@ -92,8 +91,7 @@ class _ForgotPasswordFormState extends State<_ForgotPasswordForm> {
                 const SizedBox(height: 16),
                 
                 // Descrição
-                Text(
-                  'Não se preocupe! Informe seu email e enviaremos um código de verificação para redefinir sua senha.',
+                Text( 'Não se preocupe! Informe seu email e enviaremos um código de verificação para redefinir sua senha.',
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: Colors.grey[600],
@@ -141,8 +139,7 @@ class _ForgotPasswordFormState extends State<_ForgotPasswordForm> {
                             color: Colors.white,
                           ),
                         )
-                      : const Text(
-                          'ENVIAR CÓDIGO',
+                      : const Text( 'ENVIAR CÓDIGO',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

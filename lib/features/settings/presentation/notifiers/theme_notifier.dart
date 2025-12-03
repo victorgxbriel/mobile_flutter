@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_flutter/app/utils/app_logger.dart';
 import 'package:mobile_flutter/core/services/theme_service.dart';
+
+final _log = logger(ThemeNotifier);
 
 /// Notifier global para gerenciar o tema do app
 class ThemeNotifier extends ChangeNotifier {
@@ -24,6 +27,7 @@ class ThemeNotifier extends ChangeNotifier {
   /// Carrega o tema salvo nas preferências
   void _loadSavedTheme() {
     _themeMode = _themeService.loadThemeMode();
+    _log.d('Tema carregado: ${themeModeName}');
     notifyListeners();
   }
 
@@ -31,9 +35,18 @@ class ThemeNotifier extends ChangeNotifier {
   Future<void> setThemeMode(ThemeMode mode) async {
     if (_themeMode == mode) return;
     
+    _log.i('Alterando tema para: ${_getModeName(mode)}');
     _themeMode = mode;
     await _themeService.saveThemeMode(mode);
     notifyListeners();
+  }
+
+  String _getModeName(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light: return 'Claro';
+      case ThemeMode.dark: return 'Escuro';
+      case ThemeMode.system: return 'Sistema';
+    }
   }
 
   /// Alterna entre light e dark (ignora system)

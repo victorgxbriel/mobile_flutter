@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../app/utils/app_logger.dart';
 import '../utils/jwt_utils.dart';
 import 'token_service.dart';
+
+final _log = logger(SessionService);
 
 /// Serviço para gerenciar a sessão do usuário
 class SessionService extends ChangeNotifier {
@@ -26,6 +29,7 @@ class SessionService extends ChangeNotifier {
   SessionService(this._storage);
 
   Future<void> init() async {
+    _log.d('Inicializando sessão...');
     final token = await _storage.read(key: TokenService.accessTokenKey);
     final refreshToken = await _storage.read(key: TokenService.refreshTokenKey);
 
@@ -33,13 +37,16 @@ class SessionService extends ChangeNotifier {
       _token = token;
       _isAuthenticated = true;
       _extractUserInfo(token);
+      _log.i('Sessão restaurada - Usuário: $_email (ID: $_userId)');
     } else if (refreshToken != null && !JwtUtils.isExpired(refreshToken)) {
       _isAuthenticated = true;
       if (token != null) {
         _extractUserInfo(token);
       }
+      _log.i('Sessão válida via refresh token');
     } else {
       // Ambos tokens expirados ou inexistentes - limpar
+      _log.w('Tokens expirados ou inexistentes - limpando sessão');
       await _clearStoredTokens();
       _isAuthenticated = false;
     }
@@ -49,6 +56,7 @@ class SessionService extends ChangeNotifier {
 
   /// Atualiza a sessão com um novo token
   Future<void> setToken(String token, {String? refreshToken}) async {
+    _log.d('Salvando novo token...');
     await _storage.write(key: TokenService.accessTokenKey, value: token);
     if (refreshToken != null) {
       await _storage.write(key: TokenService.refreshTokenKey, value: refreshToken);
@@ -56,6 +64,7 @@ class SessionService extends ChangeNotifier {
     _token = token;
     _isAuthenticated = true;
     _extractUserInfo(token);
+    _log.i('Token salvo - Usuário: $_email (ID: $_userId)');
     notifyListeners();
   }
 
@@ -63,21 +72,28 @@ class SessionService extends ChangeNotifier {
     _userId = JwtUtils.getUserId(token);
     _email = JwtUtils.getEmail(token);
     _roles = JwtUtils.getRoles(token);
+    _log.t('Info extraída do token - userId: $_userId, email: $_email, roles: $_roles');
   }
 
   bool checkSession() {
-    if (_token == null) return false;
+    if (_token == null) {
+      _log.w('checkSession: Token nulo');
+      return false;
+    }
     
     if (JwtUtils.isExpired(_token!)) {
+      _log.w('checkSession: Token expirado');
       handleSessionExpired();
       return false;
     }
     
+    _log.t('checkSession: Sessão válida');
     return true;
   }
 
   /// Chamado quando a sessão expira (e refresh falhou)
   void handleSessionExpired() {
+    _log.w('Sessao expirada - executando logout');
     _clearSession();
     _clearStoredTokens();
     onSessionExpired?.call();
@@ -85,14 +101,17 @@ class SessionService extends ChangeNotifier {
   }
 
   Future<void> logout() async {
+    _log.i('Logout solicitado');
     await _clearStoredTokens();
     _clearSession();
+    _log.i('Logout concluído');
     notifyListeners();
   }
 
   Future<void> _clearStoredTokens() async {
     await _storage.delete(key: TokenService.accessTokenKey);
     await _storage.delete(key: TokenService.refreshTokenKey);
+    _log.d('Tokens removidos do storage');
   }
 
   void _clearSession() {
@@ -101,6 +120,7 @@ class SessionService extends ChangeNotifier {
     _userId = null;
     _email = null;
     _roles = null;
+    _log.d('Sessão limpa da memória');
   }
 
   DateTime? get tokenExpiration {

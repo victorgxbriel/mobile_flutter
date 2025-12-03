@@ -50,8 +50,7 @@ class _VehiclesPageState extends State<VehiclesPage> {
                       color: colorScheme.error,
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      'Erro ao carregar veículos',
+                    Text( 'Erro ao carregar veículos',
                       style: theme.textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
@@ -129,14 +128,12 @@ class _VehiclesPageState extends State<VehiclesPage> {
               color: colorScheme.primary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 24),
-            Text(
-              'Nenhum veículo cadastrado',
+            Text( 'Nenhum veículo cadastrado',
               style: theme.textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            Text(
-              'Adicione seu primeiro veículo para agendar lavagens',
+            Text( 'Adicione seu primeiro veículo para agendar lavagens',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -159,8 +156,7 @@ class _VehiclesPageState extends State<VehiclesPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Remover veículo'),
-        content: Text(
-          'Deseja realmente remover o veículo ${vehicle.nomeCompleto}?',
+        content: Text( 'Deseja realmente remover o veículo ${vehicle.nomeCompleto}?',
         ),
         actions: [
           TextButton(
@@ -285,8 +281,7 @@ class _VehicleCard extends StatelessWidget {
                           color: colorScheme.error,
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          'Remover',
+                        Text( 'Remover',
                           style: TextStyle(color: colorScheme.error),
                         ),
                       ],

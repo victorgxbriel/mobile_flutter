@@ -42,19 +42,7 @@ AgendamentoModel _$AgendamentoModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AgendamentoModelToJson(AgendamentoModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
-      'active': instance.active,
-      'carroId': instance.carroId,
-      'situacaoId': instance.situacaoId,
-      'slotId': instance.slotId,
-      'carro': instance.carro,
-      'slot': instance.slotDirect,
-      'agendamento': instance.slotFromAgendamento,
-      'servicos': instance.servicos,
-      'situacao': instance.situacaoModel,
+    <String, dynamic>{ 'id': instance.id, 'createdAt': instance.createdAt.toIso8601String(), 'updatedAt': instance.updatedAt?.toIso8601String(), 'active': instance.active, 'carroId': instance.carroId, 'situacaoId': instance.situacaoId, 'slotId': instance.slotId, 'carro': instance.carro, 'slot': instance.slotDirect, 'agendamento': instance.slotFromAgendamento, 'servicos': instance.servicos, 'situacao': instance.situacaoModel,
     };
 
 AgendamentoCarro _$AgendamentoCarroFromJson(Map<String, dynamic> json) =>
@@ -68,13 +56,7 @@ AgendamentoCarro _$AgendamentoCarroFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AgendamentoCarroToJson(AgendamentoCarro instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'marca': instance.marca,
-      'modelo': instance.modelo,
-      'placa': instance.placa,
-      'cor': instance.cor,
-      'ano': instance.ano,
+    <String, dynamic>{ 'id': instance.id, 'marca': instance.marca, 'modelo': instance.modelo, 'placa': instance.placa, 'cor': instance.cor, 'ano': instance.ano,
     };
 
 AgendamentoSituacaoModel _$AgendamentoSituacaoModelFromJson(
@@ -99,9 +81,7 @@ AgendamentoServicoRelation _$AgendamentoServicoRelationFromJson(
 
 Map<String, dynamic> _$AgendamentoServicoRelationToJson(
   AgendamentoServicoRelation instance,
-) => <String, dynamic>{
-  'servicoId': instance.servicoId,
-  'servico': instance.servico,
+) => <String, dynamic>{ 'servicoId': instance.servicoId, 'servico': instance.servico,
 };
 
 AgendamentoSlot _$AgendamentoSlotFromJson(Map<String, dynamic> json) =>
@@ -118,12 +98,7 @@ AgendamentoSlot _$AgendamentoSlotFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AgendamentoSlotToJson(AgendamentoSlot instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'slotTempo': instance.slotTempo,
-      'disponivel': instance.disponivel,
-      'programacaoId': instance.programacaoId,
-      'programacao': instance.programacao,
+    <String, dynamic>{ 'id': instance.id, 'slotTempo': instance.slotTempo, 'disponivel': instance.disponivel, 'programacaoId': instance.programacaoId, 'programacao': instance.programacao,
     };
 
 AgendamentoProgramacao _$AgendamentoProgramacaoFromJson(
@@ -143,13 +118,7 @@ AgendamentoProgramacao _$AgendamentoProgramacaoFromJson(
 
 Map<String, dynamic> _$AgendamentoProgramacaoToJson(
   AgendamentoProgramacao instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'data': instance.data,
-  'estabelecimentoId': instance.estabelecimentoId,
-  'horaInicio': instance.horaInicio,
-  'horaTermino': instance.horaTermino,
-  'estabelecimento': instance.estabelecimento,
+) => <String, dynamic>{ 'id': instance.id, 'data': instance.data, 'estabelecimentoId': instance.estabelecimentoId, 'horaInicio': instance.horaInicio, 'horaTermino': instance.horaTermino, 'estabelecimento': instance.estabelecimento,
 };
 
 AgendamentoEstabelecimento _$AgendamentoEstabelecimentoFromJson(
@@ -162,10 +131,7 @@ AgendamentoEstabelecimento _$AgendamentoEstabelecimentoFromJson(
 
 Map<String, dynamic> _$AgendamentoEstabelecimentoToJson(
   AgendamentoEstabelecimento instance,
-) => <String, dynamic>{
-  'id': instance.id,
-  'nomeFantasia': instance.nomeFantasia,
-  'cnpj': instance.cnpj,
+) => <String, dynamic>{ 'id': instance.id, 'nomeFantasia': instance.nomeFantasia, 'cnpj': instance.cnpj,
 };
 
 AgendamentoServico _$AgendamentoServicoFromJson(Map<String, dynamic> json) =>
@@ -178,12 +144,7 @@ AgendamentoServico _$AgendamentoServicoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$AgendamentoServicoToJson(AgendamentoServico instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'titulo': instance.titulo,
-      'preco': instance.preco,
-      'tempoEstimado': instance.tempoEstimado,
-      'descricao': instance.descricao,
+    <String, dynamic>{ 'id': instance.id, 'titulo': instance.titulo, 'preco': instance.preco, 'tempoEstimado': instance.tempoEstimado, 'descricao': instance.descricao,
     };
 
 CreateAgendamentoDto _$CreateAgendamentoDtoFromJson(
@@ -199,9 +160,5 @@ CreateAgendamentoDto _$CreateAgendamentoDtoFromJson(
 
 Map<String, dynamic> _$CreateAgendamentoDtoToJson(
   CreateAgendamentoDto instance,
-) => <String, dynamic>{
-  'carroId': instance.carroId,
-  'situacaoId': instance.situacaoId,
-  'slotId': instance.slotId,
-  'servicosIds': instance.servicosIds,
+) => <String, dynamic>{ 'carroId': instance.carroId, 'situacaoId': instance.situacaoId, 'slotId': instance.slotId, 'servicosIds': instance.servicosIds,
 };

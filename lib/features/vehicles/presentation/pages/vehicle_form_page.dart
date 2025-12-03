@@ -448,8 +448,7 @@ class _VehicleFormPageState extends State<VehicleFormPage> {
                 context.read<NotificationsNotifier>();
             notificationsNotifier.addNotification(
               title: 'Veículo cadastrado',
-              message:
-                  'O veículo ${vehicle.marca} ${vehicle.modelo} foi cadastrado com sucesso.',
+              message: 'O veículo ${vehicle.marca} ${vehicle.modelo} foi cadastrado com sucesso.',
             );
           }
           ScaffoldMessenger.of(context).showSnackBar(
