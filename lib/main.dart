@@ -6,6 +6,7 @@ import 'app/theme/app_theme.dart';
 import 'app/router/app_router.dart';
 import 'core/di/service_locator.dart';
 import 'features/settings/presentation/notifiers/theme_notifier.dart';
+import 'features/notifications/presentation/notifiers/notifications_notifier.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +28,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final serviceLocator = ServiceLocator.instance;
     
-    return ChangeNotifierProvider<ThemeNotifier>.value(
-      value: serviceLocator.themeNotifier,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>.value(
+          value: serviceLocator.themeNotifier,
+        ),
+        ChangeNotifierProvider<NotificationsNotifier>(
+          create: (_) => NotificationsNotifier(),
+        ),
+      ],
       child: Consumer<ThemeNotifier>(
         builder: (context, themeNotifier, child) {
           return MaterialApp.router(

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../notifiers/notifications_notifier.dart';
 
 class NotificationItem {
   final String id;
@@ -16,39 +19,14 @@ class NotificationItem {
   });
 }
 
-class NotificationsPage extends StatefulWidget {
+class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
 
   @override
-  State<NotificationsPage> createState() => _NotificationsPageState();
-}
-
-class _NotificationsPageState extends State<NotificationsPage> {
-  late final List<NotificationItem> notifications;
-
-  @override
-  void initState() {
-    super.initState();
-    // Inicializamos as notificações no initState
-    notifications = [
-      NotificationItem(
-        id: '1',
-        title: 'Agendamento Confirmado',
-        message: 'Seu agendamento para 15/11/2023 às 14:30 foi confirmado.',
-        dateTime: DateTime.now().subtract(const Duration(hours: 2)),
-      ),
-      NotificationItem(
-        id: '2',
-        title: 'Promoção Especial',
-        message: 'Ganhe 20% de desconto na sua próxima lavagem!',
-        dateTime: DateTime.now().subtract(const Duration(days: 1)),
-        isRead: true,
-      ),
-    ];
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final notifier = context.watch<NotificationsNotifier>();
+    final notifications = notifier.notifications;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notificações'),
@@ -56,18 +34,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
         actions: [
           TextButton(
             onPressed: () {
-              // Marcar todas como lidas
-              setState(() {
-                notifications = notifications
-                    .map((n) => NotificationItem(
-                          id: n.id,
-                          title: n.title,
-                          message: n.message,
-                          dateTime: n.dateTime,
-                          isRead: true,
-                        ))
-                    .toList();
-              });
+              notifier.markAllAsRead();
             },
             child: const Text(
               'Marcar todas como lidas',

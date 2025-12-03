@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/di/service_locator.dart';
+import '../../../notifications/presentation/notifiers/notifications_notifier.dart';
 import '../../data/models/nhtsa_models.dart';
 import '../../data/models/vehicle_model.dart';
 import '../notifiers/nhtsa_notifier.dart';
@@ -441,7 +442,16 @@ class _VehicleFormPageState extends State<VehicleFormPage> {
       if (!context.mounted) return;
 
       switch (state) {
-        case VehicleOperationSuccess(message: final message):
+        case VehicleOperationSuccess(vehicle: final vehicle, message: final message):
+          if (!isEditing && vehicle != null) {
+            final notificationsNotifier =
+                context.read<NotificationsNotifier>();
+            notificationsNotifier.addNotification(
+              title: 'Veículo cadastrado',
+              message:
+                  'O veículo ${vehicle.marca} ${vehicle.modelo} foi cadastrado com sucesso.',
+            );
+          }
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(message),
