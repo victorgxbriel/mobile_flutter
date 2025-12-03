@@ -131,6 +131,7 @@ class _ProfilePageState extends State<_ProfilePage> {
                 ),
                 const SizedBox(height: 32),
                 _buildProfileItem(
+                  context,
                   icon: Icons.person_outline,
                   title: 'Dados Pessoais',
                   onTap: () {
@@ -139,14 +140,16 @@ class _ProfilePageState extends State<_ProfilePage> {
                 ),
                 _buildDivider(),
                 _buildProfileItem(
+                  context,
                   icon: Icons.car_repair,
                   title: 'Meus Veículos',
                   onTap: () {
-                    // Navegar para lista de veículos
+                    context.push('/profile/vehicles');
                   },
                 ),
                 _buildDivider(),
                 _buildProfileItem(
+                  context,
                   icon: Icons.credit_card,
                   title: 'Formas de Pagamento',
                   onTap: () {
@@ -155,6 +158,7 @@ class _ProfilePageState extends State<_ProfilePage> {
                 ),
                 _buildDivider(),
                 _buildProfileItem(
+                  context,
                   icon: Icons.history,
                   title: 'Histórico de Agendamentos',
                   onTap: () {
@@ -163,6 +167,7 @@ class _ProfilePageState extends State<_ProfilePage> {
                 ),
                 _buildDivider(),
                 _buildProfileItem(
+                  context,
                   icon: Icons.settings,
                   title: 'Configurações',
                   onTap: () {
@@ -199,15 +204,17 @@ class _ProfilePageState extends State<_ProfilePage> {
     );
   }
 
-  Widget _buildProfileItem({
+  Widget _buildProfileItem(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required VoidCallback onTap,
   }) {
+    final colorScheme = Theme.of(context).colorScheme;
     return ListTile(
-      leading: Icon(icon, color: Colors.blue),
+      leading: Icon(icon, color: colorScheme.primary),
       title: Text(title, style: const TextStyle(fontSize: 16)),
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: Icon(Icons.chevron_right, color: colorScheme.onSurfaceVariant),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
     );

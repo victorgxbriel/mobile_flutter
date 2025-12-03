@@ -12,10 +12,15 @@ import '../../features/home/presentation/pages/dashboard_page.dart';
 import '../../features/appointments/presentation/pages/appointments_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/vehicles/presentation/notifiers/vehicles_notifier.dart';
+import '../../features/vehicles/presentation/notifiers/nhtsa_notifier.dart';
+import '../../features/vehicles/presentation/pages/vehicles_page.dart';
+import '../../features/vehicles/presentation/pages/vehicle_form_page.dart';
+import '../../features/vehicles/presentation/pages/vehicle_edit_page.dart';
 
 // Chaves de navegação para cada branch
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
-final _shellNavigatorKey = GlobalKey<NavigatorState>();
+//final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 // Getter para o SessionService
 SessionService get _sessionService => ServiceLocator().sessionService;
@@ -124,17 +129,58 @@ final appRouter = GoRouter(
             GoRoute(
               path: "/profile",
               builder: (context, state) => const ProfilePage(),
-              // Sub-rotas de perfil podem ser adicionadas aqui
-              // routes: [
-              //   GoRoute(
-              //     path: "edit",
-              //     builder: (context, state) => EditProfilePage(),
-              //   ),
-              //   GoRoute(
-              //     path: "vehicles",
-              //     builder: (context, state) => VehiclesPage(),
-              //   ),
-              // ],
+              routes: [
+                GoRoute(
+                  path: "vehicles",
+                  builder: (context, state) => ChangeNotifierProvider(
+                    create: (_) => VehiclesNotifier(
+                      ServiceLocator().vehicleRepository,
+                    ),
+                    child: const VehiclesPage(),
+                  ),
+                  routes: [
+                    GoRoute(
+                      path: "add",
+                      builder: (context, state) => MultiProvider(
+                        providers: [
+                          ChangeNotifierProvider(
+                            create: (_) => VehiclesNotifier(
+                              ServiceLocator().vehicleRepository,
+                            ),
+                          ),
+                          ChangeNotifierProvider(
+                            create: (_) => NhtsaNotifier(
+                              ServiceLocator().nhtsaService,
+                            ),
+                          ),
+                        ],
+                        child: const VehicleFormPage(),
+                      ),
+                    ),
+                    GoRoute(
+                      path: ":id/edit",
+                      builder: (context, state) {
+                        final vehicleId = int.parse(state.pathParameters['id']!);
+                        return MultiProvider(
+                          providers: [
+                            ChangeNotifierProvider(
+                              create: (_) => VehiclesNotifier(
+                                ServiceLocator().vehicleRepository,
+                              ),
+                            ),
+                            ChangeNotifierProvider(
+                              create: (_) => NhtsaNotifier(
+                                ServiceLocator().nhtsaService,
+                              ),
+                            ),
+                          ],
+                          child: VehicleEditPage(vehicleId: vehicleId),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),

@@ -519,11 +519,22 @@
     },
     "/nhtsa/makes": {
       "get": {
+        "description": "Retorna uma lista completa de todas as marcas de veículos registradas na NHTSA (aproximadamente 10.000+ marcas).",
         "operationId": "NhtsaController_getAllMakes",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Lista de marcas retornada com sucesso"
+            "description": "Lista de marcas retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakesResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao comunicar com API NHTSA"
           }
         },
         "summary": "Listar todas as marcas de veículos",
@@ -534,13 +545,14 @@
     },
     "/nhtsa/makes/search": {
       "get": {
+        "description": "Busca uma marca específica pelo nome. Retorna a marca correspondente se encontrada.",
         "operationId": "NhtsaController_findMakeByName",
         "parameters": [
           {
             "name": "name",
             "required": true,
             "in": "query",
-            "description": "Nome da marca",
+            "description": "Nome da marca (case-insensitive)",
             "schema": {
               "example": "Toyota",
               "type": "string"
@@ -549,10 +561,20 @@
         ],
         "responses": {
           "200": {
-            "description": "Marca encontrada"
+            "description": "Marca encontrada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MakeDto"
+                }
+              }
+            }
           },
           "404": {
             "description": "Marca não encontrada"
+          },
+          "500": {
+            "description": "Erro ao comunicar com API NHTSA"
           }
         },
         "summary": "Buscar marca por nome",
@@ -563,13 +585,14 @@
     },
     "/nhtsa/makes/{makeId}/vehicle-types": {
       "get": {
+        "description": "Retorna os tipos de veículo disponíveis para uma marca específica (ex: Passenger Car, Truck, Motorcycle).",
         "operationId": "NhtsaController_getVehicleTypes",
         "parameters": [
           {
             "name": "makeId",
             "required": true,
             "in": "path",
-            "description": "ID da marca",
+            "description": "ID numérico da marca (obtido via GET /nhtsa/makes)",
             "schema": {
               "example": 448,
               "type": "number"
@@ -578,10 +601,20 @@
         ],
         "responses": {
           "200": {
-            "description": "Tipos de veículo retornados"
+            "description": "Tipos de veículo retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VehicleTypesResponseDto"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Nenhum tipo encontrado"
+            "description": "Nenhum tipo de veículo encontrado para esta marca"
+          },
+          "500": {
+            "description": "Erro ao comunicar com API NHTSA"
           }
         },
         "summary": "Buscar tipos de veículo por ID da marca",
@@ -592,13 +625,14 @@
     },
     "/nhtsa/makes/{makeId}/models": {
       "get": {
+        "description": "Retorna os modelos de veículo de uma marca. Pode ser filtrado por ano e/ou tipo de veículo.",
         "operationId": "NhtsaController_getModels",
         "parameters": [
           {
             "name": "makeId",
             "required": true,
             "in": "path",
-            "description": "ID da marca",
+            "description": "ID numérico da marca",
             "schema": {
               "example": 448,
               "type": "number"
@@ -608,17 +642,17 @@
             "name": "year",
             "required": false,
             "in": "query",
-            "description": "Ano do modelo",
+            "description": "Ano do modelo (filtro opcional)",
             "schema": {
               "example": 2020,
-              "type": "string"
+              "type": "number"
             }
           },
           {
             "name": "vehicleType",
             "required": false,
             "in": "query",
-            "description": "Tipo de veículo",
+            "description": "Tipo de veículo (filtro opcional): car, truck, motorcycle, etc.",
             "schema": {
               "example": "car",
               "type": "string"
@@ -627,10 +661,23 @@
         ],
         "responses": {
           "200": {
-            "description": "Modelos retornados com sucesso"
+            "description": "Modelos retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelsResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Nenhum modelo encontrado"
+          },
+          "500": {
+            "description": "Erro ao comunicar com API NHTSA"
           }
         },
-        "summary": "Buscar modelos por ID da marca com filtros opcionais",
+        "summary": "Buscar modelos por ID da marca",
         "tags": [
           "nhtsa"
         ]
@@ -638,13 +685,14 @@
     },
     "/nhtsa/search/models": {
       "get": {
+        "description": "Busca modelos usando o nome da marca ao invés do ID. Internamente resolve o ID e busca os modelos.",
         "operationId": "NhtsaController_getModelsByMakeName",
         "parameters": [
           {
             "name": "makeName",
             "required": true,
             "in": "query",
-            "description": "Nome da marca",
+            "description": "Nome da marca (case-insensitive)",
             "schema": {
               "example": "Toyota",
               "type": "string"
@@ -654,17 +702,17 @@
             "name": "year",
             "required": false,
             "in": "query",
-            "description": "Ano do modelo",
+            "description": "Ano do modelo (filtro opcional)",
             "schema": {
               "example": 2020,
-              "type": "string"
+              "type": "number"
             }
           },
           {
             "name": "vehicleType",
             "required": false,
             "in": "query",
-            "description": "Tipo de veículo",
+            "description": "Tipo de veículo (filtro opcional)",
             "schema": {
               "example": "car",
               "type": "string"
@@ -673,13 +721,23 @@
         ],
         "responses": {
           "200": {
-            "description": "Modelos retornados com sucesso"
+            "description": "Modelos retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelsResponseDto"
+                }
+              }
+            }
           },
           "404": {
-            "description": "Marca não encontrada"
+            "description": "Marca não encontrada ou nenhum modelo disponível"
+          },
+          "500": {
+            "description": "Erro ao comunicar com API NHTSA"
           }
         },
-        "summary": "Buscar modelos por nome da marca com filtros",
+        "summary": "Buscar modelos por nome da marca",
         "tags": [
           "nhtsa"
         ]
@@ -4744,6 +4802,174 @@
             "pattern": "^[A-Z0-9]+$"
           }
         }
+      },
+      "MakeDto": {
+        "type": "object",
+        "properties": {
+          "Make_ID": {
+            "type": "number",
+            "description": "ID da marca",
+            "example": 448
+          },
+          "Make_Name": {
+            "type": "string",
+            "description": "Nome da marca",
+            "example": "Toyota"
+          }
+        },
+        "required": [
+          "Make_ID",
+          "Make_Name"
+        ]
+      },
+      "VehicleTypeDto": {
+        "type": "object",
+        "properties": {
+          "VehicleTypeId": {
+            "type": "number",
+            "description": "ID do tipo de veículo",
+            "example": 2
+          },
+          "VehicleTypeName": {
+            "type": "string",
+            "description": "Nome do tipo de veículo",
+            "example": "Passenger Car"
+          }
+        },
+        "required": [
+          "VehicleTypeId",
+          "VehicleTypeName"
+        ]
+      },
+      "ModelDto": {
+        "type": "object",
+        "properties": {
+          "Make_ID": {
+            "type": "number",
+            "description": "ID da marca",
+            "example": 448
+          },
+          "Make_Name": {
+            "type": "string",
+            "description": "Nome da marca",
+            "example": "Toyota"
+          },
+          "Model_ID": {
+            "type": "number",
+            "description": "ID do modelo",
+            "example": 1861
+          },
+          "Model_Name": {
+            "type": "string",
+            "description": "Nome do modelo",
+            "example": "Corolla"
+          }
+        },
+        "required": [
+          "Make_ID",
+          "Make_Name",
+          "Model_ID",
+          "Model_Name"
+        ]
+      },
+      "MakesResponseDto": {
+        "type": "object",
+        "properties": {
+          "Count": {
+            "type": "number",
+            "description": "Quantidade de marcas",
+            "example": 10500
+          },
+          "Message": {
+            "type": "string",
+            "description": "Mensagem da API",
+            "example": "Response returned successfully"
+          },
+          "SearchCriteria": {
+            "type": "object",
+            "description": "Critério de busca",
+            "example": null,
+            "nullable": true
+          },
+          "Results": {
+            "description": "Lista de marcas",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MakeDto"
+            }
+          }
+        },
+        "required": [
+          "Count",
+          "Message",
+          "Results"
+        ]
+      },
+      "VehicleTypesResponseDto": {
+        "type": "object",
+        "properties": {
+          "Count": {
+            "type": "number",
+            "description": "Quantidade de tipos",
+            "example": 4
+          },
+          "Message": {
+            "type": "string",
+            "description": "Mensagem da API",
+            "example": "Response returned successfully"
+          },
+          "SearchCriteria": {
+            "type": "object",
+            "description": "Critério de busca",
+            "example": null,
+            "nullable": true
+          },
+          "Results": {
+            "description": "Lista de tipos de veículo",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VehicleTypeDto"
+            }
+          }
+        },
+        "required": [
+          "Count",
+          "Message",
+          "Results"
+        ]
+      },
+      "ModelsResponseDto": {
+        "type": "object",
+        "properties": {
+          "Count": {
+            "type": "number",
+            "description": "Quantidade de modelos",
+            "example": 50
+          },
+          "Message": {
+            "type": "string",
+            "description": "Mensagem da API",
+            "example": "Response returned successfully"
+          },
+          "SearchCriteria": {
+            "type": "object",
+            "description": "Critério de busca",
+            "example": "Make:Toyota",
+            "nullable": true
+          },
+          "Results": {
+            "description": "Lista de modelos",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ModelDto"
+            }
+          }
+        },
+        "required": [
+          "Count",
+          "Message",
+          "Results"
+        ]
       },
       "CreateClienteDto": {
         "type": "object",

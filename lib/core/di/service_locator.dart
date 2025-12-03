@@ -9,6 +9,9 @@ import '../../features/home/data/repositories/estabelecimento_repository.dart';
 import '../../features/home/data/services/estabelecimento_service.dart';
 import '../../features/profile/data/repositories/profile_repository.dart';
 import '../../features/profile/data/services/profile_service.dart';
+import '../../features/vehicles/data/repositories/vehicle_repository.dart';
+import '../../features/vehicles/data/services/vehicle_service.dart';
+import '../../features/vehicles/data/services/nhtsa_service.dart';
 import '../network/dio_client.dart';
 import '../services/session_service.dart';
 import '../storage/storage_service.dart';
@@ -33,6 +36,9 @@ class ServiceLocator {
   late final EstabelecimentoRepository _estabelecimentoRepository;
   late final EstabelecimentoDetailsService _estabelecimentoDetailsService;
   late final EstabelecimentoDetailsRepository _estabelecimentoDetailsRepository;
+  late final VehicleService _vehicleService;
+  late final VehicleRepository _vehicleRepository;
+  late final NhtsaService _nhtsaService;
   late final SharedPreferences _sharedPreferences;
   late final StorageService _storageService;
   late final SessionService _sessionService;
@@ -60,6 +66,9 @@ class ServiceLocator {
     _estabelecimentoRepository = EstabelecimentoRepository(_estabelecimentoService);
     _estabelecimentoDetailsService = EstabelecimentoDetailsServiceImpl(_dioClient);
     _estabelecimentoDetailsRepository = EstabelecimentoDetailsRepository(_estabelecimentoDetailsService);
+    _vehicleService = VehicleServiceImpl(_dioClient);
+    _vehicleRepository = VehicleRepositoryImpl(_vehicleService);
+    _nhtsaService = NhtsaServiceImpl(_dioClient);
     _storageService = StorageServiceImpl(_sharedPreferences);
     
     // Inicializa a sessão (verifica token existente)
@@ -73,6 +82,8 @@ class ServiceLocator {
   ProfileRepository get profileRepository => _profileRepository;
   EstabelecimentoRepository get estabelecimentoRepository => _estabelecimentoRepository;
   EstabelecimentoDetailsRepository get estabelecimentoDetailsRepository => _estabelecimentoDetailsRepository;
+  VehicleRepository get vehicleRepository => _vehicleRepository;
+  NhtsaService get nhtsaService => _nhtsaService;
   FlutterSecureStorage get storage => _storage;
   StorageService get storageService => _storageService;
   SessionService get sessionService => _sessionService;
