@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../estabelecimento/data/models/servico_model.dart';
+import '../../../notifications/presentation/notifiers/notifications_notifier.dart';
 import '../../../vehicles/data/models/vehicle_model.dart';
 import '../../../vehicles/presentation/notifiers/vehicles_notifier.dart';
 import '../../../vehicles/presentation/state/vehicles_state.dart';
@@ -128,6 +129,26 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
           // Listener para sucesso na criação
           if (notifier.createState is CreateAgendamentoSuccess) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
+              final state = notifier.createState as CreateAgendamentoSuccess;
+              final agendamento = state.agendamento;
+              final notificationsNotifier =
+                  context.read<NotificationsNotifier>();
+              String message =
+                  'Seu agendamento em ${widget.estabelecimentoNome} foi confirmado.';
+
+              final slot = agendamento.slot;
+              final programacao = slot?.programacao;
+              if (slot != null && programacao != null) {
+                final dataFormatada =
+                    DateFormat('dd/MM/yyyy').format(programacao.dataAsDateTime);
+                final horario = slot.horarioFormatado;
+                message =
+                    'Seu agendamento em ${widget.estabelecimentoNome} foi confirmado para $dataFormatada às $horario.';
+              }
+              notificationsNotifier.addNotification(
+                title: 'Agendamento confirmado',
+                message: message,
+              );
               _showSuccessDialog();
             });
           } else if (notifier.createState is CreateAgendamentoError) {
