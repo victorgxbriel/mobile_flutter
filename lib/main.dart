@@ -54,6 +54,9 @@ class MyApp extends StatelessWidget {
             darkTheme: AppTheme.dark,
             themeMode: themeNotifier.themeMode,
             routerConfig: appRouter,
+            builder: (context, child) {
+              return SafeArea(child: child ?? const SizedBox());
+            },
           );
         },
       ),

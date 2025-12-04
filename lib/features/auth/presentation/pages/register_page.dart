@@ -83,6 +83,7 @@ class _RegisterViewState extends State<_RegisterView>
     return Scaffold(
       appBar: AppBar(
         title: const Text('Criar Conta'),
+        /*
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -90,6 +91,7 @@ class _RegisterViewState extends State<_RegisterView>
             Tab(text: 'Sou Estabelecimento'),
           ],
         ),
+        */
       ),
       body: Consumer<RegisterNotifier>(
         builder: (context, notifier, child) {
@@ -113,7 +115,8 @@ class _RegisterViewState extends State<_RegisterView>
           });
 
           final isLoading = notifier.status is Loading;
-
+          return _buildClientForm(isLoading);
+          /*
           return TabBarView(
             controller: _tabController,
             children: [
@@ -121,6 +124,7 @@ class _RegisterViewState extends State<_RegisterView>
               _buildEstablishmentForm(isLoading),
             ],
           );
+          */
         },
       ),
     );

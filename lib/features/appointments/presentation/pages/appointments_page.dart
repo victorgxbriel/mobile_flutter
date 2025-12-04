@@ -38,11 +38,9 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     switch (situacao) {
       case AgendamentoSituacao.agendado:
         return Colors.blue;
-      case AgendamentoSituacao.confirmado:
-        return Colors.teal;
-      case AgendamentoSituacao.emAndamento:
+      case AgendamentoSituacao.atrasado:
         return Colors.orange;
-      case AgendamentoSituacao.concluido:
+      case AgendamentoSituacao.iniciado:
         return Colors.green;
       case AgendamentoSituacao.cancelado:
         return Colors.red;
@@ -53,11 +51,9 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     switch (situacao) {
       case AgendamentoSituacao.agendado:
         return Icons.schedule;
-      case AgendamentoSituacao.confirmado:
+      case AgendamentoSituacao.atrasado:
         return Icons.check_circle_outline;
-      case AgendamentoSituacao.emAndamento:
-        return Icons.local_car_wash;
-      case AgendamentoSituacao.concluido:
+      case AgendamentoSituacao.iniciado:
         return Icons.done_all;
       case AgendamentoSituacao.cancelado:
         return Icons.cancel_outlined;
@@ -254,7 +250,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     final statusColor = _getStatusColor(agendamento.situacao);
     final statusIcon = _getStatusIcon(agendamento.situacao);
     final canCancel = agendamento.situacao == AgendamentoSituacao.agendado ||
-        agendamento.situacao == AgendamentoSituacao.confirmado;
+        agendamento.situacao == AgendamentoSituacao.atrasado;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),

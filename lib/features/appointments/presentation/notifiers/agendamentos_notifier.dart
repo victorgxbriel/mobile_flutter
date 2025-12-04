@@ -24,21 +24,17 @@ class AgendamentosNotifier extends ChangeNotifier {
   List<AgendamentoModel> get agendamentosAgendados =>
       _agendamentos.where((a) => a.situacao == AgendamentoSituacao.agendado).toList();
 
-  List<AgendamentoModel> get agendamentosConfirmados =>
-      _agendamentos.where((a) => a.situacao == AgendamentoSituacao.confirmado).toList();
+  List<AgendamentoModel> get agendamentosAtrasados =>
+      _agendamentos.where((a) => a.situacao == AgendamentoSituacao.atrasado).toList();
 
-  List<AgendamentoModel> get agendamentosEmAndamento =>
-      _agendamentos.where((a) => a.situacao == AgendamentoSituacao.emAndamento).toList();
-
-  List<AgendamentoModel> get agendamentosConcluidos =>
-      _agendamentos.where((a) => a.situacao == AgendamentoSituacao.concluido).toList();
+  List<AgendamentoModel> get agendamentosIniciado =>
+      _agendamentos.where((a) => a.situacao == AgendamentoSituacao.iniciado).toList();
 
   List<AgendamentoModel> get agendamentosCancelados =>
       _agendamentos.where((a) => a.situacao == AgendamentoSituacao.cancelado).toList();
 
   List<AgendamentoModel> get agendamentosAtivos => _agendamentos
       .where((a) =>
-          a.situacao != AgendamentoSituacao.concluido &&
           a.situacao != AgendamentoSituacao.cancelado)
       .toList();
 
@@ -52,7 +48,7 @@ class AgendamentosNotifier extends ChangeNotifier {
       // Ordenar por data de criação, mais recentes primeiro
       _agendamentos.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       _log.d('${_agendamentos.length} agendamentos carregados');
-      _log.t('Ativos: ${agendamentosAtivos.length}, Concluídos: ${agendamentosConcluidos.length}, Cancelados: ${agendamentosCancelados.length}');
+      _log.t('Ativos: ${agendamentosAtivos.length}, Cancelados: ${agendamentosCancelados.length}');
       _state = AgendamentosLoaded(_agendamentos);
     } catch (e) {
       _log.e('Erro ao carregar agendamentos', error: e);

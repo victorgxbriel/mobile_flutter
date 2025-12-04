@@ -7,13 +7,11 @@ enum AgendamentoSituacao {
   @JsonValue(1)
   agendado(1, 'Agendado'),
   @JsonValue(2)
-  confirmado(2, 'Confirmado'),
+  atrasado(2, 'Atrasado'),
   @JsonValue(3)
-  emAndamento(3, 'Em Andamento'),
+  iniciado(3, 'Iniciado'),
   @JsonValue(4)
-  concluido(4, 'Concluído'),
-  @JsonValue(5)
-  cancelado(5, 'Cancelado');
+  cancelado(4, 'Cancelado');
 
   final int id;
   final String descricao;

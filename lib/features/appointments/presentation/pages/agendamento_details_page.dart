@@ -666,12 +666,10 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
       case 1: // Agendado
         return Colors.blue;
       case 2: // Confirmado
-        return Colors.green;
-      case 3: // Em Andamento
         return Colors.orange;
-      case 4: // Concluído
-        return colorScheme.primary;
-      case 5: // Cancelado
+      case 3: // Em Andamento
+        return Colors.green;
+      case 4: // Cancelado
         return Colors.red;
       default:
         return colorScheme.outline;
@@ -684,11 +682,9 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
         return Icons.schedule;
       case 2: // Confirmado
         return Icons.check_circle;
-      case 3: // Em Andamento
-        return Icons.play_circle;
-      case 4: // Concluído
+      case 3: // Concluído
         return Icons.verified;
-      case 5: // Cancelado
+      case 4: // Cancelado
         return Icons.cancel;
       default:
         return Icons.help;
