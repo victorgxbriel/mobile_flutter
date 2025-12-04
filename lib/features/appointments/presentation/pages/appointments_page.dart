@@ -3,8 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/di/service_locator.dart';
-import '../../../../core/services/session_service.dart';
 import '../../data/models/agendamento_model.dart';
 import '../notifiers/agendamentos_notifier.dart';
 import '../states/agendamento_state.dart';
@@ -27,11 +25,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   }
 
   void _loadAgendamentos() {
-    final sessionService = ServiceLocator.instance.get<SessionService>();
-    final userId = sessionService.userId;
-    if (userId != null) {
-      context.read<AgendamentosNotifier>().loadAgendamentos(userId);
-    }
+    context.read<AgendamentosNotifier>().loadAgendamentos();
   }
 
   Color _getStatusColor(AgendamentoSituacao situacao) {
@@ -88,11 +82,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   }
 
   void _cancelAgendamento(int id) {
-    final sessionService = ServiceLocator.instance.get<SessionService>();
-    final userId = sessionService.userId;
-    if (userId != null) {
-      context.read<AgendamentosNotifier>().cancelarAgendamento(id, userId);
-    }
+    context.read<AgendamentosNotifier>().cancelarAgendamento(id);
   }
 
   @override

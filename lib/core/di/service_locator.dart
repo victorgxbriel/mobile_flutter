@@ -112,8 +112,8 @@ class ServiceLocator {
     _profileRepository = ProfileRepository(_profileService, _storage);
     _estabelecimentoRepository = EstabelecimentoRepository(_estabelecimentoService);
     _estabelecimentoDetailsRepository = EstabelecimentoDetailsRepository(_estabelecimentoDetailsService);
-    _vehicleRepository = VehicleRepositoryImpl(_vehicleService);
-    _agendamentoRepository = AgendamentoRepository(_agendamentoService);
+    _vehicleRepository = VehicleRepositoryImpl(_vehicleService, _sessionService);
+    _agendamentoRepository = AgendamentoRepository(_agendamentoService, _sessionService);
     _log.d('Repositories criados');
     
     // Storage e Theme

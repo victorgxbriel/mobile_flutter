@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mobile_flutter/app/utils/app_logger.dart';
+import '../../../../core/services/session_service.dart';
 import '../models/agendamento_model.dart';
 import '../models/slot_model.dart';
 import '../services/agendamento_service.dart';
@@ -8,10 +9,18 @@ final _log = logger(AgendamentoRepository);
 
 class AgendamentoRepository {
   final AgendamentoService _service;
+  final SessionService _sessionService;
 
-  AgendamentoRepository(this._service);
+  AgendamentoRepository(this._service, this._sessionService);
 
-  Future<List<AgendamentoModel>> getAgendamentosByClienteId(int clienteId) async {
+  int? get _clienteId => _sessionService.clienteId;
+
+  Future<List<AgendamentoModel>> getAgendamentos() async {
+    final clienteId = _clienteId;
+    if (clienteId == null) {
+      _log.w('ClienteId não disponível - perfil não carregado');
+      throw Exception('Perfil não carregado. Aguarde ou faça login novamente.');
+    }
     _log.i('Carregando agendamentos do cliente: $clienteId');
     try {
       final agendamentos = await _service.getAgendamentosByClienteId(clienteId);

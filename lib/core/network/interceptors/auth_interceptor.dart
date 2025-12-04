@@ -82,6 +82,17 @@ class AuthInterceptor extends Interceptor {
     if (err.response?.statusCode == 401) {
       _log.w('Erro 401 - Nao autorizado');
       
+      // /auth/me com 401 significa que o usuário não existe ou sessão inválida
+      // Deve deslogar imediatamente
+      if (_isProfileRoute(err.requestOptions.path)) {
+        _log.e('Erro 401 em /auth/me - deslogando usuário');
+        await tokenService.clearTokens();
+        onTokenExpired?.call();
+        handler.next(err);
+        return;
+      }
+      
+      // Outras rotas de auth (login, register, etc) - apenas propaga o erro
       if (_isAuthRoute(err.requestOptions.path)) {
         _log.d('Rota de auth, propagando erro...');
         handler.next(err);
@@ -132,8 +143,13 @@ class AuthInterceptor extends Interceptor {
     return publicRoutes.any((route) => path.endsWith(route));
   }
 
-  /// Verifica se é uma rota de autenticação
+  /// Verifica se é a rota de perfil (/auth/me)
+  bool _isProfileRoute(String path) {
+    return path.endsWith('/auth/me');
+  }
+
+  /// Verifica se é uma rota de autenticação (exceto /auth/me)
   bool _isAuthRoute(String path) {
-    return path.contains('/auth/');
+    return path.contains('/auth/') && !_isProfileRoute(path);
   }
 }

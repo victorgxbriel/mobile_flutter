@@ -7,7 +7,7 @@ final _log = logger(AuthServiceImpl);
 
 abstract class AuthService {
   Future<LoginResponse> login(LoginDto dto);
-  Future<UserModel> getCurrentUser();
+  Future<ProfileModel> getProfile();
   Future<RegisterResponse> register(RegisterDto dto);
   Future<void> registerClient(RegisterDto userDto, CreateClienteDto clientDto);
   Future<void> registerEstablishment(SetupEstabelecimentoDto setupDto);
@@ -84,10 +84,11 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<UserModel> getCurrentUser() async {
+  Future<ProfileModel> getProfile() async {
     _log.t('GET /auth/me');
     final response = await _client.instance.get('/auth/me');
-    return UserModel.fromJson(response.data);
+    _log.t('Profile response received');
+    return ProfileModel.fromJson(response.data);
   }
 
   @override

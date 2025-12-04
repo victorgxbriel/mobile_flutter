@@ -22,7 +22,7 @@ class VehiclesNotifier extends ChangeNotifier {
   List<VehicleModel> get vehicles => _vehicles;
 
   Future<void> loadVehicles() async {
-    _log.i('Carregando veículos...');
+    _log.i('Carregando veículos');
     _state = const VehiclesLoading();
     notifyListeners();
 
@@ -32,7 +32,7 @@ class VehiclesNotifier extends ChangeNotifier {
       _state = VehiclesLoaded(_vehicles);
     } catch (e) {
       _log.e('Erro ao carregar veículos', error: e);
-      _state = VehiclesError(e.toString());
+      _state = VehiclesError(e.toString().replaceAll('Exception: ', ''));
     }
 
     notifyListeners();
@@ -54,20 +54,20 @@ class VehiclesNotifier extends ChangeNotifier {
       );
     } catch (e) {
       _log.e('Erro ao criar veículo', error: e);
-      _operationState = VehicleOperationError(e.toString());
+      _operationState = VehicleOperationError(e.toString().replaceAll('Exception: ', ''));
     }
 
     notifyListeners();
   }
 
-  Future<void> updateVehicle(int id, UpdateVehicleDto dto) async {
-    _log.i('Atualizando veículo: $id');
+  Future<void> updateVehicle(int vehicleId, UpdateVehicleDto dto) async {
+    _log.i('Atualizando veículo: $vehicleId');
     _operationState = const VehicleOperationLoading();
     notifyListeners();
 
     try {
-      final updatedVehicle = await _repository.updateVehicle(id, dto);
-      final index = _vehicles.indexWhere((v) => v.id == id);
+      final updatedVehicle = await _repository.updateVehicle(vehicleId, dto);
+      final index = _vehicles.indexWhere((v) => v.id == vehicleId);
       if (index != -1) {
         _vehicles[index] = updatedVehicle;
         _state = VehiclesLoaded(_vehicles);
@@ -79,20 +79,20 @@ class VehiclesNotifier extends ChangeNotifier {
       );
     } catch (e) {
       _log.e('Erro ao atualizar veículo', error: e);
-      _operationState = VehicleOperationError(e.toString());
+      _operationState = VehicleOperationError(e.toString().replaceAll('Exception: ', ''));
     }
 
     notifyListeners();
   }
 
-  Future<void> deleteVehicle(int id) async {
-    _log.i('Removendo veículo: $id');
+  Future<void> deleteVehicle(int vehicleId) async {
+    _log.i('Removendo veículo: $vehicleId');
     _operationState = const VehicleOperationLoading();
     notifyListeners();
 
     try {
-      await _repository.deleteVehicle(id);
-      _vehicles.removeWhere((v) => v.id == id);
+      await _repository.deleteVehicle(vehicleId);
+      _vehicles.removeWhere((v) => v.id == vehicleId);
       _log.i('Veículo removido com sucesso');
       _state = VehiclesLoaded(_vehicles);
       _operationState = const VehicleOperationSuccess(
@@ -100,7 +100,7 @@ class VehiclesNotifier extends ChangeNotifier {
       );
     } catch (e) {
       _log.e('Erro ao remover veículo', error: e);
-      _operationState = VehicleOperationError(e.toString());
+      _operationState = VehicleOperationError(e.toString().replaceAll('Exception: ', ''));
     }
 
     notifyListeners();

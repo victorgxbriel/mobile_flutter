@@ -162,20 +162,21 @@ class AuthRepository {
     }
   }
   
-  Future<UserModel?> getCurrentUser() async {
-    _log.d('Buscando usuário atual...');
+  /// Busca o perfil completo do usuário (incluindo clienteId/estabelecimentoId)
+  Future<ProfileModel?> getProfile() async {
+    _log.d('Buscando perfil do usuário...');
     try {
-      final token = await _storage.read(key: 'jwt_token');
+      final token = await _storage.read(key: TokenService.accessTokenKey);
       if (token == null) {
         _log.w('Nenhum token encontrado');
         return null;
       }
       
-      final response = await _dataSource.getCurrentUser();
-      _log.d('Usuário obtido: ${response.email}');
-      return response;
+      final profile = await _dataSource.getProfile();
+      _log.d('Perfil obtido: ${profile.email} (clienteId: ${profile.clienteId}, estabelecimentoId: ${profile.estabelecimentoId})');
+      return profile;
     } catch (e) {
-      _log.e('Erro ao obter usuário atual', error: e);
+      _log.e('Erro ao obter perfil', error: e);
       return null;
     }
   }

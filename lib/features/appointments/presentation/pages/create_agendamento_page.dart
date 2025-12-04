@@ -55,7 +55,7 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
       notifier.addServico(widget.servicoPreSelecionadoId!);
     }
     
-    // Carregar veículos
+    // Carregar veículos do cliente
     context.read<VehiclesNotifier>().loadVehicles();
   }
 
@@ -382,8 +382,9 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
                   const SizedBox(height: 8),
                   Text(msg),
                   TextButton(
-                    onPressed: () =>
-                        context.read<VehiclesNotifier>().loadVehicles(),
+                    onPressed: () {
+                      context.read<VehiclesNotifier>().loadVehicles();
+                    },
                     child: const Text('Tentar novamente'),
                   ),
                 ],

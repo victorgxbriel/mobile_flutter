@@ -28,7 +28,18 @@ ProgramacaoDiariaModel _$ProgramacaoDiariaModelFromJson(
 
 Map<String, dynamic> _$ProgramacaoDiariaModelToJson(
   ProgramacaoDiariaModel instance,
-) => <String, dynamic>{ 'id': instance.id, 'createdAt': instance.createdAt.toIso8601String(), 'updatedAt': instance.updatedAt?.toIso8601String(), 'active': instance.active, 'data': instance.data, 'horaInicio': instance.horaInicio, 'horaTermino': instance.horaTermino, 'intervaloHorario': instance.intervaloHorario, 'agendamentosPorHorario': instance.agendamentosPorHorario, 'estabelecimentoId': instance.estabelecimentoId, 'slotsTempo': instance.slots,
+) => <String, dynamic>{
+  'id': instance.id,
+  'createdAt': instance.createdAt.toIso8601String(),
+  'updatedAt': instance.updatedAt?.toIso8601String(),
+  'active': instance.active,
+  'data': instance.data,
+  'horaInicio': instance.horaInicio,
+  'horaTermino': instance.horaTermino,
+  'intervaloHorario': instance.intervaloHorario,
+  'agendamentosPorHorario': instance.agendamentosPorHorario,
+  'estabelecimentoId': instance.estabelecimentoId,
+  'slotsTempo': instance.slots,
 };
 
 SlotTempoModel _$SlotTempoModelFromJson(Map<String, dynamic> json) =>
@@ -47,5 +58,12 @@ SlotTempoModel _$SlotTempoModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$SlotTempoModelToJson(SlotTempoModel instance) =>
-    <String, dynamic>{ 'id': instance.id, 'createdAt': instance.createdAt?.toIso8601String(), 'updatedAt': instance.updatedAt?.toIso8601String(), 'active': instance.active, 'programacaoId': instance.programacaoId, 'slotTempo': instance.slotTempo, 'disponivel': instance.disponivel,
+    <String, dynamic>{
+      'id': instance.id,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'active': instance.active,
+      'programacaoId': instance.programacaoId,
+      'slotTempo': instance.slotTempo,
+      'disponivel': instance.disponivel,
     };

@@ -38,13 +38,13 @@ class AgendamentosNotifier extends ChangeNotifier {
           a.situacao != AgendamentoSituacao.cancelado)
       .toList();
 
-  Future<void> loadAgendamentos(int clienteId) async {
-    _log.i('Carregando agendamentos do cliente: $clienteId');
+  Future<void> loadAgendamentos() async {
+    _log.i('Carregando agendamentos');
     _state = const AgendamentosLoading();
     notifyListeners();
 
     try {
-      _agendamentos = await _repository.getAgendamentosByClienteId(clienteId);
+      _agendamentos = await _repository.getAgendamentos();
       // Ordenar por data de criação, mais recentes primeiro
       _agendamentos.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       _log.d('${_agendamentos.length} agendamentos carregados');
@@ -58,7 +58,7 @@ class AgendamentosNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> cancelarAgendamento(int id, int clienteId) async {
+  Future<void> cancelarAgendamento(int id) async {
     _log.i('Cancelando agendamento: $id');
     _cancelState = const CancelAgendamentoLoading();
     notifyListeners();
@@ -68,7 +68,7 @@ class AgendamentosNotifier extends ChangeNotifier {
       _log.i('Agendamento cancelado com sucesso');
       _cancelState = const CancelAgendamentoSuccess();
       // Recarregar a lista após cancelamento
-      await loadAgendamentos(clienteId);
+      await loadAgendamentos();
     } catch (e) {
       _log.e('Erro ao cancelar agendamento', error: e);
       _cancelState = CancelAgendamentoError(e.toString().replaceAll('Exception: ', ''));

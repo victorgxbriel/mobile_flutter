@@ -42,12 +42,27 @@ class LoginNotifier extends ChangeNotifier {
       // Atualiza a sessão com o novo token
       await ServiceLocator().sessionService.setToken(token);
       
+      // Busca o perfil para obter clienteId/estabelecimentoId (não bloqueia o login se falhar)
+      try {
+        final profile = await _authRepository.getProfile();
+        if (profile != null) {
+          ServiceLocator().sessionService.updateProfile(
+            clienteId: profile.clienteId,
+            estabelecimentoId: profile.estabelecimentoId,
+          );
+          _log.d('Perfil carregado - clienteId: ${profile.clienteId}, estabelecimentoId: ${profile.estabelecimentoId}');
+        }
+      } catch (profileError) {
+        _log.w('Não foi possível carregar o perfil: $profileError');
+        // Continua mesmo sem o perfil - será carregado depois
+      }
+      
       _log.i('Login realizado com sucesso');
       _status = Success();
       notifyListeners();
     } catch (e) {
       _log.e('Erro no login', error: e);
-      _status = Error(e.toString());
+      _status = Error(e.toString().replaceAll('Exception: ', ''));
       notifyListeners();
     }
   }

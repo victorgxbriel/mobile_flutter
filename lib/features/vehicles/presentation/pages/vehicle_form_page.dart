@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/di/service_locator.dart';
 import '../../../notifications/presentation/notifiers/notifications_notifier.dart';
 import '../../data/models/nhtsa_models.dart';
 import '../../data/models/vehicle_model.dart';
@@ -403,16 +402,6 @@ class _VehicleFormPageState extends State<VehicleFormPage> {
   Future<void> _submit(BuildContext context, VehiclesNotifier notifier) async {
     if (!_formKey.currentState!.validate()) return;
 
-    final sessionService = ServiceLocator().sessionService;
-    final userId = sessionService.userId;
-
-    if (userId == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuário não autenticado')),
-      );
-      return;
-    }
-
     final placa = _placaController.text.trim();
 
     if (isEditing) {
@@ -426,7 +415,6 @@ class _VehicleFormPageState extends State<VehicleFormPage> {
       await notifier.updateVehicle(widget.vehicle!.id, dto);
     } else {
       final dto = CreateVehicleDto(
-        clienteId: userId,
         marca: _marcaController.text.trim(),
         modelo: _modeloController.text.trim(),
         ano: _anoController.text.trim(),

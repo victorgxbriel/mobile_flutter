@@ -23,5 +23,16 @@ ServicoModel _$ServicoModelFromJson(Map<String, dynamic> json) => ServicoModel(
 );
 
 Map<String, dynamic> _$ServicoModelToJson(ServicoModel instance) =>
-    <String, dynamic>{ 'id': instance.id, 'createdAt': instance.createdAt.toIso8601String(), 'updatedAt': instance.updatedAt.toIso8601String(), 'active': instance.active, 'titulo': instance.titulo, 'descricao': instance.descricao, 'preco': instance.preco, 'tempoEstimado': instance.tempoEstimado, 'tipoServicoId': instance.tipoServicoId, 'estabelecimentoId': instance.estabelecimentoId, 'tipoServico': instance.tipoServico,
+    <String, dynamic>{
+      'id': instance.id,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt.toIso8601String(),
+      'active': instance.active,
+      'titulo': instance.titulo,
+      'descricao': instance.descricao,
+      'preco': instance.preco,
+      'tempoEstimado': instance.tempoEstimado,
+      'tipoServicoId': instance.tipoServicoId,
+      'estabelecimentoId': instance.estabelecimentoId,
+      'tipoServico': instance.tipoServico,
     };

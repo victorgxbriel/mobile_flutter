@@ -49,9 +49,9 @@ class _ProfilePageState extends State<_ProfilePage> {
       
       final token = await authRepo.getToken();
       if (token != null) {
-        final user = await authRepo.getCurrentUser();
-        if (user != null) {
-          await notifier.loadProfile(user.userId);
+        final profile = await authRepo.getProfile();
+        if (profile != null && profile.clienteId != null) {
+          await notifier.loadProfile(profile.clienteId!);
         }
       }
     } catch (e) {

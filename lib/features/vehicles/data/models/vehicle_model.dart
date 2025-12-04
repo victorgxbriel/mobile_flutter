@@ -53,7 +53,7 @@ class VehicleModel {
 
 @JsonSerializable()
 class CreateVehicleDto {
-  final int clienteId;
+  final int? clienteId;
   final String marca;
   final String modelo;
   final String ano;
@@ -61,7 +61,7 @@ class CreateVehicleDto {
   final String? placa;
 
   CreateVehicleDto({
-    required this.clienteId,
+    this.clienteId,
     required this.marca,
     required this.modelo,
     required this.ano,

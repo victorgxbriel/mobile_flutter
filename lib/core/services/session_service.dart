@@ -18,10 +18,23 @@ class SessionService extends ChangeNotifier {
   int? _userId;
   String? _email;
   List<String>? _roles;
+  int? _clienteId;
+  int? _estabelecimentoId;
 
   int? get userId => _userId;
   String? get email => _email;
   List<String>? get roles => _roles;
+  int? get clienteId => _clienteId;
+  int? get estabelecimentoId => _estabelecimentoId;
+
+  /// Verifica se o usuário é cliente
+  bool get isCliente => _roles?.contains('CLIENTE') ?? false;
+  
+  /// Verifica se o usuário é do estabelecimento
+  bool get isEstabelecimento => 
+      (_roles?.contains('GERENTE') ?? false) || 
+      (_roles?.contains('PROPRIETARIO') ?? false) || 
+      (_roles?.contains('FUNCIONARIO') ?? false);
 
   /// Callback para navegação quando a sessão expira
   VoidCallback? onSessionExpired;
@@ -120,7 +133,21 @@ class SessionService extends ChangeNotifier {
     _userId = null;
     _email = null;
     _roles = null;
+    _clienteId = null;
+    _estabelecimentoId = null;
     _log.d('Sessão limpa da memória');
+  }
+
+  /// Atualiza os dados do perfil (clienteId e estabelecimentoId)
+  void updateProfile({
+    int? clienteId,
+    int? estabelecimentoId,
+    String? nome,
+  }) {
+    _clienteId = clienteId;
+    _estabelecimentoId = estabelecimentoId;
+    _log.i('Perfil atualizado - clienteId: $clienteId, estabelecimentoId: $estabelecimentoId');
+    notifyListeners();
   }
 
   DateTime? get tokenExpiration {

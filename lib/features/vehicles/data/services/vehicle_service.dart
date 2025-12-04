@@ -5,11 +5,11 @@ import '../models/vehicle_model.dart';
 final _log = logger(VehicleServiceImpl);
 
 abstract class VehicleService {
-  Future<List<VehicleModel>> getVehicles();
-  Future<VehicleModel> getVehicle(int id);
-  Future<VehicleModel> createVehicle(CreateVehicleDto dto);
-  Future<VehicleModel> updateVehicle(int id, UpdateVehicleDto dto);
-  Future<void> deleteVehicle(int id);
+  Future<List<VehicleModel>> getVehiclesByCliente(int clienteId);
+  Future<VehicleModel> getVehicle(int clienteId, int vehicleId);
+  Future<VehicleModel> createVehicle(int clienteId, CreateVehicleDto dto);
+  Future<VehicleModel> updateVehicle(int clienteId, int vehicleId, UpdateVehicleDto dto);
+  Future<void> deleteVehicle(int clienteId, int vehicleId);
 }
 
 class VehicleServiceImpl implements VehicleService {
@@ -18,25 +18,25 @@ class VehicleServiceImpl implements VehicleService {
   VehicleServiceImpl(this._dioClient);
 
   @override
-  Future<List<VehicleModel>> getVehicles() async {
-    _log.t('GET /carros');
-    final response = await _dioClient.instance.get('/carros');
+  Future<List<VehicleModel>> getVehiclesByCliente(int clienteId) async {
+    _log.t('GET /clientes/$clienteId/carros');
+    final response = await _dioClient.instance.get('/clientes/$clienteId/carros');
     final List<dynamic> data = response.data;
     _log.t('${data.length} veículos recebidos');
     return data.map((json) => VehicleModel.fromJson(json)).toList();
   }
 
   @override
-  Future<VehicleModel> getVehicle(int id) async {
-    _log.t('GET /carros/$id');
-    final response = await _dioClient.instance.get('/carros/$id');
+  Future<VehicleModel> getVehicle(int clienteId, int vehicleId) async {
+    _log.t('GET /clientes/$clienteId/carros/$vehicleId');
+    final response = await _dioClient.instance.get('/clientes/$clienteId/carros/$vehicleId');
     return VehicleModel.fromJson(response.data);
   }
 
   @override
-  Future<VehicleModel> createVehicle(CreateVehicleDto dto) async {
-    _log.t('POST /carros');
-    final response = await _dioClient.instance.post( '/carros',
+  Future<VehicleModel> createVehicle(int clienteId, CreateVehicleDto dto) async {
+    _log.t('POST /clientes/$clienteId/carros');
+    final response = await _dioClient.instance.post('/clientes/$clienteId/carros',
       data: dto.toJson(),
     );
     _log.t('Veículo criado: ID ${response.data['id']}');
@@ -44,9 +44,9 @@ class VehicleServiceImpl implements VehicleService {
   }
 
   @override
-  Future<VehicleModel> updateVehicle(int id, UpdateVehicleDto dto) async {
-    _log.t('PATCH /carros/$id');
-    final response = await _dioClient.instance.patch( '/carros/$id',
+  Future<VehicleModel> updateVehicle(int clienteId, int vehicleId, UpdateVehicleDto dto) async {
+    _log.t('PATCH /clientes/$clienteId/carros/$vehicleId');
+    final response = await _dioClient.instance.patch('/clientes/$clienteId/carros/$vehicleId',
       data: dto.toJson(),
     );
     _log.t('Veículo atualizado');
@@ -54,9 +54,9 @@ class VehicleServiceImpl implements VehicleService {
   }
 
   @override
-  Future<void> deleteVehicle(int id) async {
-    _log.t('DELETE /carros/$id');
-    await _dioClient.instance.delete('/carros/$id');
+  Future<void> deleteVehicle(int clienteId, int vehicleId) async {
+    _log.t('DELETE /clientes/$clienteId/carros/$vehicleId');
+    await _dioClient.instance.delete('/clientes/$clienteId/carros/$vehicleId');
     _log.t('Veículo removido');
   }
 }

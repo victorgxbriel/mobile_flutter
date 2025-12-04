@@ -93,10 +93,14 @@
         },
         "responses": {
           "200": {
-            "description": "Login realizado com sucesso"
-          },
-          "400": {
-            "description": "Dados inválidos"
+            "description": "Login realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
           },
           "401": {
             "description": "Credenciais inválidas"
@@ -124,10 +128,17 @@
         },
         "responses": {
           "201": {
-            "description": "Usuário criado com sucesso"
+            "description": "Usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponseDto"
+                }
+              }
+            }
           },
-          "400": {
-            "description": "Dados inválidos"
+          "409": {
+            "description": "Email ou CPF já cadastrado"
           }
         },
         "summary": "Registrar novo usuário",
@@ -152,7 +163,14 @@
         },
         "responses": {
           "200": {
-            "description": "Tokens renovados com sucesso"
+            "description": "Tokens renovados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshTokenResponseDto"
+                }
+              }
+            }
           },
           "401": {
             "description": "Refresh token inválido ou expirado"
@@ -170,7 +188,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Logout realizado com sucesso"
+            "description": "Logout realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
           }
         },
         "security": [
@@ -200,7 +228,14 @@
         },
         "responses": {
           "200": {
-            "description": "Se o email existir, um código será enviado"
+            "description": "Se o email existir, um código será enviado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForgotPasswordResponseDto"
+                }
+              }
+            }
           }
         },
         "summary": "Solicitar código de recuperação de senha",
@@ -225,7 +260,14 @@
         },
         "responses": {
           "200": {
-            "description": "Senha alterada com sucesso"
+            "description": "Senha alterada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResetPasswordResponseDto"
+                }
+              }
+            }
           },
           "400": {
             "description": "Código inválido ou expirado"
@@ -239,11 +281,19 @@
     },
     "/auth/me": {
       "get": {
+        "description": "Retorna os dados do usuário logado. Inclui `clienteId` se o usuário for CLIENTE, e `estabelecimentoId` se for GERENTE, PROPRIETARIO ou FUNCIONARIO.",
         "operationId": "AuthController_getProfile",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Perfil retornado com sucesso"
+            "description": "Perfil retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfileResponseDto"
+                }
+              }
+            }
           },
           "401": {
             "description": "Não autorizado"
@@ -290,20 +340,20 @@
         ]
       }
     },
-    "/carros": {
+    "/clientes/{clienteId}/carros": {
       "post": {
-        "operationId": "CarrosController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCarroDto"
-              }
+        "operationId": "CarrosController_createForCliente",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "number"
             }
           }
-        },
+        ],
         "responses": {
           "201": {
             "description": "Carro criado com sucesso",
@@ -314,27 +364,211 @@
                 }
               }
             }
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "401": {
-            "description": "Não autorizado"
           }
         },
         "security": [
           {
             "bearer": []
-          },
-          {
-            "bearer": []
           }
         ],
-        "summary": "Criar novo carro",
+        "summary": "Criar novo carro para o cliente",
         "tags": [
           "carros"
         ]
       },
+      "get": {
+        "operationId": "CarrosController_findAllByCliente",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de carros do cliente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectCarroDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os carros do cliente",
+        "tags": [
+          "carros"
+        ]
+      }
+    },
+    "/clientes/{clienteId}/carros/{id}": {
+      "get": {
+        "operationId": "CarrosController_findOneByCliente",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do carro",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Carro encontrado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectCarroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Carro não encontrado para este cliente"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar carro específico do cliente",
+        "tags": [
+          "carros"
+        ]
+      },
+      "patch": {
+        "operationId": "CarrosController_updateForCliente",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do carro",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateCarroDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Carro atualizado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectCarroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Carro não encontrado para este cliente"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar carro do cliente",
+        "tags": [
+          "carros"
+        ]
+      },
+      "delete": {
+        "operationId": "CarrosController_removeForCliente",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do carro",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Carro removido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectCarroDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Carro não encontrado para este cliente"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover carro do cliente",
+        "tags": [
+          "carros"
+        ]
+      }
+    },
+    "/carros": {
       "get": {
         "operationId": "CarrosController_findAll",
         "parameters": [],
@@ -364,7 +598,7 @@
             "bearer": []
           }
         ],
-        "summary": "Listar todos os carros",
+        "summary": "Listar todos os carros (admin)",
         "tags": [
           "carros"
         ]
@@ -410,7 +644,7 @@
             "bearer": []
           }
         ],
-        "summary": "Buscar carro por ID",
+        "summary": "Buscar carro por ID (admin)",
         "tags": [
           "carros"
         ]
@@ -467,7 +701,7 @@
             "bearer": []
           }
         ],
-        "summary": "Atualizar carro",
+        "summary": "Atualizar carro (admin)",
         "tags": [
           "carros"
         ]
@@ -511,7 +745,7 @@
             "bearer": []
           }
         ],
-        "summary": "Remover carro",
+        "summary": "Remover carro (admin)",
         "tags": [
           "carros"
         ]
@@ -4662,6 +4896,31 @@
           "password"
         ]
       },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "JWT Access Token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "a1b2c3d4e5f6...",
+            "description": "Refresh Token para renovar o access token"
+          },
+          "expires_in": {
+            "type": "number",
+            "example": 900,
+            "description": "Tempo de expiração do access token em segundos (15 minutos)"
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token",
+          "expires_in"
+        ]
+      },
       "RegisterDto": {
         "type": "object",
         "properties": {
@@ -4692,6 +4951,47 @@
           "cpf"
         ]
       },
+      "RegisterResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "ID do usuário criado"
+          },
+          "nome": {
+            "type": "string",
+            "example": "João Silva",
+            "description": "Nome do usuário"
+          },
+          "email": {
+            "type": "string",
+            "example": "joao@email.com",
+            "description": "Email do usuário"
+          },
+          "roles": {
+            "example": [
+              "CLIENTE"
+            ],
+            "description": "Roles atribuídas ao usuário",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "clienteId": {
+            "type": "number",
+            "example": 5,
+            "description": "ID do cliente vinculado (se houver)"
+          }
+        },
+        "required": [
+          "id",
+          "nome",
+          "email",
+          "roles"
+        ]
+      },
       "RefreshTokenDto": {
         "type": "object",
         "properties": {
@@ -4702,6 +5002,44 @@
         },
         "required": [
           "refreshToken"
+        ]
+      },
+      "RefreshTokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "Novo JWT Access Token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "x9y8z7w6v5u4...",
+            "description": "Novo Refresh Token (rotação de tokens)"
+          },
+          "expires_in": {
+            "type": "number",
+            "example": 900,
+            "description": "Tempo de expiração em segundos"
+          }
+        },
+        "required": [
+          "access_token",
+          "refresh_token",
+          "expires_in"
+        ]
+      },
+      "LogoutResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Logout realizado com sucesso.",
+            "description": "Mensagem de confirmação"
+          }
+        },
+        "required": [
+          "message"
         ]
       },
       "ForgotPasswordDto": {
@@ -4715,6 +5053,19 @@
         },
         "required": [
           "email"
+        ]
+      },
+      "ForgotPasswordResponseDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Se o email existir, um código de recuperação será enviado.",
+            "description": "Mensagem de confirmação"
+          }
+        },
+        "required": [
+          "message"
         ]
       },
       "ResetPasswordDto": {
@@ -4742,47 +5093,176 @@
           "newPassword"
         ]
       },
-      "CreateCarroDto": {
+      "ResetPasswordResponseDto": {
         "type": "object",
         "properties": {
-          "clienteId": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          },
-          "marca": {
+          "message": {
             "type": "string",
-            "minLength": 2,
-            "maxLength": 100
-          },
-          "modelo": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 100
-          },
-          "ano": {
-            "type": "string",
-            "minLength": 4,
-            "maxLength": 4,
-            "pattern": "^\\d{4}$"
-          },
-          "cor": {
-            "type": "string",
-            "maxLength": 25
-          },
-          "placa": {
-            "type": "string",
-            "minLength": 7,
-            "maxLength": 7,
-            "pattern": "^[A-Z0-9]+$"
+            "example": "Senha alterada com sucesso.",
+            "description": "Mensagem de confirmação"
           }
         },
         "required": [
+          "message"
+        ]
+      },
+      "ProfileResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1,
+            "description": "ID do usuário"
+          },
+          "nome": {
+            "type": "string",
+            "example": "João Silva",
+            "description": "Nome do usuário"
+          },
+          "email": {
+            "type": "string",
+            "example": "joao@email.com",
+            "description": "Email do usuário"
+          },
+          "avatarUrl": {
+            "type": "object",
+            "example": "https://example.com/avatar.jpg",
+            "description": "URL do avatar (se houver)",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true,
+            "description": "Se o usuário está ativo"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-12-04T10:30:00.000Z",
+            "description": "Data de criação da conta"
+          },
+          "roles": {
+            "type": "array",
+            "example": [
+              "CLIENTE"
+            ],
+            "description": "Lista de roles do usuário",
+            "items": {
+              "type": "string",
+              "enum": [
+                "CLIENTE",
+                "FUNCIONARIO",
+                "GERENTE",
+                "PROPRIETARIO"
+              ]
+            }
+          },
+          "clienteId": {
+            "type": "number",
+            "example": 5,
+            "description": "ID do cliente (presente apenas se o usuário tiver role CLIENTE)",
+            "nullable": true
+          },
+          "estabelecimentoId": {
+            "type": "number",
+            "example": 3,
+            "description": "ID do estabelecimento (presente apenas se o usuário tiver role GERENTE, PROPRIETARIO ou FUNCIONARIO)",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "nome",
+          "email",
+          "isActive",
+          "createdAt",
+          "roles"
+        ]
+      },
+      "SelectCarroDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          },
+          "active": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true
+          },
+          "clienteId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "marca": {
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true
+          },
+          "modelo": {
+            "type": "string",
+            "maxLength": 100,
+            "x-nestjs_zod-has-null": true
+          },
+          "ano": {
+            "type": "string",
+            "maxLength": 9,
+            "x-nestjs_zod-has-null": true
+          },
+          "cor": {
+            "type": "string",
+            "maxLength": 25,
+            "x-nestjs_zod-has-null": true
+          },
+          "placa": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 7
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "active",
           "clienteId",
           "marca",
           "modelo",
           "ano",
-          "cor"
+          "cor",
+          "placa"
         ]
       },
       "UpdateCarroDto": {
@@ -6914,92 +7394,6 @@
           "cpf",
           "email",
           "userId"
-        ]
-      },
-      "SelectCarroDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true
-          },
-          "updatedAt": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true
-          },
-          "active": {
-            "type": "boolean",
-            "x-nestjs_zod-has-null": true
-          },
-          "clienteId": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          },
-          "marca": {
-            "type": "string",
-            "maxLength": 100,
-            "x-nestjs_zod-has-null": true
-          },
-          "modelo": {
-            "type": "string",
-            "maxLength": 100,
-            "x-nestjs_zod-has-null": true
-          },
-          "ano": {
-            "type": "string",
-            "maxLength": 9,
-            "x-nestjs_zod-has-null": true
-          },
-          "cor": {
-            "type": "string",
-            "maxLength": 25,
-            "x-nestjs_zod-has-null": true
-          },
-          "placa": {
-            "anyOf": [
-              {
-                "type": "string",
-                "maxLength": 7
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true
-          }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "updatedAt",
-          "active",
-          "clienteId",
-          "marca",
-          "modelo",
-          "ano",
-          "cor",
-          "placa"
         ]
       },
       "SelectAcessorioDto": {

@@ -15,5 +15,9 @@ TipoServicoModel _$TipoServicoModelFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$TipoServicoModelToJson(TipoServicoModel instance) =>
-    <String, dynamic>{ 'id': instance.id, 'slug': instance.slug, 'nome': instance.nome, 'descricao': instance.descricao,
+    <String, dynamic>{
+      'id': instance.id,
+      'slug': instance.slug,
+      'nome': instance.nome,
+      'descricao': instance.descricao,
     };

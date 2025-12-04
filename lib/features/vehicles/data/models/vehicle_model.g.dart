@@ -22,12 +22,22 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
 );
 
 Map<String, dynamic> _$VehicleModelToJson(VehicleModel instance) =>
-    <String, dynamic>{ 'id': instance.id, 'createdAt': instance.createdAt.toIso8601String(), 'updatedAt': instance.updatedAt?.toIso8601String(), 'active': instance.active, 'clienteId': instance.clienteId, 'marca': instance.marca, 'modelo': instance.modelo, 'ano': instance.ano, 'cor': instance.cor, 'placa': instance.placa,
+    <String, dynamic>{
+      'id': instance.id,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'active': instance.active,
+      'clienteId': instance.clienteId,
+      'marca': instance.marca,
+      'modelo': instance.modelo,
+      'ano': instance.ano,
+      'cor': instance.cor,
+      'placa': instance.placa,
     };
 
 CreateVehicleDto _$CreateVehicleDtoFromJson(Map<String, dynamic> json) =>
     CreateVehicleDto(
-      clienteId: (json['clienteId'] as num).toInt(),
+      clienteId: (json['clienteId'] as num?)?.toInt(),
       marca: json['marca'] as String,
       modelo: json['modelo'] as String,
       ano: json['ano'] as String,
@@ -36,7 +46,13 @@ CreateVehicleDto _$CreateVehicleDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$CreateVehicleDtoToJson(CreateVehicleDto instance) =>
-    <String, dynamic>{ 'clienteId': instance.clienteId, 'marca': instance.marca, 'modelo': instance.modelo, 'ano': instance.ano, 'cor': instance.cor, 'placa': instance.placa,
+    <String, dynamic>{
+      'clienteId': instance.clienteId,
+      'marca': instance.marca,
+      'modelo': instance.modelo,
+      'ano': instance.ano,
+      'cor': instance.cor,
+      'placa': instance.placa,
     };
 
 UpdateVehicleDto _$UpdateVehicleDtoFromJson(Map<String, dynamic> json) =>
@@ -49,5 +65,10 @@ UpdateVehicleDto _$UpdateVehicleDtoFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$UpdateVehicleDtoToJson(UpdateVehicleDto instance) =>
-    <String, dynamic>{ 'marca': instance.marca, 'modelo': instance.modelo, 'ano': instance.ano, 'cor': instance.cor, 'placa': instance.placa,
+    <String, dynamic>{
+      'marca': instance.marca,
+      'modelo': instance.modelo,
+      'ano': instance.ano,
+      'cor': instance.cor,
+      'placa': instance.placa,
     };

@@ -2,24 +2,42 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'auth_models.g.dart';
 
-// --- MODELO DE USUÁRIO (Baseado no seu JSON real do /auth/me) ---
+// --- MODELO DE PERFIL DO USUÁRIO (Baseado no ProfileResponseDto do /auth/me) ---
 @JsonSerializable()
-class UserModel {
-  final int userId; // Mudou de 'id' para 'userId'
+class ProfileModel {
+  final int id;
+  final String nome;
   final String email;
-  final List<String> roles; // Essencial para o redirecionamento
+  final String? avatarUrl;
+  final bool isActive;
+  final DateTime createdAt;
+  final List<String> roles;
+  final int? clienteId; // Presente se role = CLIENTE
+  final int? estabelecimentoId; // Presente se role = GERENTE, PROPRIETARIO ou FUNCIONARIO
   
-  // O JSON não retornou 'nome', então removemos ou deixamos nullable
-  // Se quiser adicionar campos extras que podem vir nulos, use '?'
-  
-  UserModel({
-    required this.userId,
+  ProfileModel({
+    required this.id,
+    required this.nome,
     required this.email,
+    this.avatarUrl,
+    required this.isActive,
+    required this.createdAt,
     required this.roles,
+    this.clienteId,
+    this.estabelecimentoId,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
-  Map<String, dynamic> toJson() => _$UserModelToJson(this);
+  factory ProfileModel.fromJson(Map<String, dynamic> json) => _$ProfileModelFromJson(json);
+  Map<String, dynamic> toJson() => _$ProfileModelToJson(this);
+
+  /// Verifica se o usuário é cliente
+  bool get isCliente => roles.contains('CLIENTE');
+  
+  /// Verifica se o usuário é do estabelecimento (gerente, proprietário ou funcionário)
+  bool get isEstabelecimento => 
+      roles.contains('GERENTE') || 
+      roles.contains('PROPRIETARIO') || 
+      roles.contains('FUNCIONARIO');
 }
 
 // --- DTO DE LOGIN (Request) ---
