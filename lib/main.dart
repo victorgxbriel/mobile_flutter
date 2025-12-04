@@ -55,7 +55,10 @@ class MyApp extends StatelessWidget {
             themeMode: themeNotifier.themeMode,
             routerConfig: appRouter,
             builder: (context, child) {
-              return SafeArea(child: child ?? const SizedBox());
+              return SafeArea(
+                top: false, // Mantém a barra de notificações
+                child: child ?? const SizedBox(),
+              );
             },
           );
         },
