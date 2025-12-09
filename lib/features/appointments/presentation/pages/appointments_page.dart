@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../data/models/agendamento_model.dart';
 import '../notifiers/agendamentos_notifier.dart';
@@ -131,12 +132,7 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
           }
 
           return switch (state) {
-            AgendamentosInitial() => const Center(
-                child: Text('Carregue seus agendamentos'),
-              ),
-            AgendamentosLoading() => const Center(
-                child: CircularProgressIndicator(),
-              ),
+            AgendamentosInitial() || AgendamentosLoading() => _buildSkeletonList(),
             AgendamentosError(message: final msg) => Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -370,6 +366,22 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// Skeleton loading usando mock data - layout sempre sincronizado
+  Widget _buildSkeletonList() {
+    final colorScheme = Theme.of(context).colorScheme;
+    final mockList = List.generate(4, (_) => AgendamentoModel.skeleton());
+
+    return Skeletonizer(
+      enabled: true,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: mockList.length,
+        itemBuilder: (context, index) =>
+            _buildAgendamentoCard(mockList[index], colorScheme),
       ),
     );
   }

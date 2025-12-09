@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../app/theme/colors.dart';
 import '../../data/models/estabelecimento_model.dart';
@@ -46,18 +47,28 @@ class _EstabelecimentoDetailsPageState extends State<EstabelecimentoDetailsPage>
     return Scaffold(
       body: Consumer<EstabelecimentoDetailsNotifier>(
         builder: (context, notifier, child) {
-          return switch (notifier.state) {
-            EstabelecimentoDetailsInitial() ||
-            EstabelecimentoDetailsLoading() =>
-              const Center(child: CircularProgressIndicator()),
-            EstabelecimentoDetailsLoaded(
-              estabelecimento: final estabelecimento,
-              servicos: final servicos
-            ) =>
-              _buildContent(estabelecimento, servicos),
-            EstabelecimentoDetailsError(message: final message) =>
-              _buildError(message),
-          };
+          final isLoading = notifier.state is EstabelecimentoDetailsInitial ||
+              notifier.state is EstabelecimentoDetailsLoading;
+
+          final estabelecimento =
+              notifier.state is EstabelecimentoDetailsLoaded
+                  ? (notifier.state as EstabelecimentoDetailsLoaded)
+                      .estabelecimento
+                  : EstabelecimentoModel.skeleton();
+
+          final servicos = notifier.state is EstabelecimentoDetailsLoaded
+              ? (notifier.state as EstabelecimentoDetailsLoaded).servicos
+              : List.generate(4, (_) => ServicoModel.skeleton());
+
+          if (notifier.state is EstabelecimentoDetailsError) {
+            return _buildError(
+                (notifier.state as EstabelecimentoDetailsError).message);
+          }
+
+          return Skeletonizer(
+            enabled: isLoading,
+            child: _buildContent(estabelecimento, servicos),
+          );
         },
       ),
     );

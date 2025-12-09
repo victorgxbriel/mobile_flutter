@@ -39,6 +39,21 @@ class ProgramacaoDiariaModel {
   Map<String, dynamic> toJson() => _$ProgramacaoDiariaModelToJson(this);
 
   DateTime get dataAsDateTime => DateTime.parse(data);
+
+  /// Factory para criar mock data para skeleton loading
+  factory ProgramacaoDiariaModel.skeleton() => ProgramacaoDiariaModel(
+    id: 0,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    active: true,
+    data: DateTime.now().toIso8601String().split('T').first,
+    horaInicio: '08:00',
+    horaTermino: '18:00',
+    intervaloHorario: '00:30',
+    agendamentosPorHorario: 2,
+    estabelecimentoId: 0,
+    slots: List.generate(8, (i) => SlotTempoModel.skeleton(i)),
+  );
 }
 
 @JsonSerializable()
@@ -65,6 +80,17 @@ class SlotTempoModel {
       _$SlotTempoModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$SlotTempoModelToJson(this);
+
+  /// Factory para criar mock data para skeleton loading
+  factory SlotTempoModel.skeleton(int index) => SlotTempoModel(
+    id: index,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    active: true,
+    programacaoId: 0,
+    slotTempo: '${(8 + index).toString().padLeft(2, '0')}:00',
+    disponivel: true,
+  );
 
   /// Formata o horário para exibição (HH:mm)
   String get horarioFormatado {

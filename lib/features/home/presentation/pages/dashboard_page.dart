@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../data/models/estabelecimento_models.dart';
@@ -89,9 +90,7 @@ class _DashboardContentState extends State<_DashboardContent> {
       body: Consumer<HomeNotifier>(
         builder: (context, notifier, child) {
           return switch (notifier.state) {
-            HomeInitial() || HomeLoading() => const Center(
-                child: CircularProgressIndicator(),
-              ),
+            HomeInitial() || HomeLoading() => _buildSkeletonList(),
             HomeError(message: final msg) => _buildErrorState(context, msg, notifier),
             HomeLoaded(estabelecimentos: final list) => list.isEmpty
                 ? _buildEmptyState(context, notifier)
@@ -208,7 +207,7 @@ class _DashboardContentState extends State<_DashboardContent> {
 
   Widget _buildEstabelecimentosList(
     BuildContext context,
-    List estabelecimentos,
+    List<EstabelecimentoModel> estabelecimentos,
     HomeNotifier notifier,
   ) {
     return RefreshIndicator(
@@ -223,6 +222,28 @@ class _DashboardContentState extends State<_DashboardContent> {
             child: EstabelecimentoCard(
               estabelecimento: estabelecimento,
               onTap: () => _navigateToDetails(estabelecimento),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  /// Skeleton loading usando mock data - layout sempre sincronizado
+  Widget _buildSkeletonList() {
+    final mockList = List.generate(5, (_) => EstabelecimentoModel.skeleton());
+    
+    return Skeletonizer(
+      enabled: true,
+      child: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: mockList.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16),
+            child: EstabelecimentoCard(
+              estabelecimento: mockList[index],
+              onTap: null,
             ),
           );
         },

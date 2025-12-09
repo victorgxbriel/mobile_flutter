@@ -76,4 +76,19 @@ class ServicoModel {
 
   /// Retorna o ícone do tipo de serviço
   IconData? get tipoServicoIcone => tipoServico?.icone;
+
+  /// Factory para criar mock data para skeleton loading
+  factory ServicoModel.skeleton() => ServicoModel(
+    id: 0,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    active: true,
+    titulo: 'Serviço Exemplo',
+    descricao: 'Descrição do serviço exemplo para skeleton',
+    preco: '99.90',
+    tempoEstimado: '60',
+    tipoServicoId: null,
+    estabelecimentoId: 0,
+    tipoServico: null,
+  );
 }

@@ -30,4 +30,14 @@ class EstabelecimentoModel {
     if (cnpj.length != 14) return cnpj;
     return '${cnpj.substring(0, 2)}.${cnpj.substring(2, 5)}.${cnpj.substring(5, 8)}/${cnpj.substring(8, 12)}-${cnpj.substring(12)}';
   }
+
+  /// Factory para criar um model vazio (usado para skeleton loaders)
+  factory EstabelecimentoModel.skeleton() => EstabelecimentoModel(
+    id: 0,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    active: true,
+    cnpj: '00000000000000',
+    nomeFantasia: 'Estabelecimento Exemplo',
+  );
 }

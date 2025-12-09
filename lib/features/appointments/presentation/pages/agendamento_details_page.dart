@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../data/models/agendamento_model.dart';
 import '../notifiers/agendamento_details_notifier.dart';
@@ -62,13 +63,23 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
             });
           }
 
-          return switch (notifier.state) {
-            AgendamentoDetailsInitial() || AgendamentoDetailsLoading() => 
-              const Center(child: CircularProgressIndicator()),
-            AgendamentoDetailsError(message: final msg) => _buildErrorState(msg, colorScheme),
-            AgendamentoDetailsLoaded(agendamento: final agendamento) => 
-              _buildContent(agendamento, notifier, colorScheme),
-          };
+          final isLoading = notifier.state is AgendamentoDetailsInitial ||
+              notifier.state is AgendamentoDetailsLoading;
+          
+          if (notifier.state is AgendamentoDetailsError) {
+            final error = notifier.state as AgendamentoDetailsError;
+            return _buildErrorState(error.message, colorScheme);
+          }
+
+          // Usa dados reais se carregado, senão usa mock
+          final agendamento = notifier.state is AgendamentoDetailsLoaded
+              ? (notifier.state as AgendamentoDetailsLoaded).agendamento
+              : _mockAgendamento;
+
+          return Skeletonizer(
+            enabled: isLoading,
+            child: _buildContent(agendamento, notifier, colorScheme),
+          );
         },
       ),
     );
@@ -740,4 +751,7 @@ class _AgendamentoDetailsPageState extends State<AgendamentoDetailsPage> {
       ),
     );
   }
+
+  /// Mock data para o skeleton loader
+  AgendamentoModel get _mockAgendamento => AgendamentoModel.skeleton();
 }

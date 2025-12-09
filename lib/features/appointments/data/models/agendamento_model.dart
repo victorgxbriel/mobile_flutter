@@ -96,6 +96,19 @@ class AgendamentoModel {
   String get valorTotalFormatado {
     return 'R\$ ${valorTotal.toStringAsFixed(2).replaceAll('.', ',')}';
   }
+
+  /// Factory para criar um model vazio (usado para skeleton loaders)
+  factory AgendamentoModel.skeleton() => AgendamentoModel(
+    id: 0,
+    createdAt: DateTime.now(),
+    active: true,
+    carroId: 0,
+    situacaoId: 1,
+    slotId: 0,
+    slotDirect: AgendamentoSlot.skeleton(),
+    carro: AgendamentoCarro.skeleton(),
+    servicos: [AgendamentoServicoRelation.skeleton(), AgendamentoServicoRelation.skeleton()],
+  );
 }
 
 /// Helper para converter ano que pode vir como String ou int
@@ -133,6 +146,15 @@ class AgendamentoCarro {
   Map<String, dynamic> toJson() => _$AgendamentoCarroToJson(this);
 
   String get nomeCompleto => '$marca $modelo';
+
+  factory AgendamentoCarro.skeleton() => AgendamentoCarro(
+    id: 0,
+    marca: 'Marca Exemplo',
+    modelo: 'Modelo',
+    cor: 'Cor',
+    placa: 'ABC1D23',
+    ano: 2024,
+  );
 }
 
 /// Modelo para a situação retornada pela API
@@ -167,6 +189,11 @@ class AgendamentoServicoRelation {
       _$AgendamentoServicoRelationFromJson(json);
 
   Map<String, dynamic> toJson() => _$AgendamentoServicoRelationToJson(this);
+
+  factory AgendamentoServicoRelation.skeleton() => AgendamentoServicoRelation(
+    servicoId: 0,
+    servico: AgendamentoServico.skeleton(),
+  );
 }
 
 @JsonSerializable()
@@ -197,6 +224,13 @@ class AgendamentoSlot {
     }
     return slotTempo;
   }
+
+  factory AgendamentoSlot.skeleton() => AgendamentoSlot(
+    id: 0,
+    slotTempo: '14:00:00',
+    disponivel: true,
+    programacao: AgendamentoProgramacao.skeleton(),
+  );
 }
 
 @JsonSerializable()
@@ -223,6 +257,13 @@ class AgendamentoProgramacao {
   Map<String, dynamic> toJson() => _$AgendamentoProgramacaoToJson(this);
 
   DateTime get dataAsDateTime => DateTime.parse(data);
+
+  factory AgendamentoProgramacao.skeleton() => AgendamentoProgramacao(
+    id: 0,
+    data: DateTime.now().toIso8601String(),
+    estabelecimentoId: 0,
+    estabelecimento: AgendamentoEstabelecimento.skeleton(),
+  );
 }
 
 /// Modelo simplificado do estabelecimento para o agendamento
@@ -242,6 +283,12 @@ class AgendamentoEstabelecimento {
       _$AgendamentoEstabelecimentoFromJson(json);
 
   Map<String, dynamic> toJson() => _$AgendamentoEstabelecimentoToJson(this);
+
+  factory AgendamentoEstabelecimento.skeleton() => AgendamentoEstabelecimento(
+    id: 0,
+    nomeFantasia: 'Estabelecimento',
+    cnpj: '00.000.000/0001-00',
+  );
 }
 
 @JsonSerializable()
@@ -291,6 +338,14 @@ class AgendamentoServico {
     }
     return tempoEstimado!;
   }
+
+  factory AgendamentoServico.skeleton() => AgendamentoServico(
+    id: 0,
+    titulo: 'Serviço Exemplo',
+    preco: '50.00',
+    tempoEstimado: '01:00:00',
+    descricao: 'Descrição do serviço',
+  );
 }
 
 @JsonSerializable()

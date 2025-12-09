@@ -33,6 +33,20 @@ class VehicleModel {
 
   Map<String, dynamic> toJson() => _$VehicleModelToJson(this);
 
+  /// Factory para criar mock data para skeleton loading
+  factory VehicleModel.skeleton() => VehicleModel(
+    id: 0,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+    active: true,
+    clienteId: 0,
+    marca: 'Marca Exemplo',
+    modelo: 'Modelo Exemplo',
+    ano: '2024',
+    cor: 'Prata',
+    placa: 'ABC1234',
+  );
+
   /// Retorna o nome completo do veículo (Marca Modelo)
   String get nomeCompleto => '$marca $modelo';
 

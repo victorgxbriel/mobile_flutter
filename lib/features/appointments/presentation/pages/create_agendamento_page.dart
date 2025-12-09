@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../estabelecimento/data/models/servico_model.dart';
 import '../../../notifications/presentation/notifiers/notifications_notifier.dart';
@@ -369,11 +370,9 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
         final state = vehiclesNotifier.state;
 
         return switch (state) {
-          VehiclesInitial() || VehiclesLoading() => const Center(
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: CircularProgressIndicator(),
-              ),
+          VehiclesInitial() || VehiclesLoading() => _buildVehiclesSkeletonList(
+              agendamentoNotifier,
+              colorScheme,
             ),
           VehiclesError(message: final msg) => Center(
               child: Column(
@@ -491,17 +490,8 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
     final programacoesState = notifier.programacoesState;
 
     return switch (programacoesState) {
-      ProgramacoesInitial() || ProgramacoesLoading() => const Center(
-          child: Padding(
-            padding: EdgeInsets.all(32),
-            child: Column(
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text('Carregando datas disponíveis...'),
-              ],
-            ),
-          ),
+      ProgramacoesInitial() || ProgramacoesLoading() => _buildDatasSkeletonList(
+          colorScheme,
         ),
       ProgramacoesError(message: final msg) => Center(
           child: Column(
@@ -646,11 +636,8 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
     }
 
     return switch (state) {
-      SlotsInitial() || SlotsLoading() => const Center(
-          child: Padding(
-            padding: EdgeInsets.all(32),
-            child: CircularProgressIndicator(),
-          ),
+      SlotsInitial() || SlotsLoading() => _buildSlotsSkeletonList(
+          colorScheme,
         ),
       SlotsError(message: final msg) => Center(
           child: Column(
@@ -893,6 +880,169 @@ class _CreateAgendamentoPageState extends State<CreateAgendamentoPage> {
               context.go('/appointments');
             },
             child: const Text('Ver Agendamentos'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Skeleton loading para lista de veículos usando mock data
+  Widget _buildVehiclesSkeletonList(
+    CreateAgendamentoNotifier agendamentoNotifier,
+    ColorScheme colorScheme,
+  ) {
+    final mockVehicles = List.generate(3, (_) => VehicleModel.skeleton());
+    
+    return Skeletonizer(
+      enabled: true,
+      child: _buildVehiclesList(
+        mockVehicles,
+        agendamentoNotifier,
+        colorScheme,
+      ),
+    );
+  }
+
+  /// Skeleton loading para lista de slots usando mock data
+  Widget _buildSlotsSkeletonList(ColorScheme colorScheme) {
+    final mockProgramacao = ProgramacaoDiariaModel.skeleton();
+    
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text( 'Horários disponíveis:',
+            style: TextStyle(color: colorScheme.outline),
+          ),
+          const SizedBox(height: 8),
+          Text( 'Funcionamento: ${mockProgramacao.horaInicio} - ${mockProgramacao.horaTermino}',
+            style: TextStyle(
+              color: colorScheme.outline,
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: mockProgramacao.slots!.map((slot) {
+              return ChoiceChip(
+                label: Text(slot.slotTempo),
+                selected: false,
+                onSelected: null,
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Skeleton loading para calendário de datas usando shimmer simples
+  Widget _buildDatasSkeletonList(ColorScheme colorScheme) {
+    return Skeletonizer(
+      enabled: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Selecione a data do agendamento:',
+            style: TextStyle(color: colorScheme.outline),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: colorScheme.primaryContainer.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, size: 16, color: colorScheme.primary),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text(
+                    'Carregando datas disponíveis...',
+                    style: TextStyle(fontSize: 12),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Simula um calendário com grid de dias
+          Container(
+            height: 280,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                // Header do mês
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(Icons.chevron_left),
+                    Text(
+                      'Dezembro 2024',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: colorScheme.onSurface,
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Dias da semana
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+                      .map((d) => Text(
+                            d,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: colorScheme.outline,
+                            ),
+                          ))
+                      .toList(),
+                ),
+                const SizedBox(height: 8),
+                // Grid de dias (simulado)
+                Expanded(
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 7,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4,
+                    ),
+                    itemCount: 35,
+                    itemBuilder: (context, index) {
+                      final day = index - 5; // Offset para começar no dia certo
+                      if (day < 1 || day > 31) {
+                        return const SizedBox.shrink();
+                      }
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: colorScheme.surfaceContainerHighest,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          day.toString(),
+                          style: TextStyle(color: colorScheme.outline),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
