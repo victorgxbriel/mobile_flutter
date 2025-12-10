@@ -65,7 +65,7 @@ class NotificationsPage extends StatelessWidget {
           final Color cardColor = isUnread
               ? colorScheme.brightness == Brightness.dark
                   // No tema escuro, use um container mais claro porém ainda escuro
-                  ? colorScheme.surfaceVariant
+                  ? colorScheme.surfaceContainerHighest
                   // No tema claro, use um destaque suave
                   : colorScheme.primaryContainer.withOpacity(0.35)
               : colorScheme.surface;

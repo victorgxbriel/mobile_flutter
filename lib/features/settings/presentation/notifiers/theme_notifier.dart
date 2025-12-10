@@ -27,7 +27,7 @@ class ThemeNotifier extends ChangeNotifier {
   /// Carrega o tema salvo nas preferências
   void _loadSavedTheme() {
     _themeMode = _themeService.loadThemeMode();
-    _log.d('Tema carregado: ${themeModeName}');
+    _log.d('Tema carregado: $themeModeName');
     notifyListeners();
   }
 

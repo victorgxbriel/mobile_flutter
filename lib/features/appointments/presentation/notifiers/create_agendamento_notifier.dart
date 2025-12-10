@@ -85,7 +85,7 @@ class CreateAgendamentoNotifier extends ChangeNotifier {
   }
 
   void setSelectedSlot(SlotTempoModel slot) {
-    _log.d('Slot selecionado: ${slot}');
+    _log.d('Slot selecionado: $slot');
     _selectedSlot = slot;
     notifyListeners();
   }
