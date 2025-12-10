@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -16,8 +18,8 @@ class TokenService {
   static const String accessTokenKey = 'jwt_token';
   static const String refreshTokenKey = 'refresh_token';
 
-  // Flag para evitar múltiplas chamadas de refresh simultâneas
-  bool _isRefreshing = false;
+  // Completer para coordenar múltiplas chamadas de refresh simultâneas
+  Completer<bool>? _refreshCompleter;
 
   TokenService(this._storage, this._dio, this._baseUrl);
 
@@ -62,49 +64,52 @@ class TokenService {
 
   /// Retorna true se conseguiu renovar, false caso contrário
   Future<bool> tryRefreshToken() async {
-    if (_isRefreshing) {
-      _log.d('Refresh já em andamento, aguardando...');
-      await Future.delayed(const Duration(milliseconds: 500));
-      final token = await getAccessToken();
-      return token != null && !JwtUtils.isExpired(token);
+    // Se já há um refresh em andamento, aguarda o resultado
+    if (_refreshCompleter != null) {
+      _log.d('Refresh já em andamento, aguardando resultado...');
+      return _refreshCompleter!.future;
     }
 
-    _isRefreshing = true;
+    // Cria um Completer para coordenar requisições simultâneas
+    _refreshCompleter = Completer<bool>();
     _log.i('Iniciando refresh de token...');
 
     try {
       final refreshToken = await getRefreshToken();
-      
-      if (refreshToken == null || JwtUtils.isExpired(refreshToken)) {
-        _log.w('Refresh token inválido ou expirado');
+
+      // Refresh token pode ser opaco (não JWT), então apenas verificamos se existe
+      if (refreshToken == null || refreshToken.isEmpty) {
+        _log.w('Refresh token não encontrado');
         await clearTokens();
+        _refreshCompleter!.complete(false);
         return false;
       }
 
       _log.d('Chamando endpoint de refresh...');
       // Faz a chamada de refresh diretamente com Dio (sem passar pelo interceptor)
-      final response = await _dio.post( '$_baseUrl/auth/refresh',
+      final response = await _dio.post(
+        '$_baseUrl/auth/refresh',
         data: {'refreshToken': refreshToken},
-        options: Options(
-          headers: {'Content-Type': 'application/json'},
-        ),
+        options: Options(headers: {'Content-Type': 'application/json'}),
       );
 
       final refreshResponse = RefreshTokenResponse.fromJson(response.data);
-      
+
       await saveTokens(
         accessToken: refreshResponse.accessToken,
         refreshToken: refreshResponse.refreshToken,
       );
 
       _log.i('Token renovado com sucesso');
+      _refreshCompleter!.complete(true);
       return true;
     } on DioException catch (e) {
       _log.e('Erro ao renovar token: ${e.response?.statusCode}', error: e);
       await clearTokens();
+      _refreshCompleter!.complete(false);
       return false;
     } finally {
-      _isRefreshing = false;
+      _refreshCompleter = null;
     }
   }
 }

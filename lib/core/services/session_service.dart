@@ -51,7 +51,9 @@ class SessionService extends ChangeNotifier {
       _isAuthenticated = true;
       _extractUserInfo(token);
       _log.i('Sessão restaurada - Usuário: $_email (ID: $_userId)');
-    } else if (refreshToken != null && !JwtUtils.isExpired(refreshToken)) {
+    } else if (refreshToken != null && refreshToken.isNotEmpty) {
+      // Refresh token pode ser opaco (não JWT), então apenas verificamos se existe
+      // O interceptor tentará fazer o refresh quando necessário
       _isAuthenticated = true;
       if (token != null) {
         _extractUserInfo(token);
