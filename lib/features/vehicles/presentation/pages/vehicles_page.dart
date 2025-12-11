@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../data/models/vehicle_model.dart';
 import '../notifiers/vehicles_notifier.dart';
@@ -28,66 +29,74 @@ class _VehiclesPageState extends State<VehiclesPage> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Meus Veículos'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Meus Veículos'), centerTitle: true),
       body: Consumer<VehiclesNotifier>(
         builder: (context, notifier, child) {
           final state = notifier.state;
 
-          return switch (state) {
-            VehiclesInitial() || VehiclesLoading() => const Center(
-                child: CircularProgressIndicator(),
-              ),
-            VehiclesError(message: final message) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: colorScheme.error,
-                    ),
-                    const SizedBox(height: 16),
-                    Text( 'Erro ao carregar veículos',
-                      style: theme.textTheme.titleMedium,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      message,
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 16),
-                    FilledButton.icon(
-                      onPressed: () => notifier.loadVehicles(),
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Tentar novamente'),
-                    ),
-                  ],
-                ),
-              ),
-            VehiclesLoaded(vehicles: final vehicles) => vehicles.isEmpty
-                ? _buildEmptyState(context)
-                : RefreshIndicator(
-                    onRefresh: () => notifier.loadVehicles(),
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: vehicles.length,
-                      itemBuilder: (context, index) {
-                        final vehicle = vehicles[index];
-                        return _VehicleCard(
-                          vehicle: vehicle,
-                          onTap: () => _navigateToEdit(context, vehicle.id),
-                          onDelete: () => _confirmDelete(context, vehicle),
-                        );
-                      },
-                    ),
+          // Estado de loading ou inicial - mostra skeleton
+          final isLoading =
+              state is VehiclesInitial || state is VehiclesLoading;
+
+          // Obtém veículos do estado ou usa skeleton mock
+          final vehicles = state is VehiclesLoaded
+              ? state.vehicles
+              : List.generate(3, (_) => VehicleModel.skeleton());
+
+          // Estado de erro
+          if (state is VehiclesError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 64, color: colorScheme.error),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Erro ao carregar veículos',
+                    style: theme.textTheme.titleMedium,
                   ),
-          };
+                  const SizedBox(height: 8),
+                  Text(
+                    state.message,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  FilledButton.icon(
+                    onPressed: () => notifier.loadVehicles(),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('Tentar novamente'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // Lista vazia (só verifica quando não está loading)
+          if (!isLoading && vehicles.isEmpty) {
+            return _buildEmptyState(context);
+          }
+
+          return Skeletonizer(
+            enabled: isLoading,
+            child: RefreshIndicator(
+              onRefresh: () => notifier.loadVehicles(),
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: vehicles.length,
+                itemBuilder: (context, index) {
+                  final vehicle = vehicles[index];
+                  return _VehicleCard(
+                    vehicle: vehicle,
+                    onTap: () => _navigateToEdit(context, vehicle.id),
+                    onDelete: () => _confirmDelete(context, vehicle),
+                  );
+                },
+              ),
+            ),
+          );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -128,12 +137,14 @@ class _VehiclesPageState extends State<VehiclesPage> {
               color: colorScheme.primary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 24),
-            Text( 'Nenhum veículo cadastrado',
+            Text(
+              'Nenhum veículo cadastrado',
               style: theme.textTheme.titleLarge,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
-            Text( 'Adicione seu primeiro veículo para agendar lavagens',
+            Text(
+              'Adicione seu primeiro veículo para agendar lavagens',
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
@@ -151,12 +162,16 @@ class _VehiclesPageState extends State<VehiclesPage> {
     );
   }
 
-  Future<void> _confirmDelete(BuildContext context, VehicleModel vehicle) async {
+  Future<void> _confirmDelete(
+    BuildContext context,
+    VehicleModel vehicle,
+  ) async {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Remover veículo'),
-        content: Text( 'Deseja realmente remover o veículo ${vehicle.nomeCompleto}?',
+        content: Text(
+          'Deseja realmente remover o veículo ${vehicle.nomeCompleto}?',
         ),
         actions: [
           TextButton(
@@ -276,12 +291,10 @@ class _VehicleCard extends StatelessWidget {
                     value: 'delete',
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.delete_outline,
-                          color: colorScheme.error,
-                        ),
+                        Icon(Icons.delete_outline, color: colorScheme.error),
                         const SizedBox(width: 8),
-                        Text( 'Remover',
+                        Text(
+                          'Remover',
                           style: TextStyle(color: colorScheme.error),
                         ),
                       ],
@@ -301,10 +314,7 @@ class _InfoChip extends StatelessWidget {
   final String label;
   final IconData icon;
 
-  const _InfoChip({
-    required this.label,
-    required this.icon,
-  });
+  const _InfoChip({required this.label, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -320,11 +330,7 @@ class _InfoChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 12,
-            color: colorScheme.onSurfaceVariant,
-          ),
+          Icon(icon, size: 12, color: colorScheme.onSurfaceVariant),
           const SizedBox(width: 4),
           Text(
             label,
