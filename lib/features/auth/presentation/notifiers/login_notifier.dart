@@ -46,7 +46,7 @@ class LoginNotifier extends ChangeNotifier {
       try {
         final profile = await _authRepository.getProfile();
         if (profile != null) {
-          ServiceLocator().sessionService.updateProfile(
+          await ServiceLocator().sessionService.updateProfile(
             clienteId: profile.clienteId,
             estabelecimentoId: profile.estabelecimentoId,
           );

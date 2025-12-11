@@ -52,7 +52,7 @@ class AgendamentosNotifier extends ChangeNotifier {
       _state = AgendamentosLoaded(_agendamentos);
     } catch (e) {
       _log.e('Erro ao carregar agendamentos', error: e);
-      _state = AgendamentosError(e.toString().replaceAll('Exception: ', ''));
+      _state = AgendamentosError(e);
     }
 
     notifyListeners();

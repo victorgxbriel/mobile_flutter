@@ -11,15 +11,14 @@ class ProfileLoading implements ProfileState {}
 /// Perfil carregado com sucesso
 class ProfileLoaded implements ProfileState {
   final ClienteModel cliente;
+  
+  /// Erro opcional (ex: falha ao carregar da API, mas tem dados em cache/sessão)
+  final Object? error;
 
-  ProfileLoaded(this.cliente);
-}
-
-/// Erro ao carregar/atualizar perfil
-class ProfileError implements ProfileState {
-  final String message;
-
-  ProfileError(this.message);
+  ProfileLoaded(this.cliente, {this.error});
+  
+  /// Indica se há um erro a ser mostrado (banner)
+  bool get hasError => error != null;
 }
 
 /// Logout realizado com sucesso

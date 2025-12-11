@@ -61,6 +61,7 @@ dependencies:
   flutter_native_splash: ^2.4.7
   flutter_launcher_icons: ^0.14.4
   skeletonizer: ^2.1.1
+  connectivity_plus: ^7.0.0
 
 dev_dependencies:
   flutter_test:

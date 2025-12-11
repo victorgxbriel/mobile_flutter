@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mobile_flutter/app/utils/app_logger.dart';
+import 'package:mobile_flutter/core/errors/exceptions.dart';
 
 import '../services/estabelecimento_service.dart';
 import '../models/estabelecimento_models.dart';
@@ -18,12 +19,14 @@ class EstabelecimentoRepository {
       final estabelecimentos = await _service.getEstabelecimentos();
       _log.d('${estabelecimentos.length} estabelecimentos encontrados');
       return estabelecimentos;
-    } catch (e) {
+    } on DioException catch (e) {
       _log.e('Erro ao buscar estabelecimentos', error: e);
-      if (e is DioException) {
-        if (e.response?.statusCode == 401) {
-          throw Exception('Sessão expirada. Faça login novamente.');
-        }
+      // Propaga erro de conexão para ser tratado na UI
+      if (e.error is NoInternetException) {
+        rethrow;
+      }
+      if (e.response?.statusCode == 401) {
+        throw Exception('Sessão expirada. Faça login novamente.');
       }
       throw Exception('Erro ao buscar estabelecimentos.');
     }
@@ -36,15 +39,17 @@ class EstabelecimentoRepository {
       final estabelecimento = await _service.getEstabelecimento(id);
       _log.t('Estabelecimento encontrado: ${estabelecimento.nomeFantasia}');
       return estabelecimento;
-    } catch (e) {
+    } on DioException catch (e) {
       _log.e('Erro ao buscar estabelecimento $id', error: e);
-      if (e is DioException) {
-        if (e.response?.statusCode == 404) {
-          throw Exception('Estabelecimento não encontrado.');
-        }
-        if (e.response?.statusCode == 401) {
-          throw Exception('Sessão expirada. Faça login novamente.');
-        }
+      // Propaga erro de conexão para ser tratado na UI
+      if (e.error is NoInternetException) {
+        rethrow;
+      }
+      if (e.response?.statusCode == 404) {
+        throw Exception('Estabelecimento não encontrado.');
+      }
+      if (e.response?.statusCode == 401) {
+        throw Exception('Sessão expirada. Faça login novamente.');
       }
       throw Exception('Erro ao buscar estabelecimento.');
     }

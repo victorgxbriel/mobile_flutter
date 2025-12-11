@@ -18,7 +18,7 @@ class HomeLoaded implements HomeState {
 
 /// Erro ao carregar estabelecimentos
 class HomeError implements HomeState {
-  final String message;
+  final Object error;
 
-  HomeError(this.message);
+  HomeError(this.error);
 }

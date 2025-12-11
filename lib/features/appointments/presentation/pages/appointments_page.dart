@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:mobile_flutter/widgets/error_view.dart';
 
 import '../../data/models/agendamento_model.dart';
 import '../notifiers/agendamentos_notifier.dart';
@@ -133,30 +134,10 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
 
           return switch (state) {
             AgendamentosInitial() || AgendamentosLoading() => _buildSkeletonList(),
-            AgendamentosError(message: final msg) => Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 64,
-                      color: colorScheme.error,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      msg,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: colorScheme.error),
-                    ),
-                    const SizedBox(height: 16),
-                    FilledButton.icon(
-                      onPressed: _loadAgendamentos,
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Tentar novamente'),
-                    ),
-                  ],
-                ),
-              ),
+            AgendamentosError(error: final err) => ErrorView(
+              error: err, 
+              onRetry: _loadAgendamentos
+            ),
             AgendamentosLoaded(agendamentos: final agendamentos) =>
               agendamentos.isEmpty
                   ? _buildEmptyState(colorScheme)

@@ -27,8 +27,24 @@ class ClienteModel {
     this.fotoUrl,
   });
 
-  factory ClienteModel.fromJson(Map<String, dynamic> json) => _$ClienteModelFromJson(json);
+  factory ClienteModel.fromJson(Map<String, dynamic> json) =>
+      _$ClienteModelFromJson(json);
   Map<String, dynamic> toJson() => _$ClienteModelToJson(this);
+
+  /// Factory para criar um modelo de skeleton (mock para loading)
+  factory ClienteModel.skeleton() {
+    return ClienteModel(
+      id: 0,
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      active: true,
+      nome: 'Nome do Cliente Exemplo',
+      cpf: '000.000.000-00',
+      email: 'cliente@email.com',
+      userId: 0,
+      fotoUrl: null,
+    );
+  }
 
   ClienteModel copyWith({
     int? id,
@@ -63,12 +79,7 @@ class UpdateClienteDto {
   final String? email;
   final String? fotoUrl;
 
-  UpdateClienteDto({
-    this.nome,
-    this.cpf,
-    this.email,
-    this.fotoUrl,
-  });
+  UpdateClienteDto({this.nome, this.cpf, this.email, this.fotoUrl});
 
   Map<String, dynamic> toJson() => _$UpdateClienteDtoToJson(this);
 }

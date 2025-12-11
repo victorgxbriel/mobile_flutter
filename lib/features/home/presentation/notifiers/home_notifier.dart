@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobile_flutter/app/utils/app_logger.dart';
+import 'package:mobile_flutter/core/errors/exceptions.dart';
 
 import '../../data/repositories/estabelecimento_repository.dart';
 import '../../data/models/estabelecimento_models.dart';
@@ -31,7 +33,7 @@ class HomeNotifier extends ChangeNotifier {
       _state = HomeLoaded(result);
     } catch (e) {
       _log.e('Erro ao carregar estabelecimentos', error: e);
-      _state = HomeError(e.toString().replaceAll('Exception: ', ''));
+      _state = HomeError(e);
     }
 
     notifyListeners();

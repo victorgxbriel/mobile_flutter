@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mobile_flutter/app/utils/app_logger.dart';
+import 'package:mobile_flutter/core/services/session_service.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/profile_models.dart';
 import '../services/profile_service.dart';
@@ -10,9 +10,9 @@ final _log = logger(ProfileRepository);
 
 class ProfileRepository {
   final ProfileService _profileService;
-  final FlutterSecureStorage _storage;
+  final SessionService _sessionService;
 
-  ProfileRepository(this._profileService, this._storage);
+  ProfileRepository(this._profileService, this._sessionService);
 
   /// Busca os dados do cliente pelo ID
   Future<ClienteModel> getCliente(int clienteId) async {
@@ -67,10 +67,10 @@ class ProfileRepository {
     }
   }
 
-  /// Realiza o logout (limpa o token)
+  /// Realiza o logout (limpa os tokens)
   Future<void> logout() async {
     _log.i('Realizando logout...');
-    await _storage.delete(key: 'jwt_token');
+    await _sessionService.logout();
     _log.i('Logout realizado');
   }
   
@@ -92,9 +92,8 @@ class ProfileRepository {
   }
 
   /// Verifica se o usuário está logado
-  Future<bool> isLoggedIn() async {
-    final token = await _storage.read(key: 'jwt_token');
-    final isLogged = token != null && token.isNotEmpty;
+  bool isLoggedIn() {
+    final isLogged = _sessionService.isAuthenticated;
     _log.t('Usuário logado: $isLogged');
     return isLogged;
   }

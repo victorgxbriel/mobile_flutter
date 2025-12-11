@@ -11,6 +11,9 @@ final _log = logger(SessionService);
 class SessionService extends ChangeNotifier {
   final FlutterSecureStorage _storage;
 
+  static const String _clienteIdKey = 'cliente_id';
+  static const String _estabelecimentoIdKey = 'estabelecimento_id';
+
   bool _isAuthenticated = false;
   bool get isAuthenticated => _isAuthenticated;
 
@@ -29,11 +32,11 @@ class SessionService extends ChangeNotifier {
 
   /// Verifica se o usuário é cliente
   bool get isCliente => _roles?.contains('CLIENTE') ?? false;
-  
+
   /// Verifica se o usuário é do estabelecimento
-  bool get isEstabelecimento => 
-      (_roles?.contains('GERENTE') ?? false) || 
-      (_roles?.contains('PROPRIETARIO') ?? false) || 
+  bool get isEstabelecimento =>
+      (_roles?.contains('GERENTE') ?? false) ||
+      (_roles?.contains('PROPRIETARIO') ?? false) ||
       (_roles?.contains('FUNCIONARIO') ?? false);
 
   /// Callback para navegação quando a sessão expira
@@ -50,7 +53,10 @@ class SessionService extends ChangeNotifier {
       _token = token;
       _isAuthenticated = true;
       _extractUserInfo(token);
-      _log.i('Sessão restaurada - Usuário: $_email (ID: $_userId)');
+      await _loadProfileFromStorage();
+      _log.i(
+        'Sessão restaurada - Usuário: $_email (ID: $_userId, clienteId: $_clienteId)',
+      );
     } else if (refreshToken != null && refreshToken.isNotEmpty) {
       // Refresh token pode ser opaco (não JWT), então apenas verificamos se existe
       // O interceptor tentará fazer o refresh quando necessário
@@ -58,15 +64,33 @@ class SessionService extends ChangeNotifier {
       if (token != null) {
         _extractUserInfo(token);
       }
-      _log.i('Sessão válida via refresh token');
+      await _loadProfileFromStorage();
+      _log.i('Sessão válida via refresh token (clienteId: $_clienteId)');
     } else {
       // Ambos tokens expirados ou inexistentes - limpar
       _log.w('Tokens expirados ou inexistentes - limpando sessão');
-      await _clearStoredTokens();
+      await _clearStoredData();
       _isAuthenticated = false;
     }
 
     notifyListeners();
+  }
+
+  /// Carrega clienteId e estabelecimentoId do storage
+  Future<void> _loadProfileFromStorage() async {
+    final clienteIdStr = await _storage.read(key: _clienteIdKey);
+    final estabelecimentoIdStr = await _storage.read(
+      key: _estabelecimentoIdKey,
+    );
+
+    _clienteId = clienteIdStr != null ? int.tryParse(clienteIdStr) : null;
+    _estabelecimentoId = estabelecimentoIdStr != null
+        ? int.tryParse(estabelecimentoIdStr)
+        : null;
+
+    _log.t(
+      'Profile carregado do storage - clienteId: $_clienteId, estabelecimentoId: $_estabelecimentoId',
+    );
   }
 
   /// Atualiza a sessão com um novo token
@@ -74,7 +98,10 @@ class SessionService extends ChangeNotifier {
     _log.d('Salvando novo token...');
     await _storage.write(key: TokenService.accessTokenKey, value: token);
     if (refreshToken != null) {
-      await _storage.write(key: TokenService.refreshTokenKey, value: refreshToken);
+      await _storage.write(
+        key: TokenService.refreshTokenKey,
+        value: refreshToken,
+      );
     }
     _token = token;
     _isAuthenticated = true;
@@ -87,7 +114,9 @@ class SessionService extends ChangeNotifier {
     _userId = JwtUtils.getUserId(token);
     _email = JwtUtils.getEmail(token);
     _roles = JwtUtils.getRoles(token);
-    _log.t('Info extraída do token - userId: $_userId, email: $_email, roles: $_roles');
+    _log.t(
+      'Info extraída do token - userId: $_userId, email: $_email, roles: $_roles',
+    );
   }
 
   bool checkSession() {
@@ -95,29 +124,29 @@ class SessionService extends ChangeNotifier {
       _log.w('checkSession: Token nulo');
       return false;
     }
-    
+
     if (JwtUtils.isExpired(_token!)) {
       _log.w('checkSession: Token expirado');
       handleSessionExpired();
       return false;
     }
-    
+
     _log.t('checkSession: Sessão válida');
     return true;
   }
 
   /// Chamado quando a sessão expira (e refresh falhou)
-  void handleSessionExpired() {
+  Future<void> handleSessionExpired() async {
     _log.w('Sessao expirada - executando logout');
     _clearSession();
-    _clearStoredTokens();
+    await _clearStoredData();
     onSessionExpired?.call();
     notifyListeners();
   }
 
   Future<void> logout() async {
     _log.i('Logout solicitado');
-    await _clearStoredTokens();
+    await _clearStoredData();
     _clearSession();
     _log.i('Logout concluído');
     notifyListeners();
@@ -127,6 +156,16 @@ class SessionService extends ChangeNotifier {
     await _storage.delete(key: TokenService.accessTokenKey);
     await _storage.delete(key: TokenService.refreshTokenKey);
     _log.d('Tokens removidos do storage');
+    ;
+  }
+
+  /// Limpa todos os dados armazenados (tokens + profile)
+  Future<void> _clearStoredData() async {
+    await _storage.delete(key: TokenService.accessTokenKey);
+    await _storage.delete(key: TokenService.refreshTokenKey);
+    await _storage.delete(key: _clienteIdKey);
+    await _storage.delete(key: _estabelecimentoIdKey);
+    _log.d('Todos os dados removidos do storage');
   }
 
   void _clearSession() {
@@ -140,15 +179,29 @@ class SessionService extends ChangeNotifier {
     _log.d('Sessão limpa da memória');
   }
 
-  /// Atualiza os dados do perfil (clienteId e estabelecimentoId)
-  void updateProfile({
+  /// Atualiza os dados do perfil (clienteId e estabelecimentoId) e persiste no storage
+  Future<void> updateProfile({
     int? clienteId,
     int? estabelecimentoId,
     String? nome,
-  }) {
+  }) async {
     _clienteId = clienteId;
     _estabelecimentoId = estabelecimentoId;
-    _log.i('Perfil atualizado - clienteId: $clienteId, estabelecimentoId: $estabelecimentoId');
+
+    // Persiste no storage
+    if (clienteId != null) {
+      await _storage.write(key: _clienteIdKey, value: clienteId.toString());
+    }
+    if (estabelecimentoId != null) {
+      await _storage.write(
+        key: _estabelecimentoIdKey,
+        value: estabelecimentoId.toString(),
+      );
+    }
+
+    _log.i(
+      'Perfil atualizado e persistido - clienteId: $clienteId, estabelecimentoId: $estabelecimentoId',
+    );
     notifyListeners();
   }
 

@@ -21,9 +21,9 @@ final class AgendamentosLoaded extends AgendamentosState {
 }
 
 final class AgendamentosError extends AgendamentosState {
-  final String message;
+  final Object error;
 
-  const AgendamentosError(this.message);
+  const AgendamentosError(this.error);
 }
 
 // Estado de detalhes do agendamento

@@ -1,5 +1,7 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mobile_flutter/core/network/network_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../app/utils/app_logger.dart';
 import '../../features/appointments/data/repositories/agendamento_repository.dart';
@@ -43,6 +45,7 @@ class ServiceLocator {
     if (T == StorageService) return storageService as T;
     if (T == ThemeNotifier) return themeNotifier as T;
     if (T == FlutterSecureStorage) return storage as T;
+    if (T == NetworkInfo) return networkInfo as T;
     _log.e('Dependência não registrada: $T');
     throw Exception('Dependency $T not registered in ServiceLocator');
   }
@@ -72,6 +75,7 @@ class ServiceLocator {
   late final SessionService _sessionService;
   late final ThemeService _themeService;
   late final ThemeNotifier _themeNotifier;
+  late final NetworkInfo _networkInfo;
 
   Future<void> init() async {
     if (_initialized) {
@@ -88,11 +92,15 @@ class ServiceLocator {
     
     _sessionService = SessionService(_storage);
     _log.d('SessionService criado');
+
+    _networkInfo = NetworkInfoImpl(Connectivity());
+    _log.d('NeworkInfo configurado');
     
     // Inicializa DioClient com callback de sessão expirada
     _dioClient = DioClient(
       _dio, 
       _storage,
+      _networkInfo,
       onTokenExpired: () => _sessionService.handleSessionExpired(),
     );
     _log.d('DioClient configurado');
@@ -109,7 +117,7 @@ class ServiceLocator {
     
     // Repositories
     _authRepository = AuthRepository(_authService, _storage);
-    _profileRepository = ProfileRepository(_profileService, _storage);
+    _profileRepository = ProfileRepository(_profileService, _sessionService);
     _estabelecimentoRepository = EstabelecimentoRepository(_estabelecimentoService);
     _estabelecimentoDetailsRepository = EstabelecimentoDetailsRepository(_estabelecimentoDetailsService);
     _vehicleRepository = VehicleRepositoryImpl(_vehicleService, _sessionService);
@@ -142,4 +150,5 @@ class ServiceLocator {
   StorageService get storageService => _storageService;
   SessionService get sessionService => _sessionService;
   ThemeNotifier get themeNotifier => _themeNotifier;
+  NetworkInfo get networkInfo => _networkInfo;
 }

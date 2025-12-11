@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/material_symbols_icons.dart';
+import 'package:mobile_flutter/widgets/error_view.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -91,7 +92,10 @@ class _DashboardContentState extends State<_DashboardContent> {
         builder: (context, notifier, child) {
           return switch (notifier.state) {
             HomeInitial() || HomeLoading() => _buildSkeletonList(),
-            HomeError(message: final msg) => _buildErrorState(context, msg, notifier),
+            HomeError(error: final err) => ErrorView(
+              error: err, 
+              onRetry: notifier.loadEstabelecimentos
+            ),
             HomeLoaded(estabelecimentos: final list) => list.isEmpty
                 ? _buildEmptyState(context, notifier)
                 : _buildEstabelecimentosList(context, list, notifier),
