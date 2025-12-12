@@ -1,7 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mobile_flutter/app/utils/app_logger.dart';
-import 'package:mobile_flutter/core/errors/exceptions.dart';
 
 import '../../data/repositories/estabelecimento_repository.dart';
 import '../../data/models/estabelecimento_models.dart';

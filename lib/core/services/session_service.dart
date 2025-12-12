@@ -156,7 +156,6 @@ class SessionService extends ChangeNotifier {
     await _storage.delete(key: TokenService.accessTokenKey);
     await _storage.delete(key: TokenService.refreshTokenKey);
     _log.d('Tokens removidos do storage');
-    ;
   }
 
   /// Limpa todos os dados armazenados (tokens + profile)
