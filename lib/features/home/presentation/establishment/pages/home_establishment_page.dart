@@ -83,7 +83,9 @@ class _HomeEstablishmentPageState extends State<_HomeEstablishmentPage> {
             );
           }
 
-          final isLoading = state is ScheduleLoading;
+          // Mostrar skeleton também no estado inicial, pois ainda não há dados
+          final isLoading =
+              state is ScheduleLoading || state is ScheduleInitial;
 
           return Skeletonizer(
             enabled: isLoading,

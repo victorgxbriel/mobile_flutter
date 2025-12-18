@@ -53,7 +53,24 @@ class _AppointmentsPageState extends State<AgendamentosPage> {
             onCalendarPressed: () =>
                 _showDatePickerBottomSheet(context, notifier),
           ),
-          body: _buildBody(notifier, colorScheme),
+          body: GestureDetector(
+            onHorizontalDragEnd: (details) {
+              // Velocidade mínima para considerar como swipe intencional
+              const velocityThreshold = 300.0;
+              final velocity = details.primaryVelocity ?? 0;
+
+              if (velocity.abs() > velocityThreshold) {
+                if (velocity < 0) {
+                  // Swipe para esquerda -> próximo dia
+                  notifier.nextDay();
+                } else {
+                  // Swipe para direita -> dia anterior
+                  notifier.previousDay();
+                }
+              }
+            },
+            child: _buildBody(notifier, colorScheme),
+          ),
         );
       },
     );
