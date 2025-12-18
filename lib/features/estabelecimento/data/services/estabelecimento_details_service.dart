@@ -25,7 +25,7 @@ class EstabelecimentoDetailsServiceImpl implements EstabelecimentoDetailsService
   @override
   Future<List<ServicoModel>> getServicosDoEstabelecimento(int estabelecimentoId) async {
     _log.t('GET /servicos/estabelecimentos/$estabelecimentoId?include=tipoServico');
-    final response = await _dioClient.instance.get( '/servicos/estabelecimentos/$estabelecimentoId',
+    final response = await _dioClient.instance.get( '/estabelecimentos/$estabelecimentoId/servicos',
       queryParameters: {'include': 'tipoServico'},
     );
     final List<dynamic> data = response.data;

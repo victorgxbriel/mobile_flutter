@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_flutter/features/appointments/data/models/agendamento_model.dart';
 
@@ -7,10 +6,11 @@ class EstabelecimentoAgendamentoCard extends StatelessWidget {
   final ColorScheme colorScheme;
 
   const EstabelecimentoAgendamentoCard({
+    super.key,
     required this.agendamento,
-    required this.colorScheme
+    required this.colorScheme,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final estabelecimento = agendamento.slot?.programacao?.estabelecimento;
@@ -25,7 +25,8 @@ class EstabelecimentoAgendamentoCard extends StatelessWidget {
               children: [
                 Icon(Icons.store, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text( 'Estabelecimento',
+                Text(
+                  'Estabelecimento',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -61,7 +62,8 @@ class EstabelecimentoAgendamentoCard extends StatelessWidget {
                         ),
                       ),
                       if (estabelecimento?.cnpj != null)
-                        Text( 'CNPJ: ${estabelecimento!.cnpj}',
+                        Text(
+                          'CNPJ: ${estabelecimento!.cnpj}',
                           style: TextStyle(
                             fontSize: 12,
                             color: colorScheme.outline,

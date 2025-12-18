@@ -91,6 +91,53 @@ class ProfileRepository {
     }
   }
 
+  Future<EstabelecimentoModel> getEstabelecimento(int estabelecimentoId) async {
+    _log.i('Buscando perfil do estabelecimento: $estabelecimentoId');
+    try {
+      final estabelecimento = await _profileService.getEstabelecimento(estabelecimentoId);
+      _log.d('Perfil carregado: ${estabelecimento.nomeFantasia}');
+      return estabelecimento;
+    } catch (e) {
+      _log.e('Erro ao buscar perfil', error: e);
+      if (e is DioException) {
+        if (e.response?.statusCode == 404) {
+          throw Exception('estabelecimento não encontrado.');
+        }
+        if (e.response?.statusCode == 401) {
+          throw Exception('Sessão expirada. Faça login novamente.');
+        }
+      }
+      throw Exception('Erro ao buscar dados do perfil.');
+    }
+  }
+
+  Future<EstabelecimentoModel> updateEstabelecimento(int estabelecimentoId, {
+    String? nomeFantasia,
+    String? cnpj,
+  }) async {
+    _log.i('Atualizando perfil do estabelecimento: $estabelecimentoId');
+    try {
+      final dto = UpdateEstabelecimentoDto(
+        nomeFantasia: nomeFantasia,
+        cnpj: cnpj?.replaceAll(RegExp(r'\D'), ''),
+      );
+      final estabelecimento = await _profileService.updateEstabelecimento(estabelecimentoId, dto);
+      _log.i('Perfil atualizado');
+      return estabelecimento;
+    } catch (e) {
+      _log.e('Erro ao atualizar perfil', error: e);
+      if (e is DioException) {
+        if (e.response?.statusCode == 400) {
+          throw Exception('Dados inválidos.');
+        }
+        if (e.response?.statusCode == 401) {
+          throw Exception('Sessão expirada. Faça login novamente.');
+        }
+      }
+      throw Exception('Erro ao atualizar perfil.');
+    }
+  }
+
   /// Verifica se o usuário está logado
   bool isLoggedIn() {
     final isLogged = _sessionService.isAuthenticated;

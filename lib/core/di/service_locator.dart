@@ -18,6 +18,16 @@ import '../../features/settings/presentation/notifiers/theme_notifier.dart';
 import '../../features/vehicles/data/repositories/vehicle_repository.dart';
 import '../../features/vehicles/data/services/vehicle_service.dart';
 import '../../features/vehicles/data/services/nhtsa_service.dart';
+import '../../features/services/data/repositories/servico_repository.dart';
+import '../../features/services/data/services/servico_service.dart';
+import '../../features/accessories/data/repositories/acessorio_repository.dart';
+import '../../features/accessories/data/services/acessorio_service.dart';
+import '../../features/employees/data/repositories/employee_repository.dart';
+import '../../features/employees/data/services/employee_service.dart';
+import '../../features/schedule/data/repositories/programacao_diaria_repository.dart';
+import '../../features/schedule/data/services/programacao_diaria_service.dart';
+import '../../features/treatments/data/repositories/atendimento_repository.dart';
+import '../../features/treatments/data/services/atendimento_service.dart';
 import '../network/dio_client.dart';
 import '../services/session_service.dart';
 import '../services/theme_service.dart';
@@ -38,10 +48,18 @@ class ServiceLocator {
     if (T == AuthRepository) return authRepository as T;
     if (T == ProfileRepository) return profileRepository as T;
     if (T == EstabelecimentoRepository) return estabelecimentoRepository as T;
-    if (T == EstabelecimentoDetailsRepository) return estabelecimentoDetailsRepository as T;
+    if (T == EstabelecimentoDetailsRepository) {
+      return estabelecimentoDetailsRepository as T;
+    }
     if (T == VehicleRepository) return vehicleRepository as T;
     if (T == NhtsaService) return nhtsaService as T;
     if (T == AgendamentoRepository) return agendamentoRepository as T;
+    if (T == ServicoRepository) return servicoRepository as T;
+    if (T == AcessorioRepository) return acessorioRepository as T;
+    if (T == EmployeeRepository) return employeeRepository as T;
+    if (T == ProgramacaoDiariaRepository)
+      return programacaoDiariaRepository as T;
+    if (T == AtendimentoRepository) return atendimentoRepository as T;
     if (T == StorageService) return storageService as T;
     if (T == ThemeNotifier) return themeNotifier as T;
     if (T == FlutterSecureStorage) return storage as T;
@@ -70,6 +88,16 @@ class ServiceLocator {
   late final NhtsaService _nhtsaService;
   late final AgendamentoService _agendamentoService;
   late final AgendamentoRepository _agendamentoRepository;
+  late final ServicoService _servicoService;
+  late final ServicoRepository _servicoRepository;
+  late final AcessorioService _acessorioService;
+  late final AcessorioRepository _acessorioRepository;
+  late final EmployeeService _employeeService;
+  late final EmployeeRepository _employeeRepository;
+  late final ProgramacaoDiariaService _programacaoDiariaService;
+  late final ProgramacaoDiariaRepository _programacaoDiariaRepository;
+  late final AtendimentoService _atendimentoService;
+  late final AtendimentoRepository _atendimentoRepository;
   late final SharedPreferences _sharedPreferences;
   late final StorageService _storageService;
   late final SessionService _sessionService;
@@ -82,58 +110,85 @@ class ServiceLocator {
       _log.w('ServiceLocator já foi inicializado');
       return;
     }
-    
+
     _log.i('Inicializando ServiceLocator...');
-    
+
     _dio = Dio();
     _storage = const FlutterSecureStorage();
     _sharedPreferences = await SharedPreferences.getInstance();
     _log.d('SharedPreferences inicializado');
-    
+
     _sessionService = SessionService(_storage);
     _log.d('SessionService criado');
 
     _networkInfo = NetworkInfoImpl(Connectivity());
     _log.d('NeworkInfo configurado');
-    
+
     // Inicializa DioClient com callback de sessão expirada
     _dioClient = DioClient(
-      _dio, 
+      _dio,
       _storage,
       _networkInfo,
       onTokenExpired: () => _sessionService.handleSessionExpired(),
     );
     _log.d('DioClient configurado');
-    
+
     // Services
     _authService = AuthServiceImpl(_dioClient);
     _profileService = ProfileServiceImpl(_dioClient);
     _estabelecimentoService = EstabelecimentoServiceImpl(_dioClient);
-    _estabelecimentoDetailsService = EstabelecimentoDetailsServiceImpl(_dioClient);
+    _estabelecimentoDetailsService = EstabelecimentoDetailsServiceImpl(
+      _dioClient,
+    );
     _vehicleService = VehicleServiceImpl(_dioClient);
     _nhtsaService = NhtsaServiceImpl(_dioClient);
+    _acessorioService = AcessorioServiceImpl(_dioClient);
+    _employeeService = EmployeeServiceImpl(_dioClient);
+    _programacaoDiariaService = ProgramacaoDiariaServiceImpl(_dioClient);
     _agendamentoService = AgendamentoServiceImpl(_dioClient);
+    _servicoService = ServicoServiceImpl(_dioClient);
+    _atendimentoService = AtendimentoServiceImpl(_dioClient);
     _log.d('Services criados');
-    
+
     // Repositories
     _authRepository = AuthRepository(_authService, _storage);
     _profileRepository = ProfileRepository(_profileService, _sessionService);
-    _estabelecimentoRepository = EstabelecimentoRepository(_estabelecimentoService);
-    _estabelecimentoDetailsRepository = EstabelecimentoDetailsRepository(_estabelecimentoDetailsService);
-    _vehicleRepository = VehicleRepositoryImpl(_vehicleService, _sessionService);
-    _agendamentoRepository = AgendamentoRepository(_agendamentoService, _sessionService);
+    _estabelecimentoRepository = EstabelecimentoRepository(
+      _estabelecimentoService,
+    );
+    _estabelecimentoDetailsRepository = EstabelecimentoDetailsRepository(
+      _estabelecimentoDetailsService,
+    );
+    _vehicleRepository = VehicleRepositoryImpl(
+      _vehicleService,
+      _sessionService,
+    );
+    _agendamentoRepository = AgendamentoRepository(
+      _agendamentoService,
+      _sessionService,
+    );
+    _acessorioRepository = AcessorioRepository(_acessorioService);
+    _employeeRepository = EmployeeRepository(_employeeService);
+    _programacaoDiariaRepository = ProgramacaoDiariaRepository(
+      _programacaoDiariaService,
+    );
+    _servicoRepository = ServicoRepository(_servicoService);
+    _atendimentoRepository = AtendimentoRepository(
+      _atendimentoService,
+      _sessionService,
+    );
     _log.d('Repositories criados');
-    
+
     // Storage e Theme
     _storageService = StorageServiceImpl(_sharedPreferences);
     _themeService = ThemeService(_sharedPreferences);
     _themeNotifier = ThemeNotifier(_themeService);
     _log.d('Storage e Theme configurados');
-    
+
     // Inicializa a sessão (verifica token existente)
     await _sessionService.init();
     _log.d('Sessão inicializada');
-    
+
     _initialized = true;
     _log.i('ServiceLocator inicializado com sucesso');
   }
@@ -141,11 +196,19 @@ class ServiceLocator {
   // Getters
   AuthRepository get authRepository => _authRepository;
   ProfileRepository get profileRepository => _profileRepository;
-  EstabelecimentoRepository get estabelecimentoRepository => _estabelecimentoRepository;
-  EstabelecimentoDetailsRepository get estabelecimentoDetailsRepository => _estabelecimentoDetailsRepository;
+  EstabelecimentoRepository get estabelecimentoRepository =>
+      _estabelecimentoRepository;
+  EstabelecimentoDetailsRepository get estabelecimentoDetailsRepository =>
+      _estabelecimentoDetailsRepository;
   VehicleRepository get vehicleRepository => _vehicleRepository;
   NhtsaService get nhtsaService => _nhtsaService;
+  AcessorioRepository get acessorioRepository => _acessorioRepository;
+  EmployeeRepository get employeeRepository => _employeeRepository;
+  ProgramacaoDiariaRepository get programacaoDiariaRepository =>
+      _programacaoDiariaRepository;
   AgendamentoRepository get agendamentoRepository => _agendamentoRepository;
+  ServicoRepository get servicoRepository => _servicoRepository;
+  AtendimentoRepository get atendimentoRepository => _atendimentoRepository;
   FlutterSecureStorage get storage => _storage;
   StorageService get storageService => _storageService;
   SessionService get sessionService => _sessionService;

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_flutter/features/appointments/data/models/agendamento_model.dart';
 
@@ -7,10 +6,11 @@ class TotalAgendamentoCard extends StatelessWidget {
   final ColorScheme colorScheme;
 
   const TotalAgendamentoCard({
+    super.key,
     required this.agendamento,
-    required this.colorScheme
+    required this.colorScheme,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -23,10 +23,13 @@ class TotalAgendamentoCard extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text( 'Valor Total',
+                Text(
+                  'Valor Total',
                   style: TextStyle(
                     fontSize: 14,
-                    color: colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
+                    color: colorScheme.onPrimaryContainer.withValues(
+                      alpha: 0.7,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),

@@ -1909,6 +1909,274 @@
         ]
       }
     },
+    "/estabelecimentos/{estabelecimentoId}/usuarios": {
+      "get": {
+        "operationId": "UsuariosEstabelecimentoController_findAllByEstabelecimento",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectUsuarioDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os usuários do estabelecimento",
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "operationId": "UsuariosEstabelecimentoController_createUsuario",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUsuarioDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "usuário criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectUsuarioDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar usuario para o estabelecimento",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/usuarios/{usuarioId}": {
+      "get": {
+        "operationId": "UsuariosEstabelecimentoController_findOneByEstabelecimento",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usuarioId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do usuário",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "usuário encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectUsuarioDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "usuário não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar usuário específico do estabelecimento",
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "UsuariosEstabelecimentoController_updateUsuario",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "usuarioId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do usuário",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUsuarioDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "usuário atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectUsuarioDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "usuário não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar usuario do estabelecimento",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/usuarios/{usuarioId}/papeis": {
+      "get": {
+        "operationId": "UsuariosEstabelecimentoController_getRoles",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "usuarioId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de papéis retornada com sucesso"
+          }
+        },
+        "summary": "Listar papéis do usuário",
+        "tags": [
+          "users"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/usuarios/papeis": {
+      "get": {
+        "operationId": "UsuariosEstabelecimentoController_getAvailableRoles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de papéis disponíveis"
+          }
+        },
+        "summary": "Listar todos os papéis disponíveis",
+        "tags": [
+          "users"
+        ]
+      }
+    },
     "/avarias": {
       "post": {
         "operationId": "AvariasController_create",
@@ -3206,886 +3474,6 @@
         ]
       }
     },
-    "/acessorios": {
-      "post": {
-        "operationId": "AcessoriosController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateAcessorioDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Acessório criado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectAcessorioDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Criar novo acessório",
-        "tags": [
-          "acessorios"
-        ]
-      },
-      "get": {
-        "operationId": "AcessoriosController_findAll",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Lista de acessórios retornada com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SelectAcessorioDto"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Listar todos os acessórios",
-        "tags": [
-          "acessorios"
-        ]
-      }
-    },
-    "/acessorios/{id}": {
-      "get": {
-        "operationId": "AcessoriosController_findOne",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do acessório",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "acessório encontrado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectAcessorioDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "acessório não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Buscar acessório por ID",
-        "tags": [
-          "acessorios"
-        ]
-      },
-      "patch": {
-        "operationId": "AcessoriosController_update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do Acessório",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateAcessorioDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Acessório atualizado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectAcessorioDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "Acessório não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Atualizar acessório",
-        "tags": [
-          "acessorios"
-        ]
-      },
-      "delete": {
-        "operationId": "AcessoriosController_remove",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do Acessório",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Acessório removido com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectAcessorioDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "Acessório não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Remover acessório",
-        "tags": [
-          "acessorios"
-        ]
-      }
-    },
-    "/servicos": {
-      "post": {
-        "operationId": "ServicosController_create",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateServicoDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Serviço criado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectServicoDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Criar novo serviço",
-        "tags": [
-          "servicos"
-        ]
-      },
-      "get": {
-        "operationId": "ServicosController_findAll",
-        "parameters": [
-          {
-            "name": "include",
-            "required": false,
-            "in": "query",
-            "description": "Incluir relações (ex: tipoServico)",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Lista de serviços retornada com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SelectServicoCompletoDto"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Listar todos os serviços",
-        "tags": [
-          "servicos"
-        ]
-      }
-    },
-    "/servicos/{id}": {
-      "get": {
-        "operationId": "ServicosController_findOne",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do serviço",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "include",
-            "required": false,
-            "in": "query",
-            "description": "Incluir relações (ex: tipoServico)",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "serviço encontrado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectServicoCompletoDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "serviço não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Buscar serviço por ID",
-        "tags": [
-          "servicos"
-        ]
-      },
-      "patch": {
-        "operationId": "ServicosController_update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do Serviço",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateServicoDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Serviço atualizado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectServicoDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "Serviço não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Atualizar serviço",
-        "tags": [
-          "servicos"
-        ]
-      },
-      "delete": {
-        "operationId": "ServicosController_remove",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do Serviço",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Serviço removido com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectServicoDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "Serviço não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Remover serviço",
-        "tags": [
-          "servicos"
-        ]
-      }
-    },
-    "/servicos/estabelecimentos/{id}": {
-      "get": {
-        "operationId": "ServicosController_findAllByEstabelecimentoId",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "include",
-            "required": false,
-            "in": "query",
-            "description": "Incluir relações (ex: tipoServico)",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Lista de servicos retornada com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SelectServicoCompletoDto"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Listar todos os serviços de um estabelecimento",
-        "tags": [
-          "servicos"
-        ]
-      }
-    },
-    "/estabelecimentos/{estabelecimentoId}/programacoes-diarias": {
-      "get": {
-        "operationId": "ProgramacaoDiariaController_findByEstabelecimento",
-        "parameters": [
-          {
-            "name": "estabelecimentoId",
-            "required": true,
-            "in": "path",
-            "description": "ID do estabelecimento",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Lista de programações retornada com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Listar programações diárias de um estabelecimento",
-        "tags": [
-          "programacao-diaria"
-        ]
-      },
-      "post": {
-        "operationId": "ProgramacaoDiariaController_abrirProgramacao",
-        "parameters": [
-          {
-            "name": "estabelecimentoId",
-            "required": true,
-            "in": "path",
-            "description": "ID do estabelecimento",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateProgramacaoDiariaDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Programação aberta e slots gerados com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados inválidos ou programação já existe"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Abrir programação diária para um estabelecimento (gerar slots automáticos)",
-        "tags": [
-          "programacao-diaria"
-        ]
-      }
-    },
-    "/estabelecimentos/{estabelecimentoId}/programacoes-diarias/data/{data}": {
-      "get": {
-        "operationId": "ProgramacaoDiariaController_findByEstabelecimentoAndData",
-        "parameters": [
-          {
-            "name": "estabelecimentoId",
-            "required": true,
-            "in": "path",
-            "description": "ID do estabelecimento",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "data",
-            "required": true,
-            "in": "path",
-            "description": "Data da programação (formato: YYYY-MM-DD)",
-            "schema": {
-              "example": "2025-12-03",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Programação com slots retornada com sucesso"
-          },
-          "404": {
-            "description": "Programação não encontrada para esta data"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Buscar programação de um estabelecimento em uma data específica (com slots)",
-        "tags": [
-          "programacao-diaria"
-        ]
-      }
-    },
-    "/programacoes-diarias/{id}": {
-      "get": {
-        "operationId": "ProgramacaoDiariaController_findOne",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do programação",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "programação encontrado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "programação não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Buscar programação diária por ID",
-        "tags": [
-          "programacao-diaria"
-        ]
-      },
-      "patch": {
-        "operationId": "ProgramacaoDiariaController_update",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do Programação",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateProgramacaoDiariaDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Programação atualizado com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados inválidos"
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "Programação não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Atualizar programação diária",
-        "tags": [
-          "programacao-diaria"
-        ]
-      },
-      "delete": {
-        "operationId": "ProgramacaoDiariaController_remove",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID do Programação",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Programação removido com sucesso",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Não autorizado"
-          },
-          "404": {
-            "description": "Programação não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          },
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Remover programação diária",
-        "tags": [
-          "programacao-diaria"
-        ]
-      }
-    },
-    "/programacoes-diarias/{id}/slots": {
-      "get": {
-        "operationId": "ProgramacaoDiariaController_findSlots",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID da programação",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Lista de slots retornada com sucesso"
-          },
-          "404": {
-            "description": "Programação não encontrada"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Listar slots de tempo de uma programação",
-        "tags": [
-          "programacao-diaria"
-        ]
-      }
-    },
-    "/programacoes-diarias/{id}/slots/{slotId}": {
-      "patch": {
-        "operationId": "ProgramacaoDiariaController_desabilitaHorario",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "description": "ID da programação",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "slotId",
-            "required": true,
-            "in": "path",
-            "description": "ID do slot de tempo",
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Slot atualizado com sucesso"
-          },
-          "404": {
-            "description": "Programação ou slot não encontrado"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "Desabilitar/habilitar um slot de tempo",
-        "tags": [
-          "programacao-diaria"
-        ]
-      }
-    },
     "/estabelecimentos/setup": {
       "post": {
         "operationId": "EstabelecimentosController_setup",
@@ -4792,6 +4180,2100 @@
           "estabelecimentos"
         ]
       }
+    },
+    "/estabelecimentos/{id}/clientes": {
+      "post": {
+        "operationId": "EstabelecimentosController_createCliente",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateClienteEstabelecimentoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectClienteDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar cliente e associar ao estabelecimento",
+        "tags": [
+          "estabelecimentos"
+        ]
+      },
+      "get": {
+        "operationId": "EstabelecimentosController_findAllClientes",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de clientes retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectClienteDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar clientes do estabelecimento",
+        "tags": [
+          "estabelecimentos"
+        ]
+      }
+    },
+    "/estabelecimentos/{id}/clientes/{clienteId}": {
+      "post": {
+        "operationId": "EstabelecimentosController_associarCliente",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Cliente associado com sucesso"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Associar cliente existente ao estabelecimento",
+        "tags": [
+          "estabelecimentos"
+        ]
+      }
+    },
+    "/acessorios": {
+      "post": {
+        "operationId": "AcessoriosController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAcessorioDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Acessório criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAcessorioDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar novo acessório",
+        "tags": [
+          "acessorios"
+        ]
+      },
+      "get": {
+        "operationId": "AcessoriosController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de acessórios retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectAcessorioDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os acessórios",
+        "tags": [
+          "acessorios"
+        ]
+      }
+    },
+    "/acessorios/{id}": {
+      "get": {
+        "operationId": "AcessoriosController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do acessório",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "acessório encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAcessorioDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "acessório não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar acessório por ID",
+        "tags": [
+          "acessorios"
+        ]
+      },
+      "patch": {
+        "operationId": "AcessoriosController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Acessório",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAcessorioDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Acessório atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAcessorioDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Acessório não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar acessório",
+        "tags": [
+          "acessorios"
+        ]
+      },
+      "delete": {
+        "operationId": "AcessoriosController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Acessório",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Acessório removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAcessorioDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Acessório não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover acessório",
+        "tags": [
+          "acessorios"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/acessorios": {
+      "get": {
+        "operationId": "AcessoriosEstabelecimentoController_findAllByEstabelecimento",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de acessórios retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectAcessorioDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os acessórios do estabelecimento",
+        "tags": [
+          "acessorios"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/acessorios/{id}": {
+      "get": {
+        "operationId": "AcessoriosEstabelecimentoController_findOneByEstabelecimento",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do acessório",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "acessório encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAcessorioDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "acessório não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar acessório específico do estabelecimento",
+        "tags": [
+          "acessorios"
+        ]
+      }
+    },
+    "/servicos": {
+      "post": {
+        "operationId": "ServicosController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateServicoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Serviço criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectServicoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar novo serviço",
+        "tags": [
+          "servicos"
+        ]
+      },
+      "get": {
+        "operationId": "ServicosController_findAll",
+        "parameters": [
+          {
+            "name": "include",
+            "required": false,
+            "in": "query",
+            "description": "Incluir relações (ex: tipoServico)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de serviços retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectServicoCompletoDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os serviços",
+        "tags": [
+          "servicos"
+        ]
+      }
+    },
+    "/servicos/{id}": {
+      "get": {
+        "operationId": "ServicosController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do serviço",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "include",
+            "required": false,
+            "in": "query",
+            "description": "Incluir relações (ex: tipoServico)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "serviço encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectServicoCompletoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "serviço não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar serviço por ID",
+        "tags": [
+          "servicos"
+        ]
+      },
+      "patch": {
+        "operationId": "ServicosController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Serviço",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateServicoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Serviço atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectServicoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Serviço não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar serviço",
+        "tags": [
+          "servicos"
+        ]
+      },
+      "delete": {
+        "operationId": "ServicosController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Serviço",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Serviço removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectServicoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Serviço não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover serviço",
+        "tags": [
+          "servicos"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/servicos": {
+      "get": {
+        "operationId": "ServicosEstabelecimentoController_findAllByEstabelecimento",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "include",
+            "required": false,
+            "in": "query",
+            "description": "Incluir relações (ex: tipoServico)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de servicos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectServicoCompletoDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todos os serviços do estabelecimento",
+        "tags": [
+          "servicos"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/servicos/{id}": {
+      "get": {
+        "operationId": "ServicosEstabelecimentoController_findOneByEstabelecimento",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do serviço",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "include",
+            "required": false,
+            "in": "query",
+            "description": "Incluir relações (ex: tipoServico)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "serviço encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectServicoCompletoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "serviço não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar serviço específico do estabelecimento",
+        "tags": [
+          "servicos"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/programacoes-diarias": {
+      "get": {
+        "operationId": "ProgramacaoDiariaController_findByEstabelecimento",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de programações retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar programações diárias de um estabelecimento",
+        "tags": [
+          "programacao-diaria"
+        ]
+      },
+      "post": {
+        "operationId": "ProgramacaoDiariaController_abrirProgramacao",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateProgramacaoDiariaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Programação aberta e slots gerados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos ou programação já existe"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Abrir programação diária para um estabelecimento (gerar slots automáticos)",
+        "tags": [
+          "programacao-diaria"
+        ]
+      }
+    },
+    "/estabelecimentos/{estabelecimentoId}/programacoes-diarias/data/{data}": {
+      "get": {
+        "operationId": "ProgramacaoDiariaController_findByEstabelecimentoAndData",
+        "parameters": [
+          {
+            "name": "estabelecimentoId",
+            "required": true,
+            "in": "path",
+            "description": "ID do estabelecimento",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "data",
+            "required": true,
+            "in": "path",
+            "description": "Data da programação (formato: YYYY-MM-DD)",
+            "schema": {
+              "example": "2025-12-03",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Programação com slots retornada com sucesso"
+          },
+          "404": {
+            "description": "Programação não encontrada para esta data"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar programação de um estabelecimento em uma data específica (com slots)",
+        "tags": [
+          "programacao-diaria"
+        ]
+      }
+    },
+    "/programacoes-diarias/{id}": {
+      "get": {
+        "operationId": "ProgramacaoDiariaController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do programação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "programação encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "programação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar programação diária por ID",
+        "tags": [
+          "programacao-diaria"
+        ]
+      },
+      "patch": {
+        "operationId": "ProgramacaoDiariaController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Programação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProgramacaoDiariaDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Programação atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Programação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar programação diária",
+        "tags": [
+          "programacao-diaria"
+        ]
+      },
+      "delete": {
+        "operationId": "ProgramacaoDiariaController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Programação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Programação removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectProgramacaoDiariaDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Programação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover programação diária",
+        "tags": [
+          "programacao-diaria"
+        ]
+      }
+    },
+    "/programacoes-diarias/{id}/slots": {
+      "get": {
+        "operationId": "ProgramacaoDiariaController_findSlots",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID da programação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de slots retornada com sucesso"
+          },
+          "404": {
+            "description": "Programação não encontrada"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar slots de tempo de uma programação",
+        "tags": [
+          "programacao-diaria"
+        ]
+      }
+    },
+    "/programacoes-diarias/{id}/slots/{slotId}": {
+      "patch": {
+        "operationId": "ProgramacaoDiariaController_desabilitaHorario",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID da programação",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "slotId",
+            "required": true,
+            "in": "path",
+            "description": "ID do slot de tempo",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Slot atualizado com sucesso"
+          },
+          "404": {
+            "description": "Programação ou slot não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Desabilitar/habilitar um slot de tempo",
+        "tags": [
+          "programacao-diaria"
+        ]
+      }
+    },
+    "/avaliacoes": {
+      "get": {
+        "operationId": "AvaliacoesController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de avaliações retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todas as avaliações",
+        "tags": [
+          "avaliacoes"
+        ]
+      }
+    },
+    "/avaliacoes/{id}": {
+      "get": {
+        "operationId": "AvaliacoesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do avaliação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "avaliação encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "avaliação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar avaliação por ID",
+        "tags": [
+          "avaliacoes"
+        ]
+      },
+      "delete": {
+        "operationId": "AvaliacoesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Avaliação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Avaliação removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Avaliação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover avaliação",
+        "tags": [
+          "avaliacoes"
+        ]
+      }
+    },
+    "/clientes/{clienteId}/avaliacoes": {
+      "post": {
+        "operationId": "AvaliacoesClienteController_create",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAvaliacaoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Avaliação criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar nova avaliação",
+        "tags": [
+          "avaliacoes"
+        ]
+      },
+      "get": {
+        "operationId": "AvaliacoesClienteController_findAllByClienteId",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de avaliações retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar avaliações do cliente",
+        "tags": [
+          "avaliacoes"
+        ]
+      }
+    },
+    "/clientes/{clienteId}/avaliacoes/{id}": {
+      "get": {
+        "operationId": "AvaliacoesClienteController_findOne",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do avaliação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "avaliação encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "avaliação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar avaliação por ID",
+        "tags": [
+          "avaliacoes"
+        ]
+      },
+      "patch": {
+        "operationId": "AvaliacoesClienteController_update",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Avaliação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateAvaliacaoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Avaliação atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Avaliação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar avaliação",
+        "tags": [
+          "avaliacoes"
+        ]
+      },
+      "delete": {
+        "operationId": "AvaliacoesClienteController_remove",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Avaliação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Avaliação removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Avaliação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover avaliação",
+        "tags": [
+          "avaliacoes"
+        ]
+      }
+    },
+    "/atendimentos/{atendimentoId}/avaliacao": {
+      "get": {
+        "operationId": "AvaliacaoAtendimentoController_findByAtendimentoId",
+        "parameters": [
+          {
+            "name": "atendimentoId",
+            "required": true,
+            "in": "path",
+            "description": "ID do atendimento",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do avaliação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "avaliação encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectAvaliacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "avaliação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar avaliação do atendimento",
+        "tags": [
+          "avaliacoes"
+        ]
+      }
+    },
+    "/notificacoes": {
+      "get": {
+        "operationId": "NotificacoesController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de notificações retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectNotificacaoDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar todas as notificações",
+        "tags": [
+          "notificacoes"
+        ]
+      }
+    },
+    "/notificacoes/{id}": {
+      "get": {
+        "operationId": "NotificacoesController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do notificação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "notificação encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectNotificacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "notificação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar notificação por ID",
+        "tags": [
+          "notificacoes"
+        ]
+      },
+      "delete": {
+        "operationId": "NotificacoesController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Notificação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notificação removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectNotificacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Notificação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover notificação",
+        "tags": [
+          "notificacoes"
+        ]
+      }
+    },
+    "/clientes/{clienteId}/notificacoes": {
+      "post": {
+        "operationId": "NotificacoesClienteController_create",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNotificacaoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Notificação criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectNotificacaoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Criar nova notificação para o cliente",
+        "tags": [
+          "notificacoes"
+        ]
+      },
+      "get": {
+        "operationId": "NotificacoesClienteController_findAllByClienteId",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de notificações retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SelectNotificacaoDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Listar notificações do cliente",
+        "tags": [
+          "notificacoes"
+        ]
+      }
+    },
+    "/clientes/{clienteId}/notificacoes/{id}": {
+      "get": {
+        "operationId": "NotificacoesClienteController_findOne",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do notificação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "notificação encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectNotificacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "notificação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Buscar notificação por ID",
+        "tags": [
+          "notificacoes"
+        ]
+      },
+      "patch": {
+        "operationId": "NotificacoesClienteController_update",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Notificação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateNotificacaoDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Notificação atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectNotificacaoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Notificação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atualizar notificação (marcar como lida)",
+        "tags": [
+          "notificacoes"
+        ]
+      },
+      "delete": {
+        "operationId": "NotificacoesClienteController_remove",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Notificação",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notificação removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectNotificacaoDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Notificação não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Remover notificação",
+        "tags": [
+          "notificacoes"
+        ]
+      }
+    },
+    "/clientes/{clienteId}/notificacoes/ler-todas": {
+      "patch": {
+        "operationId": "NotificacoesClienteController_markAllAsRead",
+        "parameters": [
+          {
+            "name": "clienteId",
+            "required": true,
+            "in": "path",
+            "description": "ID do cliente",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID do Notificações",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notificações atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SelectNotificacaoDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados inválidos"
+          },
+          "401": {
+            "description": "Não autorizado"
+          },
+          "404": {
+            "description": "Notificações não encontrado"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          },
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Marcar todas notificações como lidas",
+        "tags": [
+          "notificacoes"
+        ]
+      }
     }
   },
   "info": {
@@ -4854,6 +6336,14 @@
     {
       "name": "avarias",
       "description": "Gerenciamento de avarias"
+    },
+    {
+      "name": "avaliacoes",
+      "description": "Gerenciamento de avaliações"
+    },
+    {
+      "name": "notificacoes",
+      "description": "Gerenciamento de notificações"
     },
     {
       "name": "programacao-diaria",
@@ -5707,6 +7197,12 @@
           "isActive": {
             "type": "boolean",
             "default": true
+          },
+          "rolesId": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
           }
         },
         "required": [
@@ -5738,6 +7234,12 @@
           "isActive": {
             "type": "boolean",
             "default": true
+          },
+          "rolesId": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
           }
         }
       },
@@ -6380,310 +7882,6 @@
           }
         }
       },
-      "CreateAcessorioDto": {
-        "type": "object",
-        "properties": {
-          "titulo": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "preco": {
-            "anyOf": [
-              {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-              {
-                "type": "string",
-                "pattern": "^\\d+(\\.\\d{1,2})?$"
-              }
-            ],
-            "x-nestjs_zod-empty-type": true
-          }
-        },
-        "required": [
-          "titulo",
-          "preco"
-        ]
-      },
-      "UpdateAcessorioDto": {
-        "type": "object",
-        "properties": {
-          "titulo": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "preco": {
-            "anyOf": [
-              {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-              {
-                "type": "string",
-                "pattern": "^\\d+(\\.\\d{1,2})?$"
-              }
-            ],
-            "x-nestjs_zod-empty-type": true
-          }
-        }
-      },
-      "CreateServicoDto": {
-        "type": "object",
-        "properties": {
-          "titulo": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "preco": {
-            "anyOf": [
-              {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-              {
-                "type": "string",
-                "pattern": "^\\d+(\\.\\d{1,2})?$"
-              }
-            ],
-            "x-nestjs_zod-empty-type": true
-          },
-          "tempoEstimado": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
-          },
-          "tipoServicoId": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          },
-          "estabelecimentoId": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          }
-        },
-        "required": [
-          "titulo",
-          "preco",
-          "tempoEstimado",
-          "estabelecimentoId"
-        ]
-      },
-      "UpdateServicoDto": {
-        "type": "object",
-        "properties": {
-          "titulo": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 255
-          },
-          "descricao": {
-            "type": "string"
-          },
-          "preco": {
-            "anyOf": [
-              {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-              {
-                "type": "string",
-                "pattern": "^\\d+(\\.\\d{1,2})?$"
-              }
-            ],
-            "x-nestjs_zod-empty-type": true
-          },
-          "tempoEstimado": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
-          },
-          "tipoServicoId": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          },
-          "estabelecimentoId": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          }
-        }
-      },
-      "SelectProgramacaoDiariaDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
-            "x-nestjs_zod-has-null": true
-          },
-          "updatedAt": {
-            "anyOf": [
-              {
-                "type": "string",
-                "format": "date-time",
-                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "x-nestjs_zod-has-null": true,
-            "x-nestjs_zod-empty-type": true
-          },
-          "active": {
-            "type": "boolean",
-            "x-nestjs_zod-has-null": true
-          },
-          "data": {
-            "type": "string",
-            "format": "date",
-            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
-            "x-nestjs_zod-has-null": true
-          },
-          "horaInicio": {
-            "type": "string",
-            "format": "time",
-            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
-            "x-nestjs_zod-has-null": true
-          },
-          "horaTermino": {
-            "type": "string",
-            "format": "time",
-            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
-            "x-nestjs_zod-has-null": true
-          },
-          "intervaloHorario": {
-            "type": "string",
-            "x-nestjs_zod-has-null": true
-          },
-          "agendamentosPorHorario": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          },
-          "estabelecimentoId": {
-            "type": "integer",
-            "minimum": -2147483648,
-            "maximum": 2147483647,
-            "x-nestjs_zod-has-null": true
-          }
-        },
-        "required": [
-          "id",
-          "createdAt",
-          "updatedAt",
-          "active",
-          "data",
-          "horaInicio",
-          "horaTermino",
-          "intervaloHorario",
-          "agendamentosPorHorario",
-          "estabelecimentoId"
-        ]
-      },
-      "CreateProgramacaoDiariaDto": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-          },
-          "horaInicio": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
-          },
-          "horaTermino": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
-          },
-          "intervaloHorario": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
-          },
-          "agendamentosPorHorario": {
-            "default": 1,
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          },
-          "estabelecimentoId": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          }
-        },
-        "required": [
-          "data",
-          "horaInicio",
-          "horaTermino",
-          "intervaloHorario",
-          "estabelecimentoId"
-        ]
-      },
-      "UpdateProgramacaoDiariaDto": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
-          },
-          "horaInicio": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
-          },
-          "horaTermino": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
-          },
-          "intervaloHorario": {
-            "type": "string",
-            "minLength": 1,
-            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
-          },
-          "agendamentosPorHorario": {
-            "default": 1,
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          },
-          "estabelecimentoId": {
-            "type": "integer",
-            "exclusiveMinimum": 0,
-            "maximum": 9007199254740991
-          }
-        }
-      },
       "SetupEstabelecimentoDto": {
         "type": "object",
         "properties": {
@@ -6970,6 +8168,504 @@
           },
           "principal": {
             "default": false,
+            "type": "boolean"
+          }
+        }
+      },
+      "CreateClienteEstabelecimentoDto": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "cpf": {
+            "type": "string",
+            "minLength": 11,
+            "maxLength": 11,
+            "pattern": "^\\d{11}$"
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "email",
+            "pattern": "^(?!\\.)(?!.*\\.\\.)([A-Za-z0-9_'+\\-\\.]*)[A-Za-z0-9_+-]@([A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+          }
+        },
+        "required": [
+          "nome",
+          "cpf",
+          "email"
+        ]
+      },
+      "CreateAcessorioDto": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "preco": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\d+(\\.\\d{1,2})?$"
+              }
+            ],
+            "x-nestjs_zod-empty-type": true
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "titulo",
+          "preco",
+          "estabelecimentoId"
+        ]
+      },
+      "UpdateAcessorioDto": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "preco": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\d+(\\.\\d{1,2})?$"
+              }
+            ],
+            "x-nestjs_zod-empty-type": true
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        }
+      },
+      "CreateServicoDto": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "preco": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\d+(\\.\\d{1,2})?$"
+              }
+            ],
+            "x-nestjs_zod-empty-type": true
+          },
+          "tempoEstimado": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+          },
+          "tipoServicoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "titulo",
+          "preco",
+          "tempoEstimado",
+          "estabelecimentoId"
+        ]
+      },
+      "UpdateServicoDto": {
+        "type": "object",
+        "properties": {
+          "titulo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "descricao": {
+            "type": "string"
+          },
+          "preco": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              {
+                "type": "string",
+                "pattern": "^\\d+(\\.\\d{1,2})?$"
+              }
+            ],
+            "x-nestjs_zod-empty-type": true
+          },
+          "tempoEstimado": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+          },
+          "tipoServicoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        }
+      },
+      "SelectProgramacaoDiariaDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          },
+          "active": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true
+          },
+          "data": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$",
+            "x-nestjs_zod-has-null": true
+          },
+          "horaInicio": {
+            "type": "string",
+            "format": "time",
+            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
+            "x-nestjs_zod-has-null": true
+          },
+          "horaTermino": {
+            "type": "string",
+            "format": "time",
+            "pattern": "^(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?$",
+            "x-nestjs_zod-has-null": true
+          },
+          "intervaloHorario": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true
+          },
+          "agendamentosPorHorario": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "active",
+          "data",
+          "horaInicio",
+          "horaTermino",
+          "intervaloHorario",
+          "agendamentosPorHorario",
+          "estabelecimentoId"
+        ]
+      },
+      "CreateProgramacaoDiariaDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "horaInicio": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
+          },
+          "horaTermino": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
+          },
+          "intervaloHorario": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+          },
+          "agendamentosPorHorario": {
+            "default": 1,
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        },
+        "required": [
+          "data",
+          "horaInicio",
+          "horaTermino",
+          "intervaloHorario",
+          "estabelecimentoId"
+        ]
+      },
+      "UpdateProgramacaoDiariaDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "horaInicio": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
+          },
+          "horaTermino": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^([0-1][0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$"
+          },
+          "intervaloHorario": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+          },
+          "agendamentosPorHorario": {
+            "default": 1,
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "estabelecimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          }
+        }
+      },
+      "CreateAvaliacaoDto": {
+        "type": "object",
+        "properties": {
+          "atendimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5,
+            "multipleOf": 0.5
+          },
+          "comentario": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "atendimentoId",
+          "rating"
+        ]
+      },
+      "UpdateAvaliacaoDto": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 5,
+            "multipleOf": 0.5
+          },
+          "comentario": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        }
+      },
+      "CreateNotificacaoDto": {
+        "type": "object",
+        "properties": {
+          "clienteId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "titulo": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "mensagem": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tipo": {
+            "default": "SISTEMA",
+            "type": "string",
+            "enum": [
+              "SISTEMA",
+              "PROMOCAO",
+              "ATENDIMENTO",
+              "AGENDAMENTO"
+            ]
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "string",
+                    "const": "AGENDAMENTO"
+                  },
+                  "agendamentoId": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "tipo",
+                  "agendamentoId"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "string",
+                    "const": "ATENDIMENTO"
+                  },
+                  "atendimentoId": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "tipo",
+                  "atendimentoId"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "string",
+                    "const": "PROMOCAO"
+                  },
+                  "cupom": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "tipo",
+                  "cupom"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "string",
+                    "const": "SISTEMA"
+                  },
+                  "categoria": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "tipo",
+                  "categoria"
+                ]
+              }
+            ],
+            "x-nestjs_zod-empty-type": true
+          }
+        },
+        "required": [
+          "clienteId",
+          "titulo",
+          "mensagem"
+        ]
+      },
+      "UpdateNotificacaoDto": {
+        "type": "object",
+        "properties": {
+          "lida": {
             "type": "boolean"
           }
         }
@@ -7429,6 +9125,12 @@
             "type": "boolean",
             "x-nestjs_zod-has-null": true
           },
+          "estabelecimentoId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
           "titulo": {
             "type": "string",
             "maxLength": 255,
@@ -7456,6 +9158,7 @@
           "createdAt",
           "updatedAt",
           "active",
+          "estabelecimentoId",
           "titulo",
           "descricao",
           "preco"
@@ -8123,6 +9826,18 @@
             "type": "string",
             "maxLength": 255,
             "x-nestjs_zod-has-null": true
+          },
+          "avaliacaoMedia": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
           }
         },
         "required": [
@@ -8131,7 +9846,8 @@
           "updatedAt",
           "active",
           "cnpj",
-          "nomeFantasia"
+          "nomeFantasia",
+          "avaliacaoMedia"
         ]
       },
       "SelectEnderecosEstabelecimentoDto": {
@@ -8354,6 +10070,194 @@
           "codigoArea",
           "numero",
           "principal"
+        ]
+      },
+      "SelectAvaliacaoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          },
+          "active": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true
+          },
+          "clienteId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "atendimentoId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "rating": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true
+          },
+          "comentario": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "active",
+          "clienteId",
+          "atendimentoId",
+          "rating",
+          "comentario"
+        ]
+      },
+      "SelectNotificacaoDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$",
+            "x-nestjs_zod-has-null": true
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          },
+          "active": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true
+          },
+          "clienteId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "titulo": {
+            "type": "string",
+            "maxLength": 255,
+            "x-nestjs_zod-has-null": true
+          },
+          "mensagem": {
+            "type": "string",
+            "x-nestjs_zod-has-null": true
+          },
+          "lida": {
+            "type": "boolean",
+            "x-nestjs_zod-has-null": true
+          },
+          "tipo": {
+            "type": "string",
+            "maxLength": 50,
+            "x-nestjs_zod-has-null": true
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {
+
+                    }
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "x-nestjs_zod-has-null": true,
+            "x-nestjs_zod-empty-type": true
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "active",
+          "clienteId",
+          "titulo",
+          "mensagem",
+          "lida",
+          "tipo",
+          "metadata"
         ]
       }
     }

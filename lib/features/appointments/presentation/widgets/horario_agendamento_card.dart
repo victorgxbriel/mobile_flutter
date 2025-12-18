@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile_flutter/features/appointments/data/models/agendamento_model.dart';
@@ -8,10 +7,11 @@ class HorarioAgendamentoCard extends StatelessWidget {
   final ColorScheme colorScheme;
 
   const HorarioAgendamentoCard({
+    super.key,
     required this.agendamento,
-    required this.colorScheme
+    required this.colorScheme,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final data = agendamento.slot?.programacao?.dataAsDateTime;
@@ -27,7 +27,8 @@ class HorarioAgendamentoCard extends StatelessWidget {
               children: [
                 Icon(Icons.event, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text( 'Data e Horário',
+                Text(
+                  'Data e Horário',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -79,21 +80,12 @@ class HorarioAgendamentoCard extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(
-                fontSize: 12,
-                color: colorScheme.outline,
-              ),
+              style: TextStyle(fontSize: 12, color: colorScheme.outline),
             ),
-            Text(
-              value,
-              style: const TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
           ],
         ),
       ],
     );
   }
-  
 }

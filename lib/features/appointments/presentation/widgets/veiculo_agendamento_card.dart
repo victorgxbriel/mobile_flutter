@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_flutter/features/appointments/data/models/agendamento_model.dart';
 
@@ -7,10 +6,11 @@ class VeiculoAgendamentoCard extends StatelessWidget {
   final ColorScheme colorScheme;
 
   const VeiculoAgendamentoCard({
+    super.key,
     required this.carro,
-    required this.colorScheme
+    required this.colorScheme,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -23,7 +23,8 @@ class VeiculoAgendamentoCard extends StatelessWidget {
               children: [
                 Icon(Icons.directions_car, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text( 'Veículo',
+                Text(
+                  'Veículo',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -89,7 +90,8 @@ class VeiculoAgendamentoCard extends StatelessWidget {
                             ),
                           ),
                           if (carro.ano != null) ...[
-                            Text( ' • ${carro.ano}',
+                            Text(
+                              ' • ${carro.ano}',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: colorScheme.outline,
@@ -108,6 +110,4 @@ class VeiculoAgendamentoCard extends StatelessWidget {
       ),
     );
   }
-
-  
 }

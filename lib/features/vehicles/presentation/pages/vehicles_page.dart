@@ -100,6 +100,7 @@ class _VehiclesPageState extends State<VehiclesPage> {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
+        heroTag: 'vehicles_fab',
         onPressed: () => _navigateToAdd(context),
         icon: const Icon(Icons.add),
         label: const Text('Adicionar'),

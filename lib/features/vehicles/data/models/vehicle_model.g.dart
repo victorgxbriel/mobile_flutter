@@ -16,7 +16,7 @@ VehicleModel _$VehicleModelFromJson(Map<String, dynamic> json) => VehicleModel(
   clienteId: (json['clienteId'] as num).toInt(),
   marca: json['marca'] as String,
   modelo: json['modelo'] as String,
-  ano: json['ano'] as String,
+  ano: VehicleModel._anoFromJson(json['ano']),
   cor: json['cor'] as String,
   placa: json['placa'] as String?,
 );

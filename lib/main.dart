@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'app/theme/app_theme.dart';
 import 'app/router/app_router.dart';
 import 'app/utils/app_logger.dart';
@@ -13,19 +14,19 @@ final _log = logger(MyApp);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   _log.i('Iniciando aplicacao Lava Jato...');
-  
+
   // Inicializar dependências
   await ServiceLocator().init();
   _log.i('ServiceLocator inicializado');
-  
+
   if (!kIsWeb) {
     // Isso força a inicialização do path_provider
     final tempDir = await getTemporaryDirectory();
     _log.d('Diretorio temporario: ${tempDir.path}');
   }
-  
+
   _log.i('Aplicacao pronta para execucao');
   runApp(const MyApp());
 }
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final serviceLocator = ServiceLocator.instance;
-    
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeNotifier>.value(
@@ -49,6 +50,13 @@ class MyApp extends StatelessWidget {
       child: Consumer<ThemeNotifier>(
         builder: (context, themeNotifier, child) {
           return MaterialApp.router(
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [Locale('pt', 'BR'), Locale('en', 'US')],
+            locale: const Locale('pt', 'BR'),
             title: 'Lava Jato App',
             theme: AppTheme.light,
             darkTheme: AppTheme.dark,

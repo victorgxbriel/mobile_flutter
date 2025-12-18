@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_flutter/features/appointments/data/models/agendamento_model.dart';
 
@@ -7,10 +6,11 @@ class ServicoAgendamentoCard extends StatelessWidget {
   final ColorScheme colorScheme;
 
   const ServicoAgendamentoCard({
+    super.key,
     required this.agendamento,
-    required this.colorScheme
+    required this.colorScheme,
   });
-  
+
   @override
   Widget build(BuildContext context) {
     final servicos = agendamento.servicos ?? [];
@@ -25,7 +25,8 @@ class ServicoAgendamentoCard extends StatelessWidget {
               children: [
                 Icon(Icons.build, color: colorScheme.primary),
                 const SizedBox(width: 8),
-                Text( 'Serviços',
+                Text(
+                  'Serviços',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.primary,
@@ -33,12 +34,16 @@ class ServicoAgendamentoCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Text( '${servicos.length}',
+                  child: Text(
+                    '${servicos.length}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -53,7 +58,8 @@ class ServicoAgendamentoCard extends StatelessWidget {
               Center(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Text( 'Nenhum serviço encontrado',
+                  child: Text(
+                    'Nenhum serviço encontrado',
                     style: TextStyle(color: colorScheme.outline),
                   ),
                 ),
@@ -62,7 +68,7 @@ class ServicoAgendamentoCard extends StatelessWidget {
               ...servicos.map((servicoRelation) {
                 final servico = servicoRelation.servico;
                 if (servico == null) return const SizedBox.shrink();
-                
+
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: Row(
@@ -87,7 +93,9 @@ class ServicoAgendamentoCard extends StatelessWidget {
                           children: [
                             Text(
                               servico.titulo,
-                              style: const TextStyle(fontWeight: FontWeight.w500),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             if (servico.descricao != null)
                               Text(
@@ -99,7 +107,8 @@ class ServicoAgendamentoCard extends StatelessWidget {
                                   color: colorScheme.outline,
                                 ),
                               ),
-                            if (servico.tempoEstimado != null && servico.tempoFormatado.isNotEmpty)
+                            if (servico.tempoEstimado != null &&
+                                servico.tempoFormatado.isNotEmpty)
                               Row(
                                 children: [
                                   Icon(

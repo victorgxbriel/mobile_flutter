@@ -38,6 +38,10 @@ class SessionService extends ChangeNotifier {
       (_roles?.contains('GERENTE') ?? false) ||
       (_roles?.contains('PROPRIETARIO') ?? false) ||
       (_roles?.contains('FUNCIONARIO') ?? false);
+  
+  bool get isGerente => _roles?.contains('GERENTE') ?? false;
+  bool get isProprietario => _roles?.contains('PROPRIETARIO') ?? false;
+  bool get isFuncionario => _roles?.contains('FUNCIONARIO') ?? false;
 
   /// Callback para navegação quando a sessão expira
   VoidCallback? onSessionExpired;

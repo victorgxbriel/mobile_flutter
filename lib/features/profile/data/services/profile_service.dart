@@ -8,6 +8,8 @@ final _log = logger(ProfileServiceImpl);
 abstract class ProfileService {
   Future<ClienteModel> getCliente(int clienteId);
   Future<ClienteModel> updateCliente(int clienteId, UpdateClienteDto dto);
+  Future<EstabelecimentoModel> getEstabelecimento(int estabelecimentoId);
+  Future<EstabelecimentoModel> updateEstabelecimento( int estabelecimentoId, UpdateEstabelecimentoDto dto);
 }
 
 class ProfileServiceImpl implements ProfileService {
@@ -35,6 +37,31 @@ class ProfileServiceImpl implements ProfileService {
       );
       _log.t('Cliente atualizado');
       return ClienteModel.fromJson(response.data);
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<EstabelecimentoModel> getEstabelecimento(int estabelecimentoId) async {
+    _log.t('GET /estabelecimentos/$estabelecimentoId');
+    try {
+      final response = await _client.instance.get('/estabelecimentos/$estabelecimentoId');
+      return EstabelecimentoModel.fromJson(response.data);
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+  
+  @override
+  Future<EstabelecimentoModel> updateEstabelecimento(int estabelecimentoId, UpdateEstabelecimentoDto dto) async {
+    _log.t('PATCH /estabelecimentos/$estabelecimentoId');
+    try {
+      final response = await _client.instance.patch( '/estabelecimentos/$estabelecimentoId',
+        data: dto.toJson(),
+      );
+      _log.t('Cliente atualizado');
+      return EstabelecimentoModel.fromJson(response.data);
     } on DioException catch (_) {
       rethrow;
     }

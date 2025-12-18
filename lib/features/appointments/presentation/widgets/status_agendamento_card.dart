@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:mobile_flutter/features/appointments/data/models/agendamento_model.dart';
 import 'package:mobile_flutter/features/appointments/presentation/utils/status_utils.dart';
@@ -8,8 +7,9 @@ class StatusAgendamentoCard extends StatelessWidget {
   final ColorScheme colorScheme;
 
   const StatusAgendamentoCard({
+    super.key,
     required this.agendamento,
-    required this.colorScheme
+    required this.colorScheme,
   });
 
   @override
@@ -29,22 +29,16 @@ class StatusAgendamentoCard extends StatelessWidget {
                 color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Icon(
-                statusIcon,
-                color: statusColor,
-                size: 28,
-              ),
+              child: Icon(statusIcon, color: statusColor, size: 28),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text( 'Status',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: colorScheme.outline,
-                    ),
+                  Text(
+                    'Status',
+                    style: TextStyle(fontSize: 12, color: colorScheme.outline),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -64,7 +58,8 @@ class StatusAgendamentoCard extends StatelessWidget {
                 color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text( '#${agendamento.id}',
+              child: Text(
+                '#${agendamento.id}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: statusColor,
@@ -76,5 +71,4 @@ class StatusAgendamentoCard extends StatelessWidget {
       ),
     );
   }
-  
 }

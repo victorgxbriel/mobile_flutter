@@ -46,3 +46,41 @@ Map<String, dynamic> _$UpdateClienteDtoToJson(UpdateClienteDto instance) =>
       'email': instance.email,
       'fotoUrl': instance.fotoUrl,
     };
+
+EstabelecimentoModel _$EstabelecimentoModelFromJson(
+  Map<String, dynamic> json,
+) => EstabelecimentoModel(
+  id: (json['id'] as num).toInt(),
+  cnpj: json['cnpj'] as String,
+  nomeFantasia: json['nomeFantasia'] as String,
+  avaliacaoMedia: json['avaliacaoMedia'] as String?,
+  createdAt: DateTime.parse(json['createdAt'] as String),
+  updatedAt: DateTime.parse(json['updatedAt'] as String),
+  active: json['active'] as bool,
+);
+
+Map<String, dynamic> _$EstabelecimentoModelToJson(
+  EstabelecimentoModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'cnpj': instance.cnpj,
+  'nomeFantasia': instance.nomeFantasia,
+  'avaliacaoMedia': instance.avaliacaoMedia,
+  'createdAt': instance.createdAt.toIso8601String(),
+  'updatedAt': instance.updatedAt.toIso8601String(),
+  'active': instance.active,
+};
+
+UpdateEstabelecimentoDto _$UpdateEstabelecimentoDtoFromJson(
+  Map<String, dynamic> json,
+) => UpdateEstabelecimentoDto(
+  cnpj: json['cnpj'] as String?,
+  nomeFantasia: json['nomeFantasia'] as String?,
+);
+
+Map<String, dynamic> _$UpdateEstabelecimentoDtoToJson(
+  UpdateEstabelecimentoDto instance,
+) => <String, dynamic>{
+  'cnpj': instance.cnpj,
+  'nomeFantasia': instance.nomeFantasia,
+};

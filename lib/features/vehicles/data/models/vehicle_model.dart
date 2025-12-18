@@ -11,9 +11,16 @@ class VehicleModel {
   final int clienteId;
   final String marca;
   final String modelo;
+  @JsonKey(fromJson: _anoFromJson)
   final String ano;
   final String cor;
   final String? placa;
+
+  static String _anoFromJson(dynamic value) {
+    if (value is String) return value;
+    if (value is int) return value.toString();
+    return value.toString();
+  }
 
   VehicleModel({
     required this.id,
@@ -97,13 +104,7 @@ class UpdateVehicleDto {
   final String? cor;
   final String? placa;
 
-  UpdateVehicleDto({
-    this.marca,
-    this.modelo,
-    this.ano,
-    this.cor,
-    this.placa,
-  });
+  UpdateVehicleDto({this.marca, this.modelo, this.ano, this.cor, this.placa});
 
   factory UpdateVehicleDto.fromJson(Map<String, dynamic> json) =>
       _$UpdateVehicleDtoFromJson(json);
