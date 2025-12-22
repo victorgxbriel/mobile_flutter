@@ -93,6 +93,7 @@ class ProfileNotifier extends ChangeNotifier {
     String? nome,
     String? email,
     String? fotoUrl,
+    String? cpf,
   }) async {
     final clienteId = _sessionService.clienteId;
     if (clienteId == null) {
@@ -112,6 +113,7 @@ class ProfileNotifier extends ChangeNotifier {
     try {
       final cliente = await _repository.updateCliente(
         clienteId,
+        cpf: cpf,
         nome: nome,
         email: email,
         fotoUrl: fotoUrl,

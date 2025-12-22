@@ -145,15 +145,6 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
           };
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        heroTag: 'appointments_fab',
-        onPressed: () {
-          // Navegar para lista de estabelecimentos para agendar
-          context.go('/home');
-        },
-        icon: const Icon(Icons.add),
-        label: const Text('Novo Agendamento'),
-      ),
     );
   }
 

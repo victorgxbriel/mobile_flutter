@@ -101,14 +101,10 @@ List<RouteBase> getClientFullScreenRoutes(
       builder: (context, state) => MultiProvider(
         providers: [
           ChangeNotifierProvider(
-            create: (_) => VehiclesNotifier(
-              ServiceLocator().vehicleRepository,
-            ),
+            create: (_) => VehiclesNotifier(ServiceLocator().vehicleRepository),
           ),
           ChangeNotifierProvider(
-            create: (_) => NhtsaNotifier(
-              ServiceLocator().nhtsaService,
-            ),
+            create: (_) => NhtsaNotifier(ServiceLocator().nhtsaService),
           ),
         ],
         child: const VehicleFormPage(),
@@ -143,6 +139,17 @@ StatefulShellRoute getClientShellRoute() {
                   AgendamentosNotifier(ServiceLocator().agendamentoRepository),
               child: const AppointmentsPage(),
             ),
+          ),
+        ],
+      ),
+
+      // Branch ADD
+      StatefulShellBranch(
+        routes: [
+          GoRoute(
+            path: "/add",
+            builder: (context, state) =>
+                const Center(child: Text("Tela de criar agendamento")),
           ),
         ],
       ),

@@ -4,10 +4,7 @@ import 'package:go_router/go_router.dart';
 class HomeShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
-  const HomeShell({
-    super.key,
-    required this.navigationShell,
-  });
+  const HomeShell({super.key, required this.navigationShell});
 
   @override
   Widget build(BuildContext context) {
@@ -15,32 +12,44 @@ class HomeShell extends StatelessWidget {
 
     return Scaffold(
       body: navigationShell,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: navigationShell.currentIndex,
-        onTap: (index) => _onTap(context, index),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: theme.colorScheme.primary,
-        unselectedItemColor: theme.colorScheme.secondary,
-        showUnselectedLabels: true,
-        items: const [
-          BottomNavigationBarItem(
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: navigationShell.currentIndex,
+        onDestinationSelected: (value) => _onTap(context, value),
+        destinations: [
+          NavigationDestination(
             icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.home),
             label: 'Início',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.calendar_today_outlined),
-            activeIcon: Icon(Icons.calendar_today),
+            selectedIcon: Icon(Icons.calendar_today),
             label: 'Agendamentos',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
+            icon: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    theme.colorScheme.primary,
+                    theme.colorScheme.primaryContainer,
+                  ],
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.add, color: theme.colorScheme.onPrimary),
+            ),
+            label: '',
+          ),
+          NavigationDestination(
             icon: Icon(Icons.notifications_none),
-            activeIcon: Icon(Icons.notifications),
+            selectedIcon: Icon(Icons.notifications),
             label: 'Notificações',
           ),
-          BottomNavigationBarItem(
+          NavigationDestination(
             icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
+            selectedIcon: Icon(Icons.person),
             label: 'Perfil',
           ),
         ],

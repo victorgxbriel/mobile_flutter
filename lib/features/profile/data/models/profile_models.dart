@@ -72,7 +72,7 @@ class ClienteModel {
 }
 
 /// DTO para atualizar cliente (PATCH /clientes/{id})
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class UpdateClienteDto {
   final String? nome;
   final String? cpf;
@@ -101,10 +101,10 @@ class EstabelecimentoModel {
     this.avaliacaoMedia,
     required this.createdAt,
     required this.updatedAt,
-    required this.active
+    required this.active,
   });
 
-  factory EstabelecimentoModel.fromJson(Map<String, dynamic> json) => 
+  factory EstabelecimentoModel.fromJson(Map<String, dynamic> json) =>
       _$EstabelecimentoModelFromJson(json);
   Map<String, dynamic> toJson() => _$EstabelecimentoModelToJson(this);
 
@@ -116,13 +116,13 @@ class EstabelecimentoModel {
 
   factory EstabelecimentoModel.skeleton() {
     return EstabelecimentoModel(
-      id: 1, 
-      cnpj: "00000000000000", 
-      nomeFantasia: "Lava-jato", 
-      avaliacaoMedia: "4.6", 
-      createdAt: DateTime.now(), 
+      id: 1,
+      cnpj: "00000000000000",
+      nomeFantasia: "Lava-jato",
+      avaliacaoMedia: "4.6",
+      createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      active: true
+      active: true,
     );
   }
 
@@ -133,16 +133,16 @@ class EstabelecimentoModel {
     bool? active,
     String? cnpj,
     String? nomeFantasia,
-    String? avaliacaoMedia
+    String? avaliacaoMedia,
   }) {
     return EstabelecimentoModel(
       id: id ?? this.id,
-      cnpj: cnpj ?? this.cnpj, 
-      nomeFantasia: nomeFantasia ?? this.nomeFantasia, 
-      avaliacaoMedia: avaliacaoMedia ?? this.avaliacaoMedia, 
-      createdAt: createdAt ?? this.createdAt, 
-      updatedAt: updatedAt ?? this.updatedAt, 
-      active: active ?? this.active
+      cnpj: cnpj ?? this.cnpj,
+      nomeFantasia: nomeFantasia ?? this.nomeFantasia,
+      avaliacaoMedia: avaliacaoMedia ?? this.avaliacaoMedia,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      active: active ?? this.active,
     );
   }
 }

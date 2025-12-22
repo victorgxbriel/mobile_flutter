@@ -41,10 +41,10 @@ UpdateClienteDto _$UpdateClienteDtoFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$UpdateClienteDtoToJson(UpdateClienteDto instance) =>
     <String, dynamic>{
-      'nome': instance.nome,
-      'cpf': instance.cpf,
-      'email': instance.email,
-      'fotoUrl': instance.fotoUrl,
+      'nome': ?instance.nome,
+      'cpf': ?instance.cpf,
+      'email': ?instance.email,
+      'fotoUrl': ?instance.fotoUrl,
     };
 
 EstabelecimentoModel _$EstabelecimentoModelFromJson(

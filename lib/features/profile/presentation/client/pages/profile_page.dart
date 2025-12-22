@@ -184,7 +184,7 @@ class _ProfilePageState extends State<_ProfilePage> {
               icon: Icons.person_outline,
               title: 'Dados Pessoais',
               onTap: () {
-                // Navegar para edição de perfil
+                _showEditProfileBottomSheet(context, notifier, cliente);
               },
             ),
             _buildDivider(),
@@ -194,24 +194,6 @@ class _ProfilePageState extends State<_ProfilePage> {
               title: 'Meus Veículos',
               onTap: () {
                 context.push('/profile/vehicles');
-              },
-            ),
-            _buildDivider(),
-            _buildProfileItem(
-              context,
-              icon: Icons.credit_card,
-              title: 'Formas de Pagamento',
-              onTap: () {
-                // Navegar para formas de pagamento
-              },
-            ),
-            _buildDivider(),
-            _buildProfileItem(
-              context,
-              icon: Icons.history,
-              title: 'Histórico de Agendamentos',
-              onTap: () {
-                // Navegar para histórico
               },
             ),
             _buildDivider(),
@@ -265,5 +247,135 @@ class _ProfilePageState extends State<_ProfilePage> {
 
   Widget _buildDivider() {
     return const Divider(height: 1, indent: 56, endIndent: 16);
+  }
+
+  void _showEditProfileBottomSheet(
+    BuildContext context,
+    ProfileNotifier notifier,
+    ClienteModel cliente,
+  ) {
+    final formKey = GlobalKey<FormState>();
+    final nomeController = TextEditingController(text: cliente.nome);
+    final cpfController = TextEditingController(text: cliente.cpf);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (modalContext) => Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: MediaQuery.of(modalContext).viewInsets.bottom + 16,
+        ),
+        child: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        'Editar Dados',
+                        style: Theme.of(modalContext).textTheme.titleLarge,
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () => Navigator.pop(modalContext),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: nomeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nome',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.store),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Nome é obrigatório';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: cpfController,
+                  decoration: const InputDecoration(
+                    labelText: 'CPF',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.badge),
+                    helperText: 'Formato: 00.000.000-00',
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'CPF é obrigatório';
+                    }
+                    // Remove caracteres não numéricos para validação
+                    final cleanCpf = value.replaceAll(RegExp(r'[^\d]'), '');
+                    if (cleanCpf.length != 11) {
+                      return 'CPF deve ter 11 dígitos';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () async {
+                    if (formKey.currentState!.validate()) {
+                      // Capture the navigator before async gap
+                      final navigator = Navigator.of(modalContext);
+                      final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+                      // Get values before disposing
+                      final nome = nomeController.text.trim();
+                      final cpf = cpfController.text.trim();
+
+                      // Close modal first
+                      navigator.pop();
+
+                      // Update profile
+                      await notifier.updateProfile(nome: nome, cpf: cpf);
+
+                      // Show feedback using captured messenger
+                      final state = notifier.state;
+                      if (state is ProfileLoaded && !state.hasError) {
+                        scaffoldMessenger.showSnackBar(
+                          const SnackBar(
+                            content: Text('Dados atualizados com sucesso!'),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      } else if (state is ProfileLoaded && state.hasError) {
+                        scaffoldMessenger.showSnackBar(
+                          const SnackBar(
+                            content: Text('Erro ao atualizar dados'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: const Text('Salvar'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
