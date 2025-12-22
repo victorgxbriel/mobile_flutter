@@ -303,7 +303,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                   Icon(Icons.access_time, size: 16, color: colorScheme.outline),
                   const SizedBox(width: 8),
                   Text(
-                    'Criado em ${DateFormat('dd/MM/yyyy HH:mm', 'pt_BR').format(atendimento.createdAt)}',
+                    'Criado em ${DateFormat('dd/MM/yyyy HH:mm', 'pt_BR').format(atendimento.createdAt.toLocal())}',
                     style: TextStyle(color: colorScheme.outline, fontSize: 13),
                   ),
                 ],
@@ -319,7 +319,7 @@ class _TreatmentsPageState extends State<TreatmentsPage> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Início: ${DateFormat('HH:mm', 'pt_BR').format(atendimento.horaInicio!)}',
+                      'Início: ${DateFormat('HH:mm', 'pt_BR').format(atendimento.horaInicio!.toLocal())}',
                       style: TextStyle(
                         color: colorScheme.outline,
                         fontSize: 13,

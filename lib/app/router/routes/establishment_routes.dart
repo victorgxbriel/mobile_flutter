@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_flutter/features/treatments/presentation/notifiers/atendimentos_notifier.dart';
+import 'package:mobile_flutter/features/treatments/presentation/notifiers/create_atendimento_notifier.dart';
+import 'package:mobile_flutter/features/treatments/presentation/pages/create_atendimento_page.dart';
 import 'package:mobile_flutter/features/treatments/presentation/pages/treatments_page.dart';
 import 'package:provider/provider.dart';
 import '../../../core/di/service_locator.dart';
@@ -97,8 +99,27 @@ StatefulShellRoute getEstablishmentShellRoute() {
         routes: [
           GoRoute(
             path: "/establishment/atendimento",
-            builder: (context, state) =>
-                const Scaffold(body: Center(child: Text("novo atendimento"))),
+            builder: (context, state) {
+              final sl = ServiceLocator.instance;
+              final estabelecimentoId = sl.sessionService.estabelecimentoId;
+
+              if (estabelecimentoId == null) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              return ChangeNotifierProvider(
+                create: (_) => CreateAtendimentoNotifier(
+                  atendimentoRepository: sl.atendimentoRepository,
+                  clienteRepository: sl.clienteRepository,
+                  servicoRepository: sl.servicoRepository,
+                  acessorioRepository: sl.acessorioRepository,
+                  estabelecimentoId: estabelecimentoId,
+                ),
+                child: const CreateAtendimentoPage(),
+              );
+            },
           ),
         ],
       ),

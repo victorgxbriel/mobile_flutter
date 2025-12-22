@@ -2001,6 +2001,21 @@
         ]
       }
     },
+    "/estabelecimentos/{estabelecimentoId}/usuarios/papeis": {
+      "get": {
+        "operationId": "UsuariosEstabelecimentoController_getAvailableRoles",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Lista de papéis disponíveis"
+          }
+        },
+        "summary": "Listar todos os papéis disponíveis",
+        "tags": [
+          "users"
+        ]
+      }
+    },
     "/estabelecimentos/{estabelecimentoId}/usuarios/{usuarioId}": {
       "get": {
         "operationId": "UsuariosEstabelecimentoController_findOneByEstabelecimento",
@@ -2157,21 +2172,6 @@
           }
         },
         "summary": "Listar papéis do usuário",
-        "tags": [
-          "users"
-        ]
-      }
-    },
-    "/estabelecimentos/{estabelecimentoId}/usuarios/papeis": {
-      "get": {
-        "operationId": "UsuariosEstabelecimentoController_getAvailableRoles",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "Lista de papéis disponíveis"
-          }
-        },
-        "summary": "Listar todos os papéis disponíveis",
         "tags": [
           "users"
         ]
@@ -4257,7 +4257,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/SelectClienteDto"
+                    "$ref": "#/components/schemas/SelectEstabelecimentoClienteDto"
                   }
                 }
               }
@@ -6280,9 +6280,7 @@
     "title": "Lava Jato API",
     "description": "API para gerenciamento de lava jato",
     "version": "1.0",
-    "contact": {
-
-    }
+    "contact": {}
   },
   "tags": [
     {
@@ -7347,6 +7345,16 @@
             "exclusiveMinimum": 0,
             "maximum": 9007199254740991
           },
+          "clienteId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "carroId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
           "servicos": {
             "type": "array",
             "items": {
@@ -7453,7 +7461,9 @@
           }
         },
         "required": [
-          "estabelecimentoId"
+          "estabelecimentoId",
+          "clienteId",
+          "carroId"
         ]
       },
       "UpdateAtendimentoDto": {
@@ -7512,6 +7522,16 @@
             "maximum": 9007199254740991
           },
           "estabelecimentoId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "clienteId": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "carroId": {
             "type": "integer",
             "exclusiveMinimum": 0,
             "maximum": 9007199254740991
@@ -9509,6 +9529,233 @@
             "minimum": -2147483648,
             "maximum": 2147483647,
             "x-nestjs_zod-has-null": true
+          },
+          "clienteId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "carroId": {
+            "type": "integer",
+            "minimum": -2147483648,
+            "maximum": 2147483647,
+            "x-nestjs_zod-has-null": true
+          },
+          "situacao": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "descricao": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "descricao"
+            ],
+            "x-nestjs_zod-has-null": true
+          },
+          "estabelecimento": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "cnpj": {
+                "type": "string"
+              },
+              "nomeFantasia": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "cnpj",
+              "nomeFantasia"
+            ],
+            "x-nestjs_zod-has-null": true
+          },
+          "agendamento": {
+            "type": "object",
+            "properties": {
+              "carroId": {
+                "type": "number"
+              },
+              "slotId": {
+                "type": "number"
+              },
+              "situacaoId": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "carroId",
+              "slotId",
+              "situacaoId"
+            ],
+            "x-nestjs_zod-has-null": true
+          },
+          "avarias": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number"
+                },
+                "descricao": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "descricao"
+              ]
+            },
+            "x-nestjs_zod-has-null": true
+          },
+          "carro": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              "updatedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "clienteId": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "marca": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "modelo": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "ano": {
+                "type": "string",
+                "maxLength": 9
+              },
+              "cor": {
+                "type": "string",
+                "maxLength": 25
+              },
+              "placa": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "maxLength": 7
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "active",
+              "clienteId",
+              "marca",
+              "modelo",
+              "ano",
+              "cor",
+              "placa"
+            ],
+            "x-nestjs_zod-has-null": true
+          },
+          "cliente": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+              },
+              "updatedAt": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "nome": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "cpf": {
+                "type": "string",
+                "maxLength": 11
+              },
+              "email": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "userId": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": -2147483648,
+                    "maximum": 2147483647
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "createdAt",
+              "updatedAt",
+              "active",
+              "nome",
+              "cpf",
+              "email",
+              "userId"
+            ],
+            "x-nestjs_zod-has-null": true
           }
         },
         "required": [
@@ -9523,7 +9770,9 @@
           "posicaoFila",
           "situacaoId",
           "agendamentoId",
-          "estabelecimentoId"
+          "estabelecimentoId",
+          "clienteId",
+          "carroId"
         ]
       },
       "SelectServicoAtendimentoDto": {
@@ -10227,15 +10476,11 @@
                     "propertyNames": {
                       "type": "string"
                     },
-                    "additionalProperties": {
-
-                    }
+                    "additionalProperties": {}
                   },
                   {
                     "type": "array",
-                    "items": {
-
-                    }
+                    "items": {}
                   }
                 ]
               },

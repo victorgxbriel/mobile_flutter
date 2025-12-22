@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mobile_flutter/app/utils/app_logger.dart';
 import '../../../../core/network/dio_client.dart';
 import '../models/atendimento_model.dart';
+import '../models/create_atendimento_dto.dart';
 
 final _log = logger(AtendimentoServiceImpl);
 
@@ -10,6 +11,7 @@ abstract class AtendimentoService {
     int estabelecimentoId,
   );
   Future<AtendimentoModel> getAtendimentoById(int id);
+  Future<AtendimentoModel> createAtendimento(CreateAtendimentoDto dto);
 }
 
 class AtendimentoServiceImpl implements AtendimentoService {
@@ -40,6 +42,21 @@ class AtendimentoServiceImpl implements AtendimentoService {
     _log.t('GET /atendimentos/$id');
     try {
       final response = await _client.instance.get('/atendimentos/$id');
+      return AtendimentoModel.fromJson(response.data);
+    } on DioException catch (_) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<AtendimentoModel> createAtendimento(CreateAtendimentoDto dto) async {
+    _log.t('POST /atendimentos');
+    try {
+      final response = await _client.instance.post(
+        '/atendimentos',
+        data: dto.toJson(),
+      );
+      _log.t('Atendimento criado: ID ${response.data['id']}');
       return AtendimentoModel.fromJson(response.data);
     } on DioException catch (_) {
       rethrow;

@@ -27,7 +27,9 @@ import '../../features/employees/data/services/employee_service.dart';
 import '../../features/schedule/data/repositories/programacao_diaria_repository.dart';
 import '../../features/schedule/data/services/programacao_diaria_service.dart';
 import '../../features/treatments/data/repositories/atendimento_repository.dart';
+import '../../features/treatments/data/repositories/cliente_repository.dart';
 import '../../features/treatments/data/services/atendimento_service.dart';
+import '../../features/treatments/data/services/cliente_service.dart';
 import '../network/dio_client.dart';
 import '../services/session_service.dart';
 import '../services/theme_service.dart';
@@ -57,8 +59,9 @@ class ServiceLocator {
     if (T == ServicoRepository) return servicoRepository as T;
     if (T == AcessorioRepository) return acessorioRepository as T;
     if (T == EmployeeRepository) return employeeRepository as T;
-    if (T == ProgramacaoDiariaRepository)
+    if (T == ProgramacaoDiariaRepository) {
       return programacaoDiariaRepository as T;
+    }
     if (T == AtendimentoRepository) return atendimentoRepository as T;
     if (T == StorageService) return storageService as T;
     if (T == ThemeNotifier) return themeNotifier as T;
@@ -98,6 +101,8 @@ class ServiceLocator {
   late final ProgramacaoDiariaRepository _programacaoDiariaRepository;
   late final AtendimentoService _atendimentoService;
   late final AtendimentoRepository _atendimentoRepository;
+  late final ClienteService _clienteService;
+  late final ClienteRepository _clienteRepository;
   late final SharedPreferences _sharedPreferences;
   late final StorageService _storageService;
   late final SessionService _sessionService;
@@ -148,6 +153,7 @@ class ServiceLocator {
     _agendamentoService = AgendamentoServiceImpl(_dioClient);
     _servicoService = ServicoServiceImpl(_dioClient);
     _atendimentoService = AtendimentoServiceImpl(_dioClient);
+    _clienteService = ClienteServiceImpl(_dioClient);
     _log.d('Services criados');
 
     // Repositories
@@ -175,6 +181,10 @@ class ServiceLocator {
     _servicoRepository = ServicoRepository(_servicoService);
     _atendimentoRepository = AtendimentoRepository(
       _atendimentoService,
+      _sessionService,
+    );
+    _clienteRepository = ClienteRepository(
+      _clienteService,
       _sessionService,
     );
     _log.d('Repositories criados');
@@ -209,6 +219,7 @@ class ServiceLocator {
   AgendamentoRepository get agendamentoRepository => _agendamentoRepository;
   ServicoRepository get servicoRepository => _servicoRepository;
   AtendimentoRepository get atendimentoRepository => _atendimentoRepository;
+  ClienteRepository get clienteRepository => _clienteRepository;
   FlutterSecureStorage get storage => _storage;
   StorageService get storageService => _storageService;
   SessionService get sessionService => _sessionService;
